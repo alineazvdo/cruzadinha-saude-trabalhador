@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cruzadinha da saúde pública</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#EEF5F7; --surface:#FFFFFF; --ink:#12324A; --muted:#4F6B7D; --line:#9FB6C2; --edge:#12324A; --emph:#12324A;
+  --cell:#FFFFFF; --word:#CDEBDD; --sel:#FFD23F; --sel-ink:#12324A;
+  --accent:#0E7C66; --accent-ink:#FFFFFF; --err:#C7381F; --err-bg:#FBE0DA;
+  --banner:#FFF0B3; --banner-ink:#12324A; --key:#DCE8ED; --key-ink:#12324A; --focus:#0B5FA5;
+  --display:'Bricolage Grotesque','Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --body:'Atkinson Hyperlegible','Segoe UI',Verdana,system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
+    --cell:#152F41; --word:#1D5B57; --sel:#FFD23F; --sel-ink:#0B2233;
+    --accent:#3FCFAA; --accent-ink:#04241C; --err:#FF9A86; --err-bg:#4A2622;
+    --banner:#1B3548; --banner-ink:#EAF3F7; --key:#1F3D52; --key-ink:#EAF3F7; --focus:#7CC0FF;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
+  --cell:#152F41; --word:#1D5B57; --sel:#FFD23F; --sel-ink:#0B2233;
+  --accent:#3FCFAA; --accent-ink:#04241C; --err:#FF9A86; --err-bg:#4A2622;
+  --banner:#1B3548; --banner-ink:#EAF3F7; --key:#1F3D52; --key-ink:#EAF3F7; --focus:#7CC0FF;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.app{max-width:1040px;margin:0 auto;padding:18px 16px 40px}
+
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(1.7rem,5.4vw,2.6rem);line-height:1.05;margin:0 0 6px;letter-spacing:-0.02em}
+.lede{margin:0;color:var(--muted);max-width:46ch;font-size:.98rem}
+.sib{margin:8px 0 0;font-size:.95rem}
+.sib a{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.timer{font-family:var(--display);font-weight:700;font-size:1.35rem;font-variant-numeric:tabular-nums;background:var(--surface);border:2px solid var(--edge);border-radius:999px;padding:4px 14px;white-space:nowrap}
+
+.tabs{display:flex;gap:8px;margin:18px 0 20px;overflow-x:auto;padding-bottom:4px}
+.tab{flex:0 0 auto;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:8px 14px;min-height:48px}
+.tab b{display:block;font-family:var(--display);font-size:1rem}
+.tab small{display:block;color:var(--muted);font-size:.82rem}
+.tab[aria-current="true"]{border-color:var(--emph);box-shadow:0 3px 0 var(--emph)}
+.tab .ok{color:var(--accent);font-weight:700;margin-left:6px}
+
+.play{display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
+@media (min-width:900px){.play{grid-template-columns:minmax(0,580px) minmax(0,1fr);gap:40px;align-items:start}}
+
+.banner{display:flex;align-items:stretch;background:var(--banner);color:var(--banner-ink);border:2px solid var(--emph);border-radius:12px;margin-bottom:14px;overflow:hidden}
+.banner .nav{flex:0 0 46px;border:0;background:transparent;font-size:1.6rem;line-height:1}
+.banner .nav:hover{background:color-mix(in srgb,var(--banner-ink) 12%,transparent)}
+.banner .txt{flex:1;padding:8px 6px;min-height:68px;display:flex;flex-direction:column;justify-content:center}
+.banner .tag{font-family:var(--display);font-weight:700;font-size:.9rem;color:var(--emph)}
+.banner .clue{margin:0;font-size:1.02rem;line-height:1.3}
+
+.board{position:relative}
+.grid{display:grid;grid-template-columns:repeat(var(--cols),1fr);gap:3px;width:min(100%,calc(var(--cols) * 54px));margin-inline:auto;container-type:inline-size;user-select:none;-webkit-user-select:none}
+.cell{position:relative;aspect-ratio:1;background:var(--cell);border:2px solid var(--edge);border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-family:var(--display);font-weight:700;color:var(--ink);font-size:calc(100cqw / var(--cols) * .56);touch-action:manipulation}
+.cell.void{background:transparent;border-color:transparent;cursor:default}
+.cell.word{background:var(--word)}
+.cell.sel{background:var(--sel);color:var(--sel-ink);border-color:var(--emph)}
+.cell.wrong{color:var(--err);background:var(--err-bg);box-shadow:inset 0 0 0 2px var(--err)}
+.cell .n{position:absolute;top:2px;left:3px;font-family:var(--body);font-weight:700;font-size:max(8px,calc(100cqw / var(--cols) * .24));line-height:1;color:inherit;opacity:.8}
+
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 6px;justify-content:center}
+.btn{background:var(--surface);border:2px solid var(--edge);border-radius:10px;padding:8px 16px;min-height:44px;font-weight:700}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn:hover{filter:brightness(.96)}
+.status{min-height:1.5em;margin:6px 0 0;text-align:center;color:var(--muted);font-size:.95rem}
+
+.kbd{display:none;margin-top:12px;gap:6px;flex-direction:column}
+@media (pointer:coarse),(max-width:700px){.kbd{display:flex}}
+.kbd .row{display:flex;gap:5px;justify-content:center}
+.kbd button{flex:1 1 0;max-width:44px;min-height:48px;border:0;border-radius:8px;background:var(--key);color:var(--key-ink);font-family:var(--display);font-weight:700;font-size:1.1rem;padding:0;touch-action:manipulation}
+.kbd button:active{background:var(--sel);color:var(--sel-ink)}
+.kbd button.wide{max-width:64px}
+
+.clues h2{font-family:var(--display);font-size:1.15rem;margin:0 0 8px}
+.clues ol{list-style:none;margin:0 0 22px;padding:0;display:flex;flex-direction:column;gap:2px}
+.clues .item{width:100%;display:flex;gap:10px;text-align:left;background:transparent;border:0;border-left:4px solid transparent;border-radius:6px;padding:6px 8px;line-height:1.3}
+.clues .item:hover{background:var(--surface)}
+.clues .item .num{font-family:var(--display);font-weight:800;min-width:1.6em}
+.clues .item em{color:var(--muted);font-style:normal;font-size:.9em}
+.clues .item.active{background:var(--surface);border-left-color:var(--sel);box-shadow:inset 0 0 0 1px var(--line)}
+@media (min-width:900px){.clues{max-height:calc(100vh - 40px);overflow:auto;position:sticky;top:16px;padding-right:6px}}
+
+.win{position:absolute;inset:-6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:16px;
+  background:color-mix(in srgb,var(--surface) 88%,transparent);border-radius:14px}
+.win[hidden]{display:none}
+.stamp{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,7vw,2.5rem);letter-spacing:.04em;color:var(--err);border:5px solid var(--err);outline:2px solid var(--err);outline-offset:4px;border-radius:10px;padding:6px 18px;transform:rotate(-8deg)}
+.win.anim .stamp{animation:stamp .55s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes stamp{from{transform:rotate(-8deg) scale(2.4);opacity:0}60%{opacity:1}to{transform:rotate(-8deg) scale(1);opacity:1}}
+.win p{margin:0;font-size:1.1rem}
+.win .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+@media (prefers-reduced-motion:reduce){.win.anim .stamp{animation:none}}
+
+footer{margin-top:30px;color:var(--muted);font-size:.9rem;max-width:60ch}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div>
+      <h1>Cruzadinha da saúde pública</h1>
+      <p class="lede">Palavras cruzadas de nível profissional para quem trabalha com saúde pública: vigilância epidemiológica na prática, Bahia e mundo, e gestão do SUS. Escreva as respostas sem acento e sem espaço.</p>
+      <p class="sib"><a href="index.html">‹ Saúde em jogo</a><span aria-hidden="true"> · </span><a href="cruzadinha-saude-do-trabalhador.html">Cruzadinha da saúde do trabalhador →</a></p>
+    </div>
+    <div class="timer" role="timer" aria-label="Tempo de jogo" id="time">0:00</div>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Desafios"></nav>
+
+  <main class="play">
+    <section aria-label="Grade">
+      <div class="banner" aria-live="polite">
+        <button class="nav" id="prev" type="button" aria-label="Dica anterior">‹</button>
+        <div class="txt">
+          <span class="tag" id="bTag"></span>
+          <p class="clue" id="bClue"></p>
+        </div>
+        <button class="nav" id="next" type="button" aria-label="Próxima dica">›</button>
+      </div>
+
+      <div class="board">
+        <div class="grid" id="grid" role="grid" aria-label="Grade de palavras cruzadas"></div>
+        <div class="win" id="win" hidden>
+          <div class="stamp">CASO ENCERRADO</div>
+          <p>Desafio concluído em <b id="winTime"></b>.</p>
+          <div class="row">
+            <button class="btn primary" id="winNext" type="button"></button>
+            <button class="btn" id="winView" type="button">Rever a grade</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" id="btnCheck" type="button">Verificar</button>
+        <button class="btn" id="btnReveal" type="button">Revelar palavra</button>
+        <button class="btn" id="btnReset" type="button">Recomeçar</button>
+      </div>
+      <p class="status" id="status" aria-live="polite"></p>
+
+      <div class="kbd" id="kbd" aria-label="Teclado"></div>
+    </section>
+
+    <aside class="clues" aria-label="Lista de dicas">
+      <h2>Horizontais</h2>
+      <ol id="cluesA"></ol>
+      <h2>Verticais</h2>
+      <ol id="cluesD"></ol>
+    </aside>
+  </main>
+
+  <footer>Cruzadinha feita para estudo. Em caso de dúvida sobre algum termo, confira nos guias e manuais do Ministério da Saúde.</footer>
+</div>
+
+<script>
+(function(){
+var PUZZLES = [{"title": "Desafio 1", "subtitle": "Vigilância epidemiológica na prática", "rows": 12, "cols": 12, "grid": [["", "S", "A", "R", "A", "M", "P", "O", "", "", "", "P"], ["", "", "", "", "T", "", "", "", "", "M", "I", "F"], ["", "B", "", "R", "A", "I", "V", "A", "", "E", "", "A"], ["", "L", "", "", "Q", "", "", "", "", "N", "", ""], ["C", "O", "M", "P", "U", "L", "S", "O", "R", "I", "A", ""], ["", "Q", "", "", "E", "", "I", "", "", "N", "", ""], ["", "U", "", "", "", "", "M", "", "", "G", "A", "L"], ["", "E", "", "L", "", "P", "", "S", "", "I", "", ""], ["", "I", "", "I", "M", "E", "D", "I", "A", "T", "A", ""], ["", "O", "", "R", "", "P", "", "N", "", "E", "", ""], ["", "", "", "A", "", "", "", "A", "", "", "", ""], ["", "D", "T", "A", "", "S", "I", "N", "A", "S", "C", ""]], "entries": [{"n": 1, "dir": "A", "row": 0, "col": 1, "answer": "SARAMPO", "clue": "Doença exantemática de notificação imediata, com vigilância integrada à da rubéola"}, {"n": 4, "dir": "A", "row": 1, "col": 9, "answer": "MIF", "clue": "Mulher em Idade Fértil (sigla), de 10 a 49 anos: todo óbito nessa faixa deve ser investigado"}, {"n": 6, "dir": "A", "row": 2, "col": 3, "answer": "RAIVA", "clue": "Doença cuja profilaxia pós-exposição depende do tipo de ferimento e da condição do animal agressor"}, {"n": 7, "dir": "A", "row": 4, "col": 0, "answer": "COMPULSORIA", "clue": "Notificação ___: obrigatória para profissionais e serviços, definida em portaria do Ministério da Saúde"}, {"n": 9, "dir": "A", "row": 6, "col": 9, "answer": "GAL", "clue": "Sistema em que a unidade requisita exames e acompanha o resultado do laboratório central (sigla)"}, {"n": 13, "dir": "A", "row": 8, "col": 3, "answer": "IMEDIATA", "clue": "Notificação em até 24 horas às vigilâncias, exigida para doenças como sarampo e raiva humana"}, {"n": 14, "dir": "A", "row": 11, "col": 1, "answer": "DTA", "clue": "Doença Transmitida por Alimentos (sigla): surto é definido por dois ou mais casos após alimento comum"}, {"n": 15, "dir": "A", "row": 11, "col": 5, "answer": "SINASC", "clue": "Sistema abastecido pela Declaração de Nascido Vivo"}, {"n": 2, "dir": "D", "row": 0, "col": 4, "answer": "ATAQUE", "clue": "Taxa de ___: proporção de expostos que adoeceram em um surto"}, {"n": 3, "dir": "D", "row": 0, "col": 11, "answer": "PFA", "clue": "Sigla da vigilância que busca casos em menores de 15 anos para monitorar a poliomielite; meta de 1 caso por 100 mil"}, {"n": 4, "dir": "D", "row": 1, "col": 9, "answer": "MENINGITE", "clue": "Doença de notificação compulsória em que o líquor deve ser coletado antes do antibiótico, sempre que possível"}, {"n": 5, "dir": "D", "row": 2, "col": 1, "answer": "BLOQUEIO", "clue": "Vacinação seletiva de contatos e área próxima após caso suspeito de doença imunoprevenível"}, {"n": 8, "dir": "D", "row": 4, "col": 6, "answer": "SIM", "clue": "Sistema que recebe as informações da Declaração de Óbito"}, {"n": 10, "dir": "D", "row": 7, "col": 3, "answer": "LIRAA", "clue": "Levantamento rápido, por amostragem de imóveis, que gera o índice de infestação por Aedes (sigla)"}, {"n": 11, "dir": "D", "row": 7, "col": 5, "answer": "PEP", "clue": "Profilaxia após exposição de risco ao HIV, iniciada preferencialmente nas primeiras horas (sigla)"}, {"n": 12, "dir": "D", "row": 7, "col": 7, "answer": "SINAN", "clue": "Sistema em que se digita, atualiza e encerra a ficha de notificação"}]}, {"title": "Desafio 2", "subtitle": "Bahia e o mundo", "rows": 12, "cols": 12, "grid": [["", "", "C", "D", "C", "", "C", "O", "V", "I", "A", "M"], ["", "", "", "", "I", "", "", "P", "", "", "", "S"], ["N", "", "D", "I", "V", "I", "S", "A", "", "", "", "F"], ["R", "S", "I", "", "P", "", "", "S", "", "", "", ""], ["S", "", "V", "", "", "J", "", "", "", "C", "", ""], ["", "S", "E", "M", "I", "A", "R", "I", "D", "O", "", "F"], ["", "", "P", "", "", "C", "", "", "", "S", "", "E"], ["", "", "", "", "", "O", "", "C", "I", "E", "V", "S"], ["", "", "", "G", "", "B", "", "", "", "M", "", "B"], ["R", "O", "T", "A", "T", "I", "V", "O", "", "S", "", "A"], ["", "", "", "V", "", "N", "", "D", "", "", "", ""], ["S", "U", "V", "I", "S", "A", "", "S", "A", "M", "U", ""]], "entries": [{"n": 1, "dir": "A", "row": 0, "col": 2, "answer": "CDC", "clue": "Centro de Controle e Prevenção de Doenças dos Estados Unidos (sigla)"}, {"n": 3, "dir": "A", "row": 0, "col": 6, "answer": "COVIAM", "clue": "Coordenação de Vigilância em Saúde Ambiental da Sesab (sigla)"}, {"n": 7, "dir": "A", "row": 2, "col": 2, "answer": "DIVISA", "clue": "Diretoria de Vigilância Sanitária e Ambiental da Bahia (sigla)"}, {"n": 8, "dir": "A", "row": 3, "col": 0, "answer": "RSI", "clue": "Regulamento Sanitário Internacional (sigla)"}, {"n": 11, "dir": "A", "row": 5, "col": 1, "answer": "SEMIARIDO", "clue": "Região que ocupa grande parte da Bahia, com desafios de seca e acesso à água"}, {"n": 13, "dir": "A", "row": 7, "col": 7, "answer": "CIEVS", "clue": "Centro de Informações Estratégicas em Vigilância em Saúde (sigla)"}, {"n": 15, "dir": "A", "row": 9, "col": 0, "answer": "ROTATIVO", "clue": "Fundo ___ da OPAS: mecanismo de compra conjunta de vacinas para países"}, {"n": 17, "dir": "A", "row": 11, "col": 0, "answer": "SUVISA", "clue": "Superintendência de Vigilância e Proteção da Saúde da Sesab (sigla)"}, {"n": 18, "dir": "A", "row": 11, "col": 7, "answer": "SAMU", "clue": "Serviço de Atendimento Móvel de Urgência (sigla)"}, {"n": 2, "dir": "D", "row": 0, "col": 4, "answer": "CIVP", "clue": "Certificado Internacional de Vacinação ou Profilaxia (sigla)"}, {"n": 4, "dir": "D", "row": 0, "col": 7, "answer": "OPAS", "clue": "Organização Pan-Americana da Saúde, escritório regional da OMS nas Américas (sigla)"}, {"n": 5, "dir": "D", "row": 0, "col": 11, "answer": "MSF", "clue": "Médicos Sem Fronteiras (sigla)"}, {"n": 6, "dir": "D", "row": 2, "col": 0, "answer": "NRS", "clue": "Núcleo Regional de Saúde; a Bahia tem nove (sigla)"}, {"n": 7, "dir": "D", "row": 2, "col": 2, "answer": "DIVEP", "clue": "Diretoria de Vigilância Epidemiológica da Bahia (sigla)"}, {"n": 9, "dir": "D", "row": 4, "col": 5, "answer": "JACOBINA", "clue": "Município sede do NRS Centro-Norte"}, {"n": 10, "dir": "D", "row": 4, "col": 9, "answer": "COSEMS", "clue": "Conselho Estadual dos Secretários Municipais de Saúde da Bahia (sigla)"}, {"n": 12, "dir": "D", "row": 5, "col": 11, "answer": "FESBA", "clue": "Fundo Estadual de Saúde da Bahia (sigla)"}, {"n": 14, "dir": "D", "row": 8, "col": 3, "answer": "GAVI", "clue": "Aliança global que apoia o acesso de países a vacinas"}, {"n": 16, "dir": "D", "row": 9, "col": 7, "answer": "ODS", "clue": "Objetivos de Desenvolvimento Sustentável (sigla); o de número 3 trata de saúde e bem-estar"}]}, {"title": "Desafio 3", "subtitle": "Sistema de saúde e história (nível especialista)", "rows": 11, "cols": 12, "grid": [["", "", "", "R", "A", "G", "", "", "O", "", "", ""], ["S", "", "V", "", "L", "", "", "S", "I", "O", "P", "S"], ["N", "", "I", "", "M", "", "", "", "T", "", "", "N"], ["V", "I", "G", "I", "A", "R", "", "P", "A", "S", "", "O"], ["S", "", "I", "", "A", "", "L", "", "V", "", "", "W"], ["", "P", "A", "C", "T", "U", "A", "C", "A", "O", "", ""], ["", "", "G", "", "A", "", "L", "", "", "", "C", ""], ["", "", "U", "", "", "S", "O", "C", "I", "A", "I", "S"], ["C", "O", "A", "P", "", "", "N", "", "", "", "B", ""], ["I", "", "", "", "", "", "D", "", "", "", "", ""], ["T", "", "", "", "", "R", "E", "G", "I", "A", "O", ""]], "entries": [{"n": 1, "dir": "A", "row": 0, "col": 3, "answer": "RAG", "clue": "Relatório Anual de Gestão (sigla)"}, {"n": 6, "dir": "A", "row": 1, "col": 7, "answer": "SIOPS", "clue": "Sistema em que os entes federados declaram receitas e despesas com saúde (sigla)"}, {"n": 8, "dir": "A", "row": 3, "col": 0, "answer": "VIGIAR", "clue": "Programa de vigilância de populações expostas a poluentes do ar"}, {"n": 9, "dir": "A", "row": 3, "col": 7, "answer": "PAS", "clue": "Programação Anual de Saúde (sigla)"}, {"n": 11, "dir": "A", "row": 5, "col": 1, "answer": "PACTUACAO", "clue": "Negociação entre gestores, feita nas comissões intergestores"}, {"n": 13, "dir": "A", "row": 7, "col": 5, "answer": "SOCIAIS", "clue": "Determinantes ___ da saúde: condições em que as pessoas nascem, vivem e trabalham"}, {"n": 14, "dir": "A", "row": 8, "col": 0, "answer": "COAP", "clue": "Contrato Organizativo da Ação Pública da Saúde, previsto no Decreto 7.508/2011 (sigla)"}, {"n": 15, "dir": "A", "row": 10, "col": 5, "answer": "REGIAO", "clue": "___ de saúde: espaço contínuo de municípios limítrofes, base das redes do SUS"}, {"n": 2, "dir": "D", "row": 0, "col": 4, "answer": "ALMAATA", "clue": "Conferência de 1978 que proclamou 'saúde para todos' e a atenção primária"}, {"n": 3, "dir": "D", "row": 0, "col": 8, "answer": "OITAVA", "clue": "Número da conferência nacional de saúde de 1986, marco da Reforma Sanitária"}, {"n": 4, "dir": "D", "row": 1, "col": 0, "answer": "SNVS", "clue": "Sistema Nacional de Vigilância Sanitária (sigla)"}, {"n": 5, "dir": "D", "row": 1, "col": 2, "answer": "VIGIAGUA", "clue": "Programa de vigilância da qualidade da água para consumo humano"}, {"n": 7, "dir": "D", "row": 1, "col": 11, "answer": "SNOW", "clue": "John ___, que ligou casos de cólera a uma bomba d'água em Londres, em 1854"}, {"n": 10, "dir": "D", "row": 4, "col": 6, "answer": "LALONDE", "clue": "Informe canadense de 1974 que ampliou o campo da saúde além da assistência médica"}, {"n": 12, "dir": "D", "row": 6, "col": 10, "answer": "CIB", "clue": "Comissão Intergestores Bipartite (sigla)"}, {"n": 14, "dir": "D", "row": 8, "col": 0, "answer": "CIT", "clue": "Comissão Intergestores Tripartite (sigla)"}]}];
+var KEY = 'cruzadinha-saude-publica:v5';
+function $(s){return document.querySelector(s);}
+
+var grid=$('#grid'), win=$('#win'), statusEl=$('#status'), btnReset=$('#btnReset');
+var pi=0, P, letters, cellW, cells, wrong=new Set(), sel={r:0,c:0}, dir='A';
+var elapsed=0, solved=false, timer=null, hints=0, resetArm=null;
+
+function loadAll(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+function save(){ try{ var all=loadAll(); all[pi]={letters:letters,elapsed:elapsed,solved:solved}; localStorage.setItem(KEY,JSON.stringify(all)); }catch(e){} }
+
+function fmt(s){ var m=Math.floor(s/60), r=s%60; return m+':'+(r<10?'0':'')+r; }
+function updateTime(){ $('#time').textContent=fmt(elapsed); }
+function startTimer(){
+  if(timer||solved) return;
+  timer=setInterval(function(){
+    if(document.visibilityState==='visible'){ elapsed++; updateTime(); if(elapsed%5===0) save(); }
+  },1000);
+}
+function stopTimer(){ if(timer){ clearInterval(timer); timer=null; } }
+
+function cellsOf(e){
+  var out=[];
+  for(var k=0;k<e.answer.length;k++) out.push([e.row+(e.dir==='D'?k:0), e.col+(e.dir==='A'?k:0)]);
+  return out;
+}
+function setStatus(t){ statusEl.textContent=t||''; }
+
+function startPuzzle(i){
+  stopTimer(); pi=i; P=PUZZLES[i]; wrong.clear(); solved=false; elapsed=0; hints=0; setStatus('');
+  letters=P.grid.map(function(r){return r.map(function(){return '';});});
+  var s=loadAll()[i];
+  if(s && Array.isArray(s.letters) && s.letters.length===P.rows && s.letters.every(function(r){return Array.isArray(r)&&r.length===P.cols;})){
+    letters=s.letters.map(function(r,ri){return r.map(function(ch,ci){return (P.grid[ri][ci] && typeof ch==='string')?ch.slice(0,1):'';});});
+    elapsed=+s.elapsed||0; solved=!!s.solved;
+  }
+  cellW=P.grid.map(function(r){return r.map(function(){return {};});});
+  P.entries.forEach(function(e,idx){ cellsOf(e).forEach(function(rc){ cellW[rc[0]][rc[1]][e.dir]=idx; }); });
+  var first=P.entries.filter(function(e){return e.dir==='A';})[0]||P.entries[0];
+  dir=first.dir; sel={r:first.row,c:first.col};
+  renderGrid(); renderClues(); renderTabs(); updateView(); updateTime();
+  if(solved){ showWin(false); setStatus('Desafio concluído em '+fmt(elapsed)+'.'); } else { win.hidden=true; if(elapsed>0) startTimer(); }
+}
+
+function renderGrid(){
+  grid.style.setProperty('--cols',P.cols);
+  grid.innerHTML=''; cells=[];
+  var numAt={}; P.entries.forEach(function(e){ numAt[e.row+','+e.col]=e.n; });
+  for(var r=0;r<P.rows;r++){
+    cells.push([]);
+    for(var c=0;c<P.cols;c++){
+      var d=document.createElement('div');
+      if(!P.grid[r][c]){ d.className='cell void'; d.setAttribute('aria-hidden','true'); cells[r].push(null); grid.appendChild(d); continue; }
+      d.className='cell'; d.dataset.r=r; d.dataset.c=c; d.setAttribute('role','gridcell');
+      var key=r+','+c;
+      if(numAt[key]){ var n=document.createElement('span'); n.className='n'; n.textContent=numAt[key]; d.appendChild(n); }
+      var l=document.createElement('span'); l.className='l'; d.appendChild(l);
+      cells[r].push(d); grid.appendChild(d);
+    }
+  }
+}
+
+function renderClues(){
+  var A=$('#cluesA'), D=$('#cluesD'); A.innerHTML=''; D.innerHTML='';
+  P.entries.forEach(function(e,idx){
+    var li=document.createElement('li'), b=document.createElement('button');
+    b.type='button'; b.className='item'; b.dataset.i=idx;
+    var n=document.createElement('span'); n.className='num'; n.textContent=e.n;
+    var t=document.createElement('span'); t.textContent=e.clue+' ';
+    var em=document.createElement('em'); em.textContent='('+e.answer.length+')'; t.appendChild(em);
+    b.appendChild(n); b.appendChild(t); li.appendChild(b);
+    (e.dir==='A'?A:D).appendChild(li);
+  });
+}
+
+function renderTabs(){
+  var nav=$('#tabs'); nav.innerHTML=''; var all=loadAll();
+  PUZZLES.forEach(function(p,i){
+    var b=document.createElement('button'); b.type='button'; b.className='tab';
+    if(i===pi) b.setAttribute('aria-current','true');
+    var done=(i===pi)?solved:!!(all[i]&&all[i].solved);
+    var t=document.createElement('b'); t.textContent=p.title;
+    if(done){ var ok=document.createElement('span'); ok.className='ok'; ok.textContent='✓'; ok.setAttribute('aria-label','concluído'); t.appendChild(ok); }
+    var s=document.createElement('small'); s.textContent=p.subtitle;
+    b.appendChild(t); b.appendChild(s);
+    b.addEventListener('click',function(){ if(i!==pi) startPuzzle(i); });
+    nav.appendChild(b);
+  });
+}
+
+function curEntry(){
+  var idx=cellW[sel.r][sel.c][dir];
+  if(idx===undefined){ dir=(dir==='A'?'D':'A'); idx=cellW[sel.r][sel.c][dir]; }
+  return P.entries[idx];
+}
+
+function updateView(){
+  var e=curEntry(), inWord={};
+  cellsOf(e).forEach(function(rc){ inWord[rc[0]+','+rc[1]]=1; });
+  for(var r=0;r<P.rows;r++) for(var c=0;c<P.cols;c++){
+    var el=cells[r][c]; if(!el) continue;
+    var k=r+','+c, isSel=(r===sel.r&&c===sel.c);
+    el.className='cell'+(inWord[k]?' word':'')+(isSel?' sel':'')+(wrong.has(k)?' wrong':'');
+    el.querySelector('.l').textContent=letters[r][c];
+    el.setAttribute('aria-label',(letters[r][c]?('letra '+letters[r][c]):'vazia')+(wrong.has(k)?', incorreta':''));
+  }
+  $('#bTag').textContent=e.n+(e.dir==='A'?' horizontal':' vertical');
+  $('#bClue').textContent=e.clue+' ('+e.answer.length+' letras)';
+  var idx=P.entries.indexOf(e);
+  document.querySelectorAll('.clues .item').forEach(function(b){ b.classList.toggle('active', +b.dataset.i===idx); });
+  var act=document.querySelector('.clues .item.active');
+  if(act && window.matchMedia && window.matchMedia('(min-width:900px)').matches){ act.scrollIntoView({block:'nearest'}); }
+}
+
+function selectCell(r,c){
+  if(!P.grid[r][c]) return;
+  if(sel.r===r&&sel.c===c){
+    var o=(dir==='A'?'D':'A'); if(cellW[r][c][o]!==undefined) dir=o;
+  } else {
+    sel={r:r,c:c};
+    if(cellW[r][c][dir]===undefined) dir=(dir==='A'?'D':'A');
+  }
+  updateView();
+}
+
+function firstEmpty(e){
+  var cs=cellsOf(e);
+  for(var i=0;i<cs.length;i++){ if(!letters[cs[i][0]][cs[i][1]]) return {r:cs[i][0],c:cs[i][1]}; }
+  return {r:cs[0][0],c:cs[0][1]};
+}
+function goEntry(idx){ var e=P.entries[idx]; dir=e.dir; sel=firstEmpty(e); updateView(); }
+function stepClue(step){
+  var idx=P.entries.indexOf(curEntry()), n=P.entries.length;
+  goEntry((idx+step+n)%n);
+}
+
+function ensureTimer(){ startTimer(); }
+function after(){ save(); updateView(); if(isComplete()) winNow(); }
+
+function typeLetter(ch){
+  if(solved) return;
+  ensureTimer();
+  letters[sel.r][sel.c]=ch; wrong.delete(sel.r+','+sel.c); setStatus('');
+  var cs=cellsOf(curEntry()), k=-1;
+  for(var i=0;i<cs.length;i++){ if(cs[i][0]===sel.r&&cs[i][1]===sel.c){ k=i; break; } }
+  if(k>=0 && k<cs.length-1) sel={r:cs[k+1][0],c:cs[k+1][1]};
+  after();
+}
+function backspace(){
+  if(solved) return;
+  var k0=sel.r+','+sel.c;
+  if(letters[sel.r][sel.c]){ letters[sel.r][sel.c]=''; wrong.delete(k0); }
+  else {
+    var cs=cellsOf(curEntry()), k=-1;
+    for(var i=0;i<cs.length;i++){ if(cs[i][0]===sel.r&&cs[i][1]===sel.c){ k=i; break; } }
+    if(k>0){ sel={r:cs[k-1][0],c:cs[k-1][1]}; letters[sel.r][sel.c]=''; wrong.delete(sel.r+','+sel.c); }
+  }
+  setStatus(''); after();
+}
+function arrow(dr,dc){
+  var want=dc!==0?'A':'D';
+  if(dir!==want && cellW[sel.r][sel.c][want]!==undefined){ dir=want; updateView(); return; }
+  var r=sel.r+dr, c=sel.c+dc;
+  while(r>=0&&r<P.rows&&c>=0&&c<P.cols){
+    if(P.grid[r][c]){
+      sel={r:r,c:c};
+      dir=(cellW[r][c][want]!==undefined)?want:(want==='A'?'D':'A');
+      break;
+    }
+    r+=dr; c+=dc;
+  }
+  updateView();
+}
+
+function isComplete(){
+  for(var r=0;r<P.rows;r++) for(var c=0;c<P.cols;c++){ if(P.grid[r][c] && letters[r][c]!==P.grid[r][c]) return false; }
+  return true;
+}
+function check(){
+  if(solved) return;
+  wrong.clear(); var filled=0, bad=0;
+  for(var r=0;r<P.rows;r++) for(var c=0;c<P.cols;c++){
+    if(P.grid[r][c] && letters[r][c]){ filled++; if(letters[r][c]!==P.grid[r][c]){ wrong.add(r+','+c); bad++; } }
+  }
+  updateView();
+  if(!filled) setStatus('Preencha algumas letras para verificar.');
+  else if(!bad) setStatus('Tudo certo até aqui.');
+  else setStatus(bad+(bad===1?' letra errada, marcada em vermelho.':' letras erradas, marcadas em vermelho.'));
+}
+function reveal(){
+  if(solved) return;
+  ensureTimer();
+  var e=curEntry(); hints++;
+  cellsOf(e).forEach(function(rc){ letters[rc[0]][rc[1]]=P.grid[rc[0]][rc[1]]; wrong.delete(rc[0]+','+rc[1]); });
+  setStatus('Palavra revelada: '+e.answer+'.'); after();
+}
+function disarm(){ if(resetArm){ clearTimeout(resetArm); resetArm=null; } btnReset.textContent='Recomeçar'; }
+function doReset(){
+  stopTimer(); letters=P.grid.map(function(r){return r.map(function(){return '';});});
+  wrong.clear(); solved=false; elapsed=0; hints=0; win.hidden=true; setStatus('');
+  var first=P.entries.filter(function(e){return e.dir==='A';})[0]||P.entries[0];
+  dir=first.dir; sel={r:first.row,c:first.col};
+  save(); updateTime(); updateView(); renderTabs();
+}
+
+function winNow(){ solved=true; stopTimer(); save(); showWin(true); renderTabs(); setStatus('Desafio concluído em '+fmt(elapsed)+(hints?' (com '+hints+(hints===1?' palavra revelada)':' palavras reveladas)'):'.')); }
+function showWin(animate){
+  $('#winTime').textContent=fmt(elapsed);
+  $('#winNext').textContent=(pi<PUZZLES.length-1)?'Próximo desafio':'Voltar ao Desafio 1';
+  win.classList.toggle('anim',!!animate); win.hidden=false;
+  $('#winNext').focus({preventScroll:true});
+}
+
+/* eventos */
+grid.addEventListener('click',function(ev){
+  var el=ev.target.closest('.cell'); if(!el||el.classList.contains('void')) return;
+  selectCell(+el.dataset.r,+el.dataset.c);
+});
+document.addEventListener('click',function(ev){
+  var b=ev.target.closest('.clues .item'); if(b) goEntry(+b.dataset.i);
+});
+$('#prev').addEventListener('click',function(){ stepClue(-1); });
+$('#next').addEventListener('click',function(){ stepClue(1); });
+$('#btnCheck').addEventListener('click',check);
+$('#btnReveal').addEventListener('click',reveal);
+btnReset.addEventListener('click',function(){
+  if(!resetArm){ btnReset.textContent='Toque de novo para apagar tudo'; resetArm=setTimeout(disarm,3000); return; }
+  disarm(); doReset();
+});
+$('#winNext').addEventListener('click',function(){ startPuzzle((pi+1)%PUZZLES.length); window.scrollTo({top:0}); });
+$('#winView').addEventListener('click',function(){ win.hidden=true; });
+
+/* teclado na tela */
+var kbd=$('#kbd');
+['QWERTYUIOP','ASDFGHJKL','ZXCVBNM'].forEach(function(row,ri){
+  var d=document.createElement('div'); d.className='row';
+  row.split('').forEach(function(ch){
+    var b=document.createElement('button'); b.type='button'; b.textContent=ch; b.dataset.k=ch; d.appendChild(b);
+  });
+  if(ri===2){ var bk=document.createElement('button'); bk.type='button'; bk.className='wide'; bk.textContent='⌫'; bk.dataset.k='BACK'; bk.setAttribute('aria-label','Apagar'); d.appendChild(bk); }
+  kbd.appendChild(d);
+});
+kbd.addEventListener('click',function(ev){
+  var b=ev.target.closest('button'); if(!b) return;
+  if(b.dataset.k==='BACK') backspace(); else typeLetter(b.dataset.k);
+});
+
+/* teclado físico */
+document.addEventListener('keydown',function(ev){
+  if(ev.ctrlKey||ev.metaKey||ev.altKey) return;
+  var onBtn=ev.target && ev.target.closest && ev.target.closest('button');
+  var k=ev.key;
+  if(k==='Backspace'||k==='Delete'){ ev.preventDefault(); backspace(); return; }
+  if(k==='ArrowLeft'){ ev.preventDefault(); arrow(0,-1); return; }
+  if(k==='ArrowRight'){ ev.preventDefault(); arrow(0,1); return; }
+  if(k==='ArrowUp'){ ev.preventDefault(); arrow(-1,0); return; }
+  if(k==='ArrowDown'){ ev.preventDefault(); arrow(1,0); return; }
+  if((k===' '||k==='Enter') && onBtn) return;
+  if(k===' '){ ev.preventDefault(); selectCell(sel.r,sel.c); return; }
+  if(k==='Enter'){ ev.preventDefault(); stepClue(ev.shiftKey?-1:1); return; }
+  var base=k.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  if(/^[a-zA-Z]$/.test(base)){ ev.preventDefault(); typeLetter(base.toUpperCase()); }
+});
+
+document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden') save(); });
+window.addEventListener('pagehide',save);
+
+/* começa no primeiro desafio ainda não concluído */
+var all=loadAll(), start=0;
+for(var i=0;i<PUZZLES.length;i++){ if(!(all[i]&&all[i].solved)){ start=i; break; } }
+startPuzzle(start);
+})();
+</script>
+</body>
+</html>
