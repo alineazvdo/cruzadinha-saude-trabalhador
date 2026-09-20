@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ficha do SINAN em jogo: acidente de trabalho grave</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#EEF5F7; --surface:#FFFFFF; --ink:#12324A; --muted:#4F6B7D; --line:#B9CBD3; --edge:#12324A; --emph:#12324A;
+  --field:#FFFFFF; --sel:#FFD23F; --sel-ink:#12324A;
+  --accent:#0E7C66; --accent-ink:#FFFFFF; --ok:#0B6B58; --ok-bg:#D6F0E6;
+  --err:#B3311A; --err-bg:#FBE0DA; --warn:#7A4E00; --warn-bg:#FFF0B3; --focus:#0B5FA5;
+  --display:'Bricolage Grotesque','Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --body:'Atkinson Hyperlegible','Segoe UI',Verdana,system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
+    --field:#152F41; --sel:#FFD23F; --sel-ink:#0B2233;
+    --accent:#3FCFAA; --accent-ink:#04241C; --ok:#3FCFAA; --ok-bg:#12403A;
+    --err:#FF9A86; --err-bg:#4A2622; --warn:#FFD23F; --warn-bg:#3A3411; --focus:#7CC0FF;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
+  --field:#152F41; --sel:#FFD23F; --sel-ink:#0B2233;
+  --accent:#3FCFAA; --accent-ink:#04241C; --ok:#3FCFAA; --ok-bg:#12403A;
+  --err:#FF9A86; --err-bg:#4A2622; --warn:#FFD23F; --warn-bg:#3A3411; --focus:#7CC0FF;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.app{max-width:1080px;margin:0 auto;padding:18px 16px 48px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,5vw,2.4rem);line-height:1.08;margin:0 0 6px;letter-spacing:-0.02em}
+h2{font-family:var(--display);font-weight:800;font-size:1.35rem;margin:0 0 10px;line-height:1.2}
+h3{font-family:var(--display);font-weight:700;font-size:1.05rem;margin:0 0 8px}
+.back{margin:0 0 6px;font-size:.95rem}
+.back a{font-weight:700;text-underline-offset:3px;color:var(--ink)}
+.lede{margin:0;color:var(--muted);max-width:58ch}
+.tag{display:inline-block;font-family:var(--display);font-weight:700;font-size:.85rem;background:var(--surface);border:2px solid var(--edge);border-radius:999px;padding:2px 12px;white-space:nowrap}
+
+.card{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:16px 18px}
+.card + .card{margin-top:14px}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+
+.btn{background:var(--surface);border:2px solid var(--edge);border-radius:10px;padding:10px 18px;min-height:46px;font-weight:700}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn:hover{filter:brightness(.96)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+
+/* progresso */
+.steps{display:flex;gap:6px;margin:0 0 16px;padding:0;list-style:none}
+.steps li{flex:1;height:8px;border-radius:99px;background:var(--line)}
+.steps li.done{background:var(--accent)}
+.steps li.now{background:var(--emph)}
+
+/* tela do caso */
+.case{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media (min-width:980px){.case{grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:26px;align-items:start}.story{position:sticky;top:16px}}
+.story p{margin:0 0 10px}
+.story b{background:color-mix(in srgb,var(--sel) 45%,transparent);padding:0 3px;border-radius:3px;font-weight:700}
+.story .who{font-family:var(--display);font-weight:800;font-size:1.2rem;margin:0 0 8px}
+
+fieldset{border:2px solid var(--line);border-radius:14px;padding:12px 16px 16px;margin:0 0 14px;background:var(--surface);min-width:0}
+legend{font-family:var(--display);font-weight:800;padding:0 8px;font-size:1.05rem}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:4px;margin-top:10px;min-width:0}
+.field > label,.field > .lab{font-weight:700;font-size:.95rem}
+.field.wide{grid-column:1/-1}
+.hint{color:var(--muted);font-size:.85rem;margin:0}
+input[type=text],input[type=date],input[type=number],select{width:100%;min-height:46px;padding:8px 10px;border:2px solid var(--edge);border-radius:8px;background:var(--field);font-size:16px}
+.checks{display:flex;flex-wrap:wrap;gap:8px}
+.chk{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:10px;padding:8px 12px;min-height:44px;background:var(--field);cursor:pointer}
+.chk:has(input:checked){border-color:var(--accent);background:var(--ok-bg)}
+.chk input{width:20px;height:20px;accent-color:var(--accent);flex:none}
+
+/* feedback */
+.score{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.pct{font-family:var(--display);font-weight:800;font-size:3rem;line-height:1}
+.bar{height:12px;border-radius:99px;background:var(--line);overflow:hidden;flex:1;min-width:140px}
+.bar > i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.issue{border:2px solid var(--line);border-left-width:8px;border-radius:12px;padding:12px 14px;margin-top:10px;background:var(--surface)}
+.issue.crit{border-left-color:var(--err)}
+.issue.warn{border-left-color:var(--warn)}
+.badge{display:inline-block;font-family:var(--display);font-weight:700;font-size:.78rem;border-radius:999px;padding:1px 10px;margin-right:6px}
+.badge.crit{background:var(--err-bg);color:var(--err)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.badge.ok{background:var(--ok-bg);color:var(--ok)}
+.issue .cmp{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:6px 0;font-size:.95rem}
+.issue .cmp span:nth-child(odd){color:var(--muted)}
+.impact{margin:6px 0 0;padding:8px 10px;border-radius:8px;background:var(--bg);font-size:.95rem}
+.impact b{font-family:var(--display)}
+.oks{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+
+/* painel final */
+.stamp{display:inline-block;font-family:var(--display);font-weight:800;font-size:clamp(1.3rem,5vw,2rem);letter-spacing:.04em;border:5px solid currentColor;outline:2px solid currentColor;outline-offset:4px;border-radius:10px;padding:4px 16px;transform:rotate(-4deg);margin:8px 0 14px}
+.stamp.good{color:var(--ok)} .stamp.mid{color:var(--warn)} .stamp.bad{color:var(--err)}
+.ind{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media (min-width:760px){.ind{grid-template-columns:1fr 1fr}}
+.ind .it .top2{display:flex;justify-content:space-between;gap:8px;font-weight:700}
+.ind .it .pair{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center;font-size:.9rem;margin-top:6px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display)}
+td.bad{color:var(--err);font-weight:700}
+td.good{color:var(--ok);font-weight:700}
+ul.clean{margin:8px 0 0;padding-left:20px}
+ul.clean li{margin:4px 0}
+details summary{cursor:pointer;font-weight:700}
+footer{margin-top:28px;color:var(--muted);font-size:.9rem;max-width:70ch}
+@media (prefers-reduced-motion:no-preference){.stamp{animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}}
+@keyframes pop{from{transform:rotate(-4deg) scale(2);opacity:0}to{transform:rotate(-4deg) scale(1);opacity:1}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div>
+      <p class="back"><a href="index.html">‹ Saúde em jogo</a></p>
+      <h1>Ficha do SINAN em jogo</h1>
+      <p class="lede">Acidente de trabalho grave. Preencha a ficha a partir do relato do caso, envie ao SINAN e veja o que ocupação, CNAE e CAT fazem com a vigilância em saúde do trabalhador.</p>
+    </div>
+    <span class="tag" id="tag">Protótipo</span>
+  </header>
+  <main id="app"></main>
+  <footer>
+    Todos os casos, pessoas e empresas são fictícios. O jogo simplifica a Ficha de Investigação de Acidente de Trabalho (SVS/Sinan, versão de 2019) e usa listas reduzidas de CID-10 e de CNAE. Na rotina, siga sempre a ficha, o instrutivo, o Guia de Vigilância em Saúde e as normas vigentes na sua UF.
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- opções dos campos ---------- */
+var OPT = {
+  sexo:[['M','Masculino'],['F','Feminino'],['ign','Ignorado']],
+  raca:[['branca','Branca'],['preta','Preta'],['amarela','Amarela'],['parda','Parda'],['indigena','Indígena'],['ign','Ignorado']],
+  situacao:[['carteira','Empregado registrado com carteira assinada'],['sem_carteira','Empregado não registrado'],['autonomo','Autônomo/conta própria'],['estatutario','Servidor público estatutário'],['celetista','Servidor público celetista'],['aposentado','Aposentado'],['desempregado','Desempregado'],['temporario','Trabalho temporário'],['cooperativado','Cooperativado'],['avulso','Trabalhador avulso'],['empregador','Empregador'],['outros','Outros'],['ign','Ignorado']],
+  cnae:[
+    ['0151-2/01','0151-2/01 – Criação de bovinos para corte'],
+    ['0151-2/02','0151-2/02 – Criação de bovinos para leite'],
+    ['0710-3/01','0710-3/01 – Extração de minério de ferro'],
+    ['0724-3/01','0724-3/01 – Extração de minério de metais preciosos'],
+    ['4120-4/00','4120-4/00 – Construção de edifícios'],
+    ['4321-5/00','4321-5/00 – Instalação e manutenção elétrica'],
+    ['4399-1/03','4399-1/03 – Obras de alvenaria'],
+    ['4711-3/02','4711-3/02 – Supermercados (comércio varejista com predominância de alimentos)'],
+    ['4930-2/01','4930-2/01 – Transporte rodoviário de carga municipal'],
+    ['5320-2/02','5320-2/02 – Serviços de entrega rápida'],
+    ['5611-2/01','5611-2/01 – Restaurantes e similares'],
+    ['8411-6/00','8411-6/00 – Administração pública em geral']],
+  terceirizada:[['sim','Sim'],['nao','Não'],['na','Não se aplica'],['ign','Ignorado']],
+  local:[['contratante','Instalações do contratante'],['via','Via pública'],['terceiros','Instalações de terceiros'],['domicilio','Domicílio próprio'],['ign','Ignorado']],
+  causa:[
+    ['V23','V23 – Motociclista traumatizado em colisão com automóvel, pick-up ou caminhonete'],
+    ['W11','W11 – Queda em ou de escada de mão'],
+    ['W12','W12 – Queda em ou de um andaime'],
+    ['W20','W20 – Impacto causado por objeto lançado, projetado ou em queda'],
+    ['W26','W26 – Contato com faca, espada e punhal'],
+    ['W30','W30 – Contato com máquinas agrícolas'],
+    ['W85','W85 – Exposição a linhas de transmissão de corrente elétrica'],
+    ['X00','X00 – Exposição a fogo não controlado em edifício ou outra construção'],
+    ['Y96','Y96 – Circunstância relativa às condições de trabalho']],
+  tipo:[['tipico','Típico'],['trajeto','Trajeto'],['ign','Ignorado']],
+  outros:[['sim','Sim'],['nao','Não'],['ign','Ignorado']],
+  lesao:[
+    ['S06','S06 – Traumatismo intracraniano'],
+    ['S36','S36 – Traumatismo de órgão intra-abdominal'],
+    ['S52','S52 – Fratura do antebraço'],
+    ['S61','S61 – Ferimento do punho e da mão'],
+    ['S68','S68 – Amputação traumática do punho e da mão'],
+    ['S72','S72 – Fratura do fêmur'],
+    ['S82','S82 – Fratura da perna, incluindo tornozelo'],
+    ['T14.9','T14.9 – Traumatismo não especificado'],
+    ['T23','T23 – Queimadura e corrosão do punho e da mão'],
+    ['T75.4','T75.4 – Efeitos da corrente elétrica']],
+  regime:[['hosp','Hospitalar'],['amb','Ambulatorial'],['ambos','Ambos'],['ign','Ignorado']],
+  evolucao:[['cura','Cura'],['inc_temp','Incapacidade temporária'],['inc_parcial','Incapacidade parcial permanente'],['inc_total','Incapacidade total permanente'],['obito_at','Óbito por acidente de trabalho grave'],['obito_outras','Óbito por outras causas'],['outro','Outro'],['ign','Ignorado']],
+  cat:[['sim','Sim'],['nao','Não'],['na','Não se aplica'],['ign','Ignorado']]
+};
+OPT.cnaePrinc = OPT.cnae;
+var PARTES = [['olho','Olho'],['cabeca','Cabeça'],['pescoco','Pescoço'],['torax','Tórax'],['abdome','Abdome'],['mao','Mão'],['msup','Membro superior'],['minf','Membro inferior'],['pe','Pé'],['todo','Todo o corpo'],['outro','Outro']];
+var SETS = {partes:PARTES};
+
+/* número entre parênteses = número do campo na ficha do Sinan (versão 2019) */
+var FIELDS = [
+  {k:'dtNotif',label:'Data da notificação (campo 3)',w:1,type:'date'},
+  {k:'dtAcid',label:'Data do acidente (campo 7)',w:2,type:'date'},
+  {k:'idade',label:'Idade em anos (campo 10)',w:2,type:'num'},
+  {k:'sexo',label:'Sexo (campo 11)',w:1,type:'sel'},
+  {k:'raca',label:'Raça/cor (campo 13)',w:1,type:'sel'},
+  {k:'ocupacao',label:'Ocupação (campo 31)',w:3,type:'occ'},
+  {k:'situacao',label:'Situação no mercado de trabalho (campo 32)',w:2,type:'sel'},
+  {k:'local',label:'Local onde ocorreu o acidente (campo 34)',w:2,type:'sel'},
+  {k:'empresa',label:'Nome da empresa ou empregador (campo 36)',w:2,type:'txt'},
+  {k:'cnae',label:'Atividade econômica, CNAE (campo 37)',w:3,type:'sel'},
+  {k:'terceirizada',label:'O empregador é empresa terceirizada (campo 46)',w:2,type:'sel'},
+  {k:'cnaePrinc',label:'CNAE da empresa principal (campo 47)',w:2,type:'sel'},
+  {k:'causa',label:'Código da causa do acidente, CID-10 (campo 54)',w:3,type:'sel'},
+  {k:'tipo',label:'Tipo de acidente (campo 55)',w:2,type:'sel'},
+  {k:'outros',label:'Houve outros trabalhadores atingidos (campo 56)',w:1,type:'sel'},
+  {k:'quantos',label:'Se sim, quantos (campo 57)',w:1,type:'num'},
+  {k:'partes',label:'Partes do corpo atingidas (campo 63)',w:2,type:'set'},
+  {k:'lesao',label:'Diagnóstico da lesão, CID-10 (campo 64)',w:3,type:'sel'},
+  {k:'regime',label:'Regime de tratamento (campo 65)',w:1,type:'sel'},
+  {k:'evolucao',label:'Evolução do caso (campo 66)',w:2,type:'sel'},
+  {k:'dtObito',label:'Se óbito, data do óbito (campo 67)',w:2,type:'date'},
+  {k:'cat',label:'Foi emitida a CAT (campo 68)',w:3,type:'sel'}
+];
+var FIELD = {}; FIELDS.forEach(function(f){FIELD[f.k]=f;});
+
+/* ---------- o que cada erro provoca na análise ---------- */
+var IMPACT = {
+  dtNotif:'A data da notificação mostra quando a vigilância tomou conhecimento do caso. Data errada faz o caso parecer notificado antes de acontecer ou muito depois, e atrapalha o acompanhamento da oportunidade da notificação.',
+  dtAcid:'A data do acidente ancora o caso no tempo: série histórica, sazonalidade e cruzamento com a CAT e com os óbitos. Errada, ela desloca o caso de período e distorce a demora entre acidente e notificação.',
+  idade:'A idade define as faixas etárias das taxas e identifica os menores de 18 anos, cujos acidentes entram na notificação independentemente da gravidade. Idade errada ou em branco esconde o acidente com adolescente.',
+  sexo:'Sem o sexo, ou com o sexo errado, o perfil dos trabalhadores acidentados fica incompleto e as análises por sexo perdem a base.',
+  raca:'Sem raça/cor não se enxerga a desigualdade no risco de acidente e na gravidade. É um dos campos que costumam ficar em branco ou como ignorado.',
+  ocupacao:'Ocupação é campo obrigatório e um dos indicadores de qualidade da notificação. Sem a função específica, consultada na CBO, não se sabe quais categorias mais se acidentam nem onde direcionar a ação de vigilância. "Trabalhador", "ajudante" ou "trabalhador rural" valem quase como campo vazio.',
+  situacao:'A situação no mercado de trabalho mostra o vínculo do trabalhador. É o campo que revela a informalidade e ajuda a explicar por que muitos acidentes não chegam à Previdência.',
+  local:'O local do acidente diferencia obra e instalações da empresa, via pública e instalações de terceiros. Errado, ele orienta a inspeção e a análise de risco para o lugar errado.',
+  empresa:'O nome da empresa é campo obrigatório: identifica onde o trabalhador se acidentou, permite ver se outros trabalhadores se acidentaram no mesmo lugar e dá base para a inspeção sanitária.',
+  cnae:'O CNAE é campo obrigatório e outro indicador de qualidade da notificação. Ele diz em que setor o acidente ocorreu e por onde a vigilância deve começar. Com CNAE errado ou em branco, o caso cai no setor errado do mapa de risco. O código é o da atividade da empresa, e não o da ocupação do trabalhador.',
+  terceirizada:'Saber se o empregador é terceirizado é o que separa quem emprega de quem controla o ambiente de trabalho. Sem essa informação, a vigilância não consegue chegar à empresa principal.',
+  cnaePrinc:'Na terceirização, o CNAE da empresa principal mostra o setor em que o risco realmente está. Sem ele, o acidente fica associado só à terceirizada, e o setor principal não aparece na análise.',
+  causa:'A causa (CID-10, de V01 a Y98) diz como o acidente aconteceu: queda, corte, choque elétrico, colisão. É a informação que orienta a prevenção. O código Y96 não deve ser usado aqui, porque já identifica o agravo no início da ficha e não diz nada sobre o mecanismo.',
+  tipo:'Típico ou trajeto muda a resposta de vigilância. No trajeto, a prevenção passa por transporte e trânsito. No típico, passa pelo ambiente e pelo processo de trabalho. Trocar um pelo outro leva a ação para o lugar errado.',
+  outros:'Acidente com mais de um trabalhador é sinal de risco coletivo no ambiente de trabalho. Sem esse campo, o acidente coletivo é contado como um caso isolado.',
+  quantos:'O número de atingidos mede a dimensão do acidente coletivo. Em branco, ou inconsistente com o campo anterior, a ficha perde esse dado.',
+  partes:'As partes do corpo atingidas mostram o perfil das lesões e orientam a proteção. Incompletas, subestimam a gravidade do acidente.',
+  lesao:'O diagnóstico da lesão (CID-10) é campo obrigatório e é diferente da causa: a causa é como aconteceu, a lesão é o que aconteceu no corpo. Código genérico, como traumatismo não especificado, diz pouco sobre a gravidade do caso.',
+  regime:'O regime de tratamento (hospitalar, ambulatorial ou ambos) é um dos sinais de gravidade. Sem ele, o caso fica sem esse critério.',
+  evolucao:'A evolução alimenta a análise de gravidade e de letalidade. Evolução errada pode esconder um óbito ou uma incapacidade permanente.',
+  dtObito:'Sem a data do óbito, o caso fatal não entra na série de mortalidade por acidente de trabalho, e a inconsistência trava a análise da ficha.',
+  cat:'A CAT é campo obrigatório e liga a vigilância à Previdência. A empresa deve emitir a CAT até o primeiro dia útil seguinte ao acidente, e imediatamente em caso de morte. Se ela não emitir, o próprio trabalhador, seus dependentes, o sindicato, o médico que o assistiu ou uma autoridade pública podem emitir. Ficha com CAT "não" aponta trabalhador sem cobertura acidentária.'
+};
+
+var GENERIC = ['trabalhador','trabalhadora','autonomo','autonoma','outros','outro','ignorado','nao informado','nao sabe','n/i','ni','?','-','funcionario','funcionaria','empregado','empregada','operario','operaria','ajudante','auxiliar','colaborador','colaboradora','servicos gerais','trabalhador rural','trabalhadora rural','trabalhador bracal','peao','profissional','prestador de servicos'];
+
+/* ---------- casos fictícios ---------- */
+var CASES = [
+ { id:1, titulo:'A plataforma que cedeu',
+   relato:[
+    '<b>Rogério, 38 anos</b>, <b>pedreiro</b>, registrado com <b>carteira assinada</b> pela <b>Construtora Torre Alta</b>, que está construindo um prédio residencial. Ele se declara pardo.',
+    'Em <b>10 de março</b>, por volta das 10h, a plataforma do <b>andaime</b> cedeu e ele caiu de uns quatro metros, dentro do canteiro de obras. Nenhum colega se feriu.',
+    'Foi levado ao hospital com <b>fratura do fêmur</b>, na coxa. Foi operado e ficou <b>internado por seis dias</b>. Vai ficar afastado por alguns meses e deve voltar ao trabalho depois da reabilitação.',
+    'A empresa <b>emitiu a CAT</b> no dia seguinte. Você notificou o caso em <b>11 de março</b>.'],
+   ocup:/pedreir/, emp:/torre alta/,
+   truth:{dtNotif:'2026-03-11',dtAcid:'2026-03-10',idade:38,sexo:'M',raca:'parda',ocupacao:'pedreiro',situacao:'carteira',local:'contratante',empresa:'Construtora Torre Alta',cnae:'4120-4/00',terceirizada:'nao',cnaePrinc:'',causa:'W12',tipo:'tipico',outros:'nao',quantos:'',partes:['minf'],lesao:'S72',regime:'hosp',evolucao:'inc_temp',dtObito:'',cat:'sim'},
+   nota:'Causa e lesão são campos diferentes. A causa (campo 54) é como o acidente aconteceu: queda de andaime. A lesão (campo 64) é o que ele provocou no corpo: fratura do fêmur. Usar Y96 ou trocar um pelo outro tira da ficha a informação mais útil para a prevenção.' },
+ { id:2, titulo:'A entrega das nove da noite',
+   relato:[
+    '<b>Diego, 26 anos</b>, entregador de moto (<b>motoboy</b>) do <b>Restaurante Sabor da Serra</b>. Trabalha há oito meses <b>sem carteira assinada</b>, recebendo por dia. Ele se declara preto.',
+    'Em <b>18 de abril</b>, às 21h, fazendo uma entrega com a moto do restaurante, foi atingido por um <b>carro</b> num cruzamento, na <b>via pública</b>. Não havia outros trabalhadores envolvidos.',
+    'Teve <b>fratura da perna</b>, na região do tornozelo. Foi operado e ficou <b>internado por quatro dias</b>. Vai ficar afastado por vários meses.',
+    'O dono do restaurante disse ao hospital que "não precisa de papel" e <b>não emitiu a CAT</b>. Você notificou em <b>19 de abril</b>.'],
+   ocup:/motoboy|motociclista|entregador/, emp:/sabor da serra/,
+   truth:{dtNotif:'2026-04-19',dtAcid:'2026-04-18',idade:26,sexo:'M',raca:'preta',ocupacao:'motoboy',situacao:'sem_carteira',local:'via',empresa:'Restaurante Sabor da Serra',cnae:'5611-2/01',terceirizada:'nao',cnaePrinc:'',causa:'V23',tipo:'tipico',outros:'nao',quantos:'',partes:['minf'],lesao:'S82',regime:'hosp',evolucao:'inc_temp',dtObito:'',cat:'nao'},
+   nota:'O acidente aconteceu durante a entrega, a serviço do restaurante: é típico, e não de trajeto. Trajeto é só o deslocamento de casa para o trabalho e de volta. O CNAE também é o da empresa que emprega (restaurante), e não o da atividade de entregar. Sem carteira assinada e sem CAT, este é o tipo de caso que a vigilância em saúde do trabalhador precisa enxergar no Sinan.' },
+ { id:3, titulo:'O estilete no depósito',
+   relato:[
+    '<b>Larissa, 17 anos</b>, <b>repositora de mercadorias</b> no <b>Supermercado Bom Preço</b>, contratada como aprendiz com <b>carteira assinada</b>. Ela se declara parda.',
+    'Em <b>5 de junho</b>, ao abrir uma caixa de papelão com um <b>estilete</b>, cortou a palma da mão esquerda, no depósito da loja.',
+    'Foi atendida na UPA, levou pontos e <b>voltou para casa no mesmo dia</b>, com acompanhamento ambulatorial. Nenhum outro trabalhador se feriu. Ela se recuperou por completo.',
+    'A empresa <b>emitiu a CAT</b>. Você notificou em <b>6 de junho</b>.'],
+   ocup:/repositor|estoquista/, emp:/bom preco/,
+   truth:{dtNotif:'2026-06-06',dtAcid:'2026-06-05',idade:17,sexo:'F',raca:'parda',ocupacao:'repositora de mercadorias',situacao:'carteira',local:'contratante',empresa:'Supermercado Bom Preço',cnae:'4711-3/02',terceirizada:'nao',cnaePrinc:'',causa:'W26',tipo:'tipico',outros:'nao',quantos:'',partes:['mao'],lesao:'S61',regime:'amb',evolucao:'cura',dtObito:'',cat:'sim'},
+   nota:'O corte, sozinho, não seria grave. Mas acidente de trabalho com menor de 18 anos é notificado independentemente da gravidade, e é a idade correta na ficha que permite identificar esses casos.' },
+ { id:4, titulo:'O cabo dentro da mina',
+   relato:[
+    '<b>Edvaldo, 45 anos</b>, <b>eletricista de manutenção</b>, empregado com <b>carteira assinada</b> da <b>Elétrica Serra Norte</b>, empresa <b>terceirizada</b> que presta serviço para a <b>Mineração Ouro do Norte</b> (extração de ouro). Ele se declara branco.',
+    'Em <b>12 de agosto</b>, trocando um isolador de uma rede de alta tensão <b>dentro da área da mina</b>, encostou num cabo energizado e levou uma <b>descarga elétrica</b>. Um colega que tentou socorrê-lo também se queimou e foi atendido na UPA: <b>1 outro trabalhador atingido</b>.',
+    'Edvaldo chegou ao hospital com queimaduras nas <b>mãos</b> e no <b>tórax</b>. O diagnóstico principal registrado foi <b>efeitos da corrente elétrica</b>. Ficou <b>internado</b> na UTI e <b>morreu em 14 de agosto</b>, em consequência do acidente.',
+    'A terceirizada <b>emitiu a CAT</b>. Você notificou em <b>13 de agosto</b> e atualizou a ficha com o óbito no dia 14.'],
+   ocup:/eletricista/, emp:/eletrica serra norte/,
+   truth:{dtNotif:'2026-08-13',dtAcid:'2026-08-12',idade:45,sexo:'M',raca:'branca',ocupacao:'eletricista',situacao:'carteira',local:'terceiros',empresa:'Elétrica Serra Norte',cnae:'4321-5/00',terceirizada:'sim',cnaePrinc:'0724-3/01',causa:'W85',tipo:'tipico',outros:'sim',quantos:1,partes:['mao','torax'],lesao:'T75.4',regime:'hosp',evolucao:'obito_at',dtObito:'2026-08-14',cat:'sim'},
+   nota:'Na terceirização, o nome da empresa (campo 36) e o CNAE (campo 37) são os da terceirizada, que emprega o trabalhador. A empresa principal, onde está o risco, entra nos campos 46 a 49. Sem o CNAE dela, a mineração não aparece na análise. Como o acidente ocorreu na mina, que não pertence à empresa que o emprega, o local é "Instalações de terceiros".' },
+ { id:5, titulo:'A picadeira sem proteção',
+   relato:[
+    '<b>Antônio, 52 anos</b>, <b>tratador de gado leiteiro</b>, empregado com <b>carteira assinada</b> na <b>Fazenda Boa Esperança</b>, que cria vacas para produção de leite. Ele se declara pardo.',
+    'Em <b>22 de julho</b>, às 14h, colocando capim na <b>picadeira de forragem</b>, uma máquina agrícola sem proteção na boca de alimentação, teve a mão direita puxada e sofreu <b>amputação traumática da mão</b>, na altura do punho. Aconteceu no curral da fazenda, e ninguém mais se feriu.',
+    'Foi levado a um hospital regional e ficou <b>internado por cinco dias</b>. Ficou com <b>incapacidade parcial permanente</b>.',
+    'A fazenda <b>emitiu a CAT</b> quatro dias depois. Você notificou em <b>23 de julho</b>.'],
+   ocup:/tratador|pecuar|vaqueiro|leiteir|agropecu/, emp:/boa esperanca/,
+   truth:{dtNotif:'2026-07-23',dtAcid:'2026-07-22',idade:52,sexo:'M',raca:'parda',ocupacao:'tratador de gado leiteiro',situacao:'carteira',local:'contratante',empresa:'Fazenda Boa Esperança',cnae:'0151-2/02',terceirizada:'nao',cnaePrinc:'',causa:'W30',tipo:'tipico',outros:'nao',quantos:'',partes:['mao'],lesao:'S68',regime:'hosp',evolucao:'inc_parcial',dtObito:'',cat:'sim'},
+   nota:'A amputação é um dos critérios de acidente grave. Na ocupação, prefira a função (tratador de gado leiteiro) a termos como "trabalhador rural", que só dizem que o trabalho é no campo.' }
+];
+
+/* ---------- datas e textos ---------- */
+function parse(iso){ return iso ? new Date(iso+'T00:00:00Z') : null; }
+function fmt(iso){ return iso ? iso.split('-').reverse().join('/') : ''; }
+function norm(s){ return (s||'').toString().trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+function labelOf(k, v){
+  if(v===''||v==null) return '(em branco)';
+  var list = OPT[k] || SETS[k];
+  if(!list) return String(v);
+  for(var i=0;i<list.length;i++) if(list[i][0]===v) return list[i][1];
+  return String(v);
+}
+function setLabels(k, arr){ return arr.length ? arr.map(function(x){return labelOf(k,x);}).join(', ') : 'nenhuma'; }
+function isDeath(ev){ return ev==='obito_at' || ev==='obito_outras'; }
+
+/* ---------- motor de avaliação ---------- */
+function evaluate(C, A){
+  var T=C.truth, items=[], earned=0, possible=0;
+  FIELDS.forEach(function(f){
+    var mine=A[f.k], exp=T[f.k], st='ok', detail='', w=f.w, mineTxt='', expTxt='';
+    if(f.type==='date'){
+      mineTxt = mine ? fmt(mine) : '(em branco)'; expTxt = exp ? fmt(exp) : 'sem data (não houve óbito)';
+      if(exp===''){ if(mine!==''){ st='divergente'; } else { w=0; } }
+      else if(mine===''){ st='branco'; }
+      else if(mine!==exp){ st='divergente'; }
+    } else if(f.type==='num'){
+      mineTxt = mine===''?'(em branco)':String(mine);
+      expTxt = (exp==='')?'em branco (não se aplica)':String(exp);
+      if(exp===''){ if(mine!=='') st='divergente'; else w=0; }
+      else if(mine==='') st='branco';
+      else if(Number(mine)!==exp) st='divergente';
+    } else if(f.type==='sel'){
+      mineTxt=labelOf(f.k,mine); expTxt=(exp==='')?'em branco (não se aplica)':labelOf(f.k,exp);
+      if(exp===''){ if(mine!=='') st='divergente'; else w=0; }
+      else if(mine==='') st='branco';
+      else if(mine==='ign' && exp!=='ign') st='ignorado';
+      else if(mine!==exp) st='divergente';
+    } else if(f.type==='occ'){
+      mineTxt = mine ? mine : '(em branco)'; expTxt = exp;
+      var n=norm(mine);
+      if(!n) st='branco';
+      else if(GENERIC.indexOf(n)>=0) st='generica';
+      else if(!C.ocup.test(n)) st='divergente';
+    } else if(f.type==='txt'){
+      mineTxt = mine ? mine : '(em branco)'; expTxt = exp;
+      var t=norm(mine);
+      if(!t) st='branco';
+      else if(!C.emp.test(t)) st='divergente';
+    } else if(f.type==='set'){
+      var m=mine||[], missing=exp.filter(function(x){return m.indexOf(x)<0;}), extra=m.filter(function(x){return exp.indexOf(x)<0;});
+      mineTxt=setLabels(f.k,m); expTxt=setLabels(f.k,exp);
+      if(missing.length||extra.length){
+        st='divergente';
+        var parts=[];
+        if(missing.length) parts.push('Faltou marcar: '+setLabels(f.k,missing)+'.');
+        if(extra.length) parts.push('Marcado a mais: '+setLabels(f.k,extra)+'.');
+        detail=parts.join(' ');
+      }
+    }
+    possible+=w; if(st==='ok') earned+=w;
+    items.push({k:f.k,label:f.label,st:st,w:f.w,scored:w>0,mine:mineTxt,exp:expTxt,detail:detail,impact:IMPACT[f.k]});
+  });
+
+  /* regras de consistência */
+  var rules=[], g=A;
+  function rule(text,k){ rules.push({type:'cons',text:text,k:k,impact:IMPACT[k]}); }
+  if(g.dtAcid && g.dtNotif && g.dtAcid>g.dtNotif) rule('A data do acidente é posterior à data da notificação.','dtAcid');
+  if(isDeath(g.evolucao) && !g.dtObito) rule('Evolução para óbito sem data do óbito.','dtObito');
+  if(g.dtObito && g.evolucao && !isDeath(g.evolucao)) rule('Há data de óbito, mas a evolução não é óbito.','evolucao');
+  if(g.dtObito && g.dtAcid && g.dtObito<g.dtAcid) rule('A data do óbito é anterior à data do acidente.','dtObito');
+  if(g.terceirizada==='nao' && g.cnaePrinc) rule('Há CNAE da empresa principal, mas o empregador foi marcado como não terceirizado.','cnaePrinc');
+  if(g.terceirizada==='sim' && !g.cnaePrinc) rule('Empregador terceirizado, mas sem o CNAE da empresa principal.','cnaePrinc');
+  if(g.outros==='nao' && Number(g.quantos)>0) rule('Há número de trabalhadores atingidos, mas o campo "Houve outros trabalhadores atingidos" é Não.','outros');
+  if(g.outros==='sim' && !(Number(g.quantos)>0)) rule('Outros trabalhadores atingidos = Sim, mas sem informar quantos.','quantos');
+  if(g.causa==='Y96') rule('O CID Y96 foi usado no campo 54. Ele já identifica o agravo no início da ficha e não deve ser usado como causa do acidente.','causa');
+  if(g.lesao==='T14.9') rule('O diagnóstico da lesão é o genérico "traumatismo não especificado". O campo pede o diagnóstico específico.','lesao');
+
+  var pct = possible ? Math.round(earned/possible*100) : 0;
+  return {items:items, rules:rules, earned:earned, possible:possible, pct:pct};
+}
+
+/* ---------- DOM helpers ---------- */
+function h(tag, props){
+  var e=document.createElement(tag), kids=Array.prototype.slice.call(arguments,2);
+  if(props) Object.keys(props).forEach(function(k){
+    var v=props[k];
+    if(k==='class') e.className=v;
+    else if(k==='html') e.innerHTML=v;
+    else if(k.slice(0,2)==='on') e.addEventListener(k.slice(2),v);
+    else if(v===true) e.setAttribute(k,'');
+    else if(v!==false && v!=null) e.setAttribute(k,v);
+  });
+  (function add(list){ list.forEach(function(c){ if(c==null||c===false) return; if(Array.isArray(c)) add(c); else e.append(c.nodeType?c:document.createTextNode(c)); }); })(kids);
+  return e;
+}
+var root=document.getElementById('app');
+function show(node){ root.innerHTML=''; root.append(node); window.scrollTo({top:0}); }
+function steps(i, total){
+  var ul=h('ul',{class:'steps','aria-label':'Progresso'});
+  for(var n=0;n<total;n++) ul.append(h('li',{class:n<i?'done':(n===i?'now':'')}));
+  return ul;
+}
+
+/* ---------- estado ---------- */
+var state={ i:0, answers:[], results:[] };
+var KEY='ficha-sinan-acidente-trabalho:v1';
+function best(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}').best||0; }catch(e){ return 0; } }
+function saveBest(v){ try{ if(v>best()) localStorage.setItem(KEY, JSON.stringify({best:v})); }catch(e){} }
+
+/* ---------- telas ---------- */
+function screenIntro(){
+  var b=best();
+  show(h('div',null,
+    h('div',{class:'card'},
+      h('h2',null,'Você é a pessoa que digita a ficha'),
+      h('p',null,'Cinco acidentes de trabalho chegam à vigilância. Cada um vem com um relato. Seu trabalho é preencher a ficha com fidelidade ao que o relato informa, sem inventar e sem deixar de registrar.'),
+      h('ul',{class:'clean'},
+        h('li',null,h('b',null,'Preencha'),' a ficha a partir do relato. O número entre parênteses é o campo da ficha do Sinan.'),
+        h('li',null,h('b',null,'Envie ao SINAN'),' e veja os erros e o que cada um provoca na análise da vigilância em saúde do trabalhador.'),
+        h('li',null,'No fim, compare ',h('b',null,'a sua base com a base correta'),' da regional.')),
+      h('p',{class:'muted small'},'Use "Ignorado" só quando a informação realmente não existir. Se ela está no relato, ela deve estar na ficha.'),
+      h('p',{class:'muted small'},'A ficha é a de acidente de trabalho grave do Sinan. Pelo Guia de Vigilância em Saúde, a notificação vale hoje para todo acidente de trabalho, independentemente da gravidade, e a ficha é a mesma.'),
+      b? h('p',{class:'muted small'},'Sua melhor pontuação neste navegador: '+b+'%.'):null,
+      h('div',{class:'actions'}, h('button',{class:'btn primary',type:'button',onclick:function(){ state={i:0,answers:[],results:[]}; screenCase(0); }},'Começar'))
+    )));
+}
+
+function selectField(f, id){
+  var s=h('select',{id:id,name:f.k}, h('option',{value:''},'Selecione'));
+  OPT[f.k].forEach(function(o){ s.append(h('option',{value:o[0]},o[1])); });
+  return s;
+}
+function fieldWrap(f, ctl, id, hint, wide){
+  return h('div',{class:'field'+(wide?' wide':'')}, h('label',{for:id},f.label), ctl, hint?h('p',{class:'hint'},hint):null);
+}
+function checkGroup(f){
+  var box=h('div',{class:'checks',role:'group','aria-label':f.label});
+  SETS[f.k].forEach(function(o){
+    var id='c_'+f.k+'_'+o[0];
+    box.append(h('label',{class:'chk',for:id}, h('input',{type:'checkbox',id:id,name:f.k,value:o[0]}), o[1]));
+  });
+  return h('div',{class:'field'}, h('span',{class:'lab'},f.label), box);
+}
+
+function screenCase(i){
+  state.i=i; var C=CASES[i];
+  var story=h('section',{class:'card story','aria-label':'Relato do caso'},
+    h('span',{class:'tag'},'Caso '+(i+1)+' de '+CASES.length),
+    h('p',{class:'who',style:'margin-top:10px'},C.titulo),
+    C.relato.map(function(p){ return h('p',{html:p}); }));
+
+  var F=function(k){return FIELD[k];};
+  var sel=function(k,wide){ return fieldWrap(F(k),selectField(F(k),'f_'+k),'f_'+k,null,wide); };
+  var form=h('form',{novalidate:true,onsubmit:function(ev){ ev.preventDefault(); submit(); }},
+    h('fieldset',null,h('legend',null,'Notificação e acidente'),
+      h('div',{class:'row2'},
+        fieldWrap(F('dtNotif'),h('input',{type:'date',id:'f_dtNotif',name:'dtNotif'}),'f_dtNotif'),
+        fieldWrap(F('dtAcid'),h('input',{type:'date',id:'f_dtAcid',name:'dtAcid'}),'f_dtAcid'))),
+    h('fieldset',null,h('legend',null,'Trabalhador'),
+      h('div',{class:'row2'},
+        fieldWrap(F('idade'),h('input',{type:'number',id:'f_idade',name:'idade',min:'0',max:'120',inputmode:'numeric'}),'f_idade'),
+        sel('sexo'), sel('raca'), sel('situacao',true)),
+      fieldWrap(F('ocupacao'),h('input',{type:'text',id:'f_ocupacao',name:'ocupacao',autocomplete:'off'}),'f_ocupacao','Escreva a função específica, como consta na CBO (por exemplo, "soldador"). Termos genéricos empobrecem a análise.')),
+    h('fieldset',null,h('legend',null,'Empresa contratante'),
+      fieldWrap(F('empresa'),h('input',{type:'text',id:'f_empresa',name:'empresa',autocomplete:'off'}),'f_empresa','Razão social ou nome da empresa que emprega o trabalhador.'),
+      h('div',{class:'row2'},
+        fieldWrap(F('cnae'),selectField(F('cnae'),'f_cnae'),'f_cnae','É o CNAE da atividade da empresa, e não o da ocupação do trabalhador.',true),
+        sel('terceirizada'),
+        fieldWrap(F('cnaePrinc'),selectField(F('cnaePrinc'),'f_cnaePrinc'),'f_cnaePrinc','Só se o empregador for terceirizado. Caso contrário, deixe em branco.',true))),
+    h('fieldset',null,h('legend',null,'Dados do acidente'),
+      h('div',{class:'row2'},
+        sel('local'),
+        fieldWrap(F('causa'),selectField(F('causa'),'f_causa'),'f_causa','A causa diz como o acidente aconteceu. A lesão vem mais adiante.',true),
+        sel('tipo'), sel('outros'),
+        fieldWrap(F('quantos'),h('input',{type:'number',id:'f_quantos',name:'quantos',min:'0',max:'999',inputmode:'numeric'}),'f_quantos','Deixe em branco se não houve outros atingidos.'))),
+    h('fieldset',null,h('legend',null,'Lesão e tratamento'),
+      checkGroup(F('partes')),
+      h('div',{class:'row2'},
+        fieldWrap(F('lesao'),selectField(F('lesao'),'f_lesao'),'f_lesao','O diagnóstico específico da lesão, e não a causa.',true),
+        sel('regime'))),
+    h('fieldset',null,h('legend',null,'Conclusão do caso'),
+      h('div',{class:'row2'},
+        sel('evolucao'),
+        fieldWrap(F('dtObito'),h('input',{type:'date',id:'f_dtObito',name:'dtObito'}),'f_dtObito','Deixe em branco se não houve óbito.'),
+        sel('cat'))),
+    h('div',{class:'actions'}, h('button',{class:'btn primary',type:'submit',id:'send'},'Enviar ao SINAN')));
+
+  show(h('div',null, steps(i,CASES.length), h('div',{class:'case'}, story, form)));
+}
+
+function collect(){
+  var a={};
+  FIELDS.forEach(function(f){
+    if(f.type==='set'){
+      a[f.k]=Array.prototype.map.call(document.querySelectorAll('input[name="'+f.k+'"]:checked'),function(x){return x.value;});
+    } else {
+      var el=document.getElementById('f_'+f.k); a[f.k]=el?el.value:'';
+    }
+  });
+  return a;
+}
+
+function submit(){
+  var A=collect(), C=CASES[state.i], R=evaluate(C,A);
+  state.answers[state.i]=A; state.results[state.i]=R;
+  screenFeedback(state.i);
+}
+
+function issueCard(it){
+  var crit = it.w>=2;
+  var badge = it.st==='branco'?'Campo em branco': it.st==='ignorado'?'Marcado como ignorado': it.st==='generica'?'Ocupação genérica':'Diferente do relato';
+  return h('div',{class:'issue '+(crit?'crit':'warn')},
+    h('div',null,h('span',{class:'badge '+(crit?'crit':'warn')},crit?'Crítico':'Atenção'),h('b',null,it.label),' ',h('span',{class:'muted small'},'('+badge+')')),
+    h('div',{class:'cmp'}, h('span',null,'Você:'),h('span',null,it.mine), h('span',null,'Relato:'),h('span',null,it.exp)),
+    it.detail?h('p',{class:'small',style:'margin:4px 0'},it.detail):null,
+    h('p',{class:'impact'},h('b',null,'O que isso causa: '),it.impact));
+}
+
+function screenFeedback(i){
+  var C=CASES[i], R=state.results[i];
+  var bad=R.items.filter(function(x){return x.st!=='ok' && x.scored;});
+  var oks=R.items.filter(function(x){return x.st==='ok' && x.scored;});
+  bad.sort(function(a,b){return b.w-a.w;});
+  var cons=R.rules;
+  var last=(i===CASES.length-1);
+
+  show(h('div',null, steps(i+1,CASES.length),
+    h('div',{class:'card'},
+      h('span',{class:'tag'},'Caso '+(i+1)+': '+C.titulo),
+      h('div',{class:'score',style:'margin-top:10px'},
+        h('div',{class:'pct'},R.pct+'%'),
+        h('div',{style:'flex:1;min-width:160px'},
+          h('div',{class:'bar'},h('i',{style:'width:'+R.pct+'%'})),
+          h('p',{class:'muted small',style:'margin:6px 0 0'},'Qualidade da ficha (campos críticos valem mais)'))),
+      bad.length===0 && cons.length===0 ? h('p',{style:'margin:10px 0 0'},'Ficha impecável: todos os campos batem com o relato.') : null),
+    bad.length?h('div',{class:'card'},h('h3',null,'Erros de preenchimento ('+bad.length+')'), bad.map(issueCard)):null,
+    cons.length?h('div',{class:'card'},h('h3',null,'Inconsistências que o SINAN apontaria'),
+      cons.map(function(r){ return h('div',{class:'issue crit'}, h('span',{class:'badge crit'},'Inconsistência'), r.text, h('p',{class:'impact'},h('b',null,'O que isso causa: '),r.impact)); })):null,
+    C.nota?h('div',{class:'card'},h('h3',null,'O que este caso ensina'),h('p',{style:'margin:0'},C.nota)):null,
+    oks.length?h('div',{class:'card'},h('h3',null,'Campos corretos ('+oks.length+')'),
+      h('div',{class:'oks'}, oks.map(function(x){ return h('span',{class:'badge ok'},x.label); }))):null,
+    h('div',{class:'actions'}, h('button',{class:'btn primary',type:'button',onclick:function(){ last?screenFinal():screenCase(i+1); }}, last?'Ver o painel da regional':'Próximo caso'))
+  ));
+}
+
+/* ---------- painel final ---------- */
+function stOf(R,k){ for(var i=0;i<R.items.length;i++) if(R.items[i].k===k) return R.items[i].st; return 'ok'; }
+function shortOf(k, v){ return v ? (k==='cnae'||k==='causa' ? v : labelOf(k,v)) : '(em branco)'; }
+
+function screenFinal(){
+  var n=CASES.length, res=state.results, ans=state.answers;
+  var avg=Math.round(res.reduce(function(s,r){return s+r.pct;},0)/n);
+  saveBest(avg);
+
+  var occOk=0, cnaeOk=0, causaOk=0, catOk=0, consOk=0;
+  var obMine=0, obTrue=0, menMine=0, menTrue=0, infMine=0, infTrue=0, catNaoMine=0, catNaoTrue=0, colMine=0, colTrue=0;
+  var errCount={};
+  CASES.forEach(function(C,i){
+    var A=ans[i], T=C.truth, R=res[i];
+    if(stOf(R,'ocupacao')==='ok') occOk++;
+    if(stOf(R,'cnae')==='ok') cnaeOk++;
+    if(stOf(R,'causa')==='ok') causaOk++;
+    if(stOf(R,'cat')==='ok') catOk++;
+    if(R.rules.length===0) consOk++;
+    if(A.evolucao==='obito_at') obMine++;
+    if(T.evolucao==='obito_at') obTrue++;
+    if(A.idade!=='' && Number(A.idade)<18) menMine++;
+    if(T.idade<18) menTrue++;
+    if(A.situacao==='sem_carteira') infMine++;
+    if(T.situacao==='sem_carteira') infTrue++;
+    if(A.cat==='nao') catNaoMine++;
+    if(T.cat==='nao') catNaoTrue++;
+    if(A.outros==='sim') colMine++;
+    if(T.outros==='sim') colTrue++;
+    R.items.forEach(function(it){ if(it.st!=='ok' && it.scored) errCount[it.k]=(errCount[it.k]||0)+1; });
+  });
+  var pc=function(x,t){return Math.round(x/t*100);};
+
+  function ind(title, mine, truth, note){
+    return h('div',{class:'it card'},
+      h('div',{class:'top2'},h('span',null,title)),
+      h('div',{class:'pair'},
+        h('span',null,'Sua base'), h('div',{class:'bar'},h('i',{style:'width:'+mine+'%'})), h('b',null,mine+'%'),
+        h('span',null,'Correta'), h('div',{class:'bar'},h('i',{style:'width:'+truth+'%;background:var(--emph)'})), h('b',null,truth+'%')),
+      note?h('p',{class:'muted small',style:'margin:8px 0 0'},note):null);
+  }
+
+  var verdict = avg>=90?['good','BASE CONFIÁVEL']:avg>=70?['mid','BASE COM RESSALVAS']:['bad','BASE COMPROMETIDA'];
+  var rows = CASES.map(function(C,i){
+    var A=ans[i], T=C.truth;
+    var okC = A.cnae===T.cnae, okK = A.causa===T.causa, okT = A.cat===T.cat, okE = A.evolucao===T.evolucao;
+    return h('tr',null,
+      h('td',null,'Caso '+(i+1)),
+      h('td',{class:okC?'good':'bad'}, shortOf('cnae',A.cnae)+(okC?'':' (correto: '+T.cnae+')')),
+      h('td',{class:okK?'good':'bad'}, shortOf('causa',A.causa)+(okK?'':' (correta: '+T.causa+')')),
+      h('td',{class:okT?'good':'bad'}, shortOf('cat',A.cat)+(okT?'':' (correto: '+labelOf('cat',T.cat)+')')),
+      h('td',{class:okE?'good':'bad'}, shortOf('evolucao',A.evolucao)+(okE?'':' (correta: '+labelOf('evolucao',T.evolucao)+')')));
+  });
+
+  var topErr = Object.keys(errCount).map(function(k){return [k,errCount[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,4);
+
+  show(h('div',null, steps(n,n),
+    h('div',{class:'card'},
+      h('h2',null,'Painel da regional: sua base contra a base correta'),
+      h('span',{class:'stamp '+verdict[0]},verdict[1]),
+      h('p',{style:'margin:0'},'Qualidade média das fichas: ',h('b',null,avg+'%'),'.'),
+      best()>avg?h('p',{class:'muted small'},'Melhor pontuação neste navegador: '+best()+'%.'):null),
+    h('div',{class:'card'},
+      h('h3',null,'O que a vigilância em saúde do trabalhador veria nos seus dados'),
+      h('ul',{class:'clean'},
+        h('li',null,'Acidentes com setor (CNAE) identificado corretamente: ',h('b',null,cnaeOk),' de ',n,'. É por setor que a inspeção é planejada.'),
+        h('li',null,'Óbitos por acidente de trabalho: ',h('b',null,obMine),' na sua base; o correto seria ',h('b',null,obTrue),'.'),
+        h('li',null,'Acidentes com menores de 18 anos: ',h('b',null,menMine),' na sua base; o correto seria ',h('b',null,menTrue),'.'),
+        h('li',null,'Trabalhadores sem carteira assinada: ',h('b',null,infMine),' na sua base; o correto seria ',h('b',null,infTrue),'.'),
+        h('li',null,'Casos sem CAT emitida: ',h('b',null,catNaoMine),' na sua base; o correto seria ',h('b',null,catNaoTrue),'.'),
+        h('li',null,'Acidentes com mais de um trabalhador atingido: ',h('b',null,colMine),' na sua base; o correto seria ',h('b',null,colTrue),'.'))),
+    h('div',{class:'ind',style:'margin-top:14px'},
+      ind('Ocupação específica e correta', pc(occOk,n), 100, 'O preenchimento da ocupação é um dos indicadores de qualidade do Guia de Vigilância em Saúde. Aqui, só conta a ocupação específica e compatível com o relato.'),
+      ind('CNAE correto', pc(cnaeOk,n), 100, 'O preenchimento do CNAE é outro indicador de qualidade do Guia de Vigilância em Saúde. Aqui, só conta o código correto.'),
+      ind('Causa do acidente correta (CID-10)', pc(causaOk,n), 100, null),
+      ind('CAT informada corretamente', pc(catOk,n), 100, null),
+      ind('Fichas sem inconsistência', pc(consOk,n), 100, null)),
+    h('div',{class:'card',style:'margin-top:14px'},
+      h('h3',null,'Caso a caso'),
+      h('div',{class:'tablewrap'}, h('table',null,
+        h('thead',null,h('tr',null,h('th',null,'Caso'),h('th',null,'CNAE'),h('th',null,'Causa'),h('th',null,'CAT'),h('th',null,'Evolução'))),
+        h('tbody',null,rows)))),
+    topErr.length?h('div',{class:'card'},
+      h('h3',null,'Campos onde você mais errou'),
+      h('ul',{class:'clean'}, topErr.map(function(t){ return h('li',null,FIELD[t[0]].label+': '+t[1]+(t[1]===1?' caso':' casos')); }))):null,
+    h('div',{class:'actions'},
+      h('button',{class:'btn primary',type:'button',onclick:function(){ state={i:0,answers:[],results:[]}; screenCase(0); }},'Jogar de novo'),
+      h('button',{class:'btn',type:'button',onclick:screenIntro},'Voltar ao início'))
+  ));
+}
+
+window.SinanGame = {CASES:CASES, FIELDS:FIELDS, evaluate:evaluate};
+screenIntro();
+})();
+</script>
+</body>
+</html>
