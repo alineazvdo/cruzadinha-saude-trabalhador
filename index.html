@@ -13,7 +13,7 @@
   color-scheme:light;
   --bg:#EEF5F7; --surface:#FFFFFF; --ink:#12324A; --muted:#4F6B7D; --line:#B9CBD3; --edge:#12324A; --emph:#12324A;
   --cell:#FFFFFF; --sel:#FFD23F; --sel-ink:#12324A; --focus:#0B5FA5;
-  --t-green:#0E7C66; --t-orange:#B4470A; --t-blue:#1F5FA8; --t-soon:#6B8391;
+  --t-green:#0E7C66; --t-orange:#B4470A; --t-blue:#1F5FA8; --t-violet:#5B3FB4; --t-soon:#6B8391;
   --display:'Bricolage Grotesque','Trebuchet MS','Segoe UI',system-ui,sans-serif;
   --body:'Atkinson Hyperlegible','Segoe UI',Verdana,system-ui,sans-serif;
   box-sizing:border-box;
@@ -25,14 +25,14 @@
     color-scheme:dark;
     --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
     --cell:#152F41; --sel:#FFD23F; --sel-ink:#0B2233; --focus:#7CC0FF;
-    --t-green:#3FCFAA; --t-orange:#FF9A5C; --t-blue:#7CB7FF; --t-soon:#7C95A4;
+    --t-green:#3FCFAA; --t-orange:#FF9A5C; --t-blue:#7CB7FF; --t-violet:#B79CFF; --t-soon:#7C95A4;
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
   --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
   --cell:#152F41; --sel:#FFD23F; --sel-ink:#0B2233; --focus:#7CC0FF;
-  --t-green:#3FCFAA; --t-orange:#FF9A5C; --t-blue:#7CB7FF; --t-soon:#7C95A4;
+  --t-green:#3FCFAA; --t-orange:#FF9A5C; --t-blue:#7CB7FF; --t-violet:#B79CFF; --t-soon:#7C95A4;
 }
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
 *,*::before,*::after{box-sizing:inherit}
@@ -65,13 +65,15 @@ a.card:hover{border-color:var(--tone);transform:translateY(-3px)}
 .chip{font-size:.8rem;font-weight:700;border:2px solid var(--line);border-radius:999px;padding:1px 10px}
 .prog{font-size:.88rem;font-weight:700;color:var(--tone)}
 .cta{margin-top:auto;padding-top:6px;font-family:var(--display);font-weight:800;color:var(--tone)}
+.art .bar{fill:color-mix(in srgb,var(--tone) 22%,transparent)}
+.card.soon .art .bar{fill:none;stroke-dasharray:4 3}
 .card.soon{border-style:dashed;background:transparent}
 .card.soon .art{background:transparent;border-bottom-style:dashed}
 .card.soon h3{color:var(--muted)}
 .card.soon .cta{color:var(--muted);font-weight:700}
 
 /* cores por jogo */
-.tone-green{--tone:var(--t-green)} .tone-orange{--tone:var(--t-orange)} .tone-blue{--tone:var(--t-blue)} .tone-soon{--tone:var(--t-soon)}
+.tone-green{--tone:var(--t-green)} .tone-orange{--tone:var(--t-orange)} .tone-blue{--tone:var(--t-blue)} .tone-violet{--tone:var(--t-violet)} .tone-soon{--tone:var(--t-soon)}
 
 footer{margin-top:44px;color:var(--muted);font-size:.9rem;max-width:70ch}
 @media (prefers-reduced-motion:reduce){.card{transition:none}a.card:hover{transform:none}}
@@ -104,6 +106,7 @@ footer{margin-top:44px;color:var(--muted);font-size:.9rem;max-width:70ch}
 var CATEGORIAS = [
   { id:'cruzadinhas', titulo:'Cruzadinhas', sub:'Palavras cruzadas de nível profissional, em desafios progressivos.' },
   { id:'fichas', titulo:'Fichas e sistemas', sub:'Preencha, envie e veja o que cada erro provoca na análise.' },
+  { id:'campo', titulo:'Investigação de campo', sub:'Conduza a investigação decidindo cada etapa.' },
   { id:'breve', titulo:'Em breve', sub:'Próximos jogos do projeto.' }
 ];
 var JOGOS = [
@@ -116,12 +119,12 @@ var JOGOS = [
   { cat:'fichas', href:'ficha-sinan-dengue.html', titulo:'Ficha do SINAN em jogo: dengue',
     desc:'Preencha fichas de casos fictícios a partir do relato e compare a sua base com a base correta.',
     chips:['5 casos','Protótipo'], arte:'ficha', tom:'blue', key:'ficha-sinan-dengue:v1', tipo:'ficha' },
+  { cat:'campo', href:'detetive-de-surtos.html', titulo:'Detetive de surtos',
+    desc:'Do alerta ao encerramento: investigue um surto de DTA, analise a curva e a taxa de ataque e decida as medidas.',
+    chips:['8 etapas','Protótipo'], arte:'surto', tom:'violet', key:'detetive-surtos:v1', tipo:'ficha' },
   { cat:'breve', titulo:'Ficha do SINAN em jogo: acidente de trabalho grave',
     desc:'Ocupação, CNAE, CAT e o que a ficha incompleta faz com a vigilância em saúde do trabalhador.',
-    chips:['Em breve'], arte:'ficha', tom:'soon' },
-  { cat:'breve', titulo:'Detetive de surtos',
-    desc:'Do alerta ao bloqueio: investigue um surto, monte a curva e decida as medidas de controle.',
-    chips:['Em breve'], arte:'surto', tom:'soon' }
+    chips:['Em breve'], arte:'ficha', tom:'soon' }
 ];
 
 /* ---------- ilustrações (SVG que herda as cores do tema) ---------- */
@@ -152,7 +155,7 @@ function arteFicha(){
 }
 function arteSurto(){
   var bars=[10,16,26,44,70,52,30,18], o='', i, w=16;
-  for(i=0;i<bars.length;i++) o+='<rect x="'+(34+i*20)+'" y="'+(96-bars[i])+'" width="'+w+'" height="'+bars[i]+'" rx="3" fill="none" stroke="var(--tone)" stroke-width="2.5" stroke-dasharray="4 3"/>';
+  for(i=0;i<bars.length;i++) o+='<rect x="'+(34+i*20)+'" y="'+(96-bars[i])+'" width="'+w+'" height="'+bars[i]+'" rx="3" class="bar" stroke="var(--tone)" stroke-width="2.5"/>';
   o+='<line x1="26" y1="97" x2="196" y2="97" stroke="var(--tone)" stroke-width="2.5"/>';
   return svg(o);
 }

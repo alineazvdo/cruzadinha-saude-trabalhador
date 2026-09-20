@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Detetive de surtos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#EEF5F7; --surface:#FFFFFF; --ink:#12324A; --muted:#4F6B7D; --line:#B9CBD3; --edge:#12324A; --emph:#12324A;
+  --field:#FFFFFF; --sel:#FFD23F; --sel-ink:#12324A;
+  --accent:#5B3FB4; --accent-ink:#FFFFFF; --ok:#0B6B58; --ok-bg:#D6F0E6;
+  --err:#B3311A; --err-bg:#FBE0DA; --warn:#7A4E00; --warn-bg:#FFF0B3; --focus:#0B5FA5;
+  --display:'Bricolage Grotesque','Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --body:'Atkinson Hyperlegible','Segoe UI',Verdana,system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
+    --field:#152F41; --sel:#FFD23F; --sel-ink:#0B2233;
+    --accent:#B79CFF; --accent-ink:#1B0E44; --ok:#3FCFAA; --ok-bg:#12403A;
+    --err:#FF9A86; --err-bg:#4A2622; --warn:#FFD23F; --warn-bg:#3A3411; --focus:#7CC0FF;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
+  --field:#152F41; --sel:#FFD23F; --sel-ink:#0B2233;
+  --accent:#B79CFF; --accent-ink:#1B0E44; --ok:#3FCFAA; --ok-bg:#12403A;
+  --err:#FF9A86; --err-bg:#4A2622; --warn:#FFD23F; --warn-bg:#3A3411; --focus:#7CC0FF;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.app{max-width:860px;margin:0 auto;padding:18px 16px 56px}
+.back{margin:0 0 6px;font-size:.95rem}
+.back a{font-weight:700;text-underline-offset:3px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(1.7rem,5.5vw,2.5rem);line-height:1.08;margin:0 0 6px;letter-spacing:-0.02em}
+h2{font-family:var(--display);font-weight:800;font-size:1.3rem;margin:0 0 10px;line-height:1.2}
+h3{font-family:var(--display);font-weight:700;font-size:1.05rem;margin:0 0 8px}
+.lede{margin:0 0 18px;color:var(--muted);max-width:60ch}
+.muted{color:var(--muted)} .small{font-size:.9rem}
+
+.card{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:16px 18px}
+.card + .card{margin-top:14px}
+.tag{display:inline-block;font-family:var(--display);font-weight:700;font-size:.85rem;background:var(--surface);border:2px solid var(--edge);border-radius:999px;padding:2px 12px}
+
+.btn{background:var(--surface);border:2px solid var(--edge);border-radius:10px;padding:10px 18px;min-height:46px;font-weight:700}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+
+/* etapas */
+.steps{display:flex;gap:5px;margin:0 0 6px;padding:0;list-style:none}
+.steps li{flex:1;height:8px;border-radius:99px;background:var(--line)}
+.steps li.done{background:var(--accent)} .steps li.now{background:var(--emph)}
+.stepname{margin:0 0 14px;color:var(--muted);font-size:.92rem}
+
+/* peças do caso */
+.exhibit{border-left:8px solid var(--accent)}
+.exhibit p{margin:0 0 8px}
+.exhibit b{font-family:var(--display)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display)}
+td.num,th.num{text-align:right;white-space:nowrap}
+.chart{width:100%;height:auto;display:block;margin:6px 0 2px}
+
+/* perguntas */
+.q{margin-top:16px}
+.q .qt{font-weight:700;margin:0 0 4px}
+.q .hint{margin:0 0 8px;color:var(--muted);font-size:.9rem}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:2px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--field);cursor:pointer;min-height:48px}
+.opt:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--field))}
+.opt input{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex:none}
+
+/* feedback */
+.badge{display:inline-block;font-family:var(--display);font-weight:700;font-size:.78rem;border-radius:999px;padding:1px 10px;margin-right:6px}
+.badge.ok{background:var(--ok-bg);color:var(--ok)} .badge.mid{background:var(--warn-bg);color:var(--warn)} .badge.bad{background:var(--err-bg);color:var(--err)}
+.fb{border:2px solid var(--line);border-left-width:8px;border-radius:12px;padding:12px 14px;margin-top:12px;background:var(--surface)}
+.fb.ok{border-left-color:var(--ok)} .fb.mid{border-left-color:var(--warn)} .fb.bad{border-left-color:var(--err)}
+.fb .qt{font-weight:700;margin:0 0 6px}
+.fb ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.fb li{font-size:.95rem;padding:6px 10px;border-radius:8px;background:var(--bg)}
+.fb li .st{font-family:var(--display);font-weight:700;font-size:.78rem;margin-right:6px}
+.fb li.rec{outline:2px solid var(--ok)} .fb li.nao.pick{outline:2px solid var(--err)}
+.why{margin:8px 0 0;padding:8px 10px;border-radius:8px;background:var(--bg);font-size:.95rem}
+.score{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.pct{font-family:var(--display);font-weight:800;font-size:2.8rem;line-height:1}
+.bar{height:12px;border-radius:99px;background:var(--line);overflow:hidden;flex:1;min-width:140px}
+.bar > i{display:block;height:100%;background:var(--accent);border-radius:99px}
+
+/* relatório */
+.stamp{display:inline-block;font-family:var(--display);font-weight:800;font-size:clamp(1.2rem,4.6vw,1.8rem);letter-spacing:.03em;border:5px solid currentColor;outline:2px solid currentColor;outline-offset:4px;border-radius:10px;padding:4px 16px;transform:rotate(-3deg);margin:8px 0 14px}
+.stamp.good{color:var(--ok)} .stamp.mid{color:var(--warn)} .stamp.bad{color:var(--err)}
+.rows{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.row{display:grid;grid-template-columns:minmax(120px,190px) 1fr auto;gap:10px;align-items:center;font-size:.95rem}
+ol.clean,ul.clean{margin:8px 0 0;padding-left:22px} ol.clean li,ul.clean li{margin:4px 0}
+footer{margin-top:28px;color:var(--muted);font-size:.9rem;max-width:70ch}
+@media (prefers-reduced-motion:no-preference){.stamp{animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}}
+@keyframes pop{from{transform:rotate(-3deg) scale(2);opacity:0}to{transform:rotate(-3deg) scale(1);opacity:1}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <p class="back"><a href="index.html">‹ Saúde em jogo</a></p>
+    <h1>Detetive de surtos</h1>
+    <p class="lede">Do alerta ao encerramento: conduza a investigação de um surto tomando as decisões de cada etapa.</p>
+  </header>
+  <main id="app"></main>
+  <footer>
+    O caso é fictício e simplificado. A sequência segue o roteiro clássico de investigação de surtos. Na rotina, consulte o manual vigente de vigilância das doenças transmitidas por alimentos e as normas da sua UF.
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* =====================  DADOS DO CASO  ===================== */
+var HORAS = [['0–6',1],['6–12',5],['12–18',9],['18–24',9],['24–30',5],['30–36',3],['36–42',1],['42–48',1]];
+var SINTOMAS = [['Diarreia',30],['Dor abdominal',25],['Náuseas',20],['Febre',19],['Cefaleia',12],['Vômitos',11]];
+var ALIMENTOS = [
+  ['Salada de batata com maionese caseira',32,42,2,18],
+  ['Frango assado',29,50,5,10],
+  ['Arroz branco',32,56,2,4],
+  ['Farofa',18,30,16,30],
+  ['Bolo',27,48,7,12],
+  ['Pudim',15,25,19,35],
+  ['Suco de fruta',20,36,14,24]
+];
+var N_PART=60, N_CASOS=34;
+
+function pct(a,b){ return Math.round(a/b*100); }
+
+var ETAPAS = [
+ { id:'alerta', nome:'Alerta',
+   exhibit:function(){ return card('exhibit',
+     h('p',null,h('b',null,'Segunda-feira, 14/09/2026, 8h10.')),
+     h('p',null,'Você trabalha na vigilância epidemiológica do município fictício de Serra Alta. A UBS Jardim das Acácias liga: 9 pessoas foram atendidas desde a noite de domingo com diarreia, dor abdominal e febre.'),
+     h('p',null,'Duas delas contaram que estiveram na confraternização de formatura de sábado, 12/09, num salão, com jantar servido por um buffet contratado. A UBS não sabe se há outros doentes.')); },
+   perguntas:[
+    { id:'q1', tipo:'single', texto:'Qual é a primeira providência da vigilância?',
+      opcoes:[
+       {t:'Aguardar mais casos para ter certeza de que se trata de um surto.', v:0, fb:'Esperar atrasa a investigação e mantém a exposição. O alerta já justifica a verificação imediata.'},
+       {t:'Contatar a UBS e alguns casos para confirmar quadro clínico, datas e o evento em comum, e verificar se há excesso de casos ligados a ele.', v:100, fb:'Verificar o alerta, confirmar o diagnóstico provável e a existência do surto é o primeiro passo do roteiro de investigação.'},
+       {t:'Coletar fezes de todos os atendidos antes de conversar com eles.', v:20, fb:'A coleta fará parte da investigação, mas sem confirmar a história e definir o que se investiga, o material fica sem contexto.'},
+       {t:'Interditar o buffet imediatamente e divulgar nota à imprensa.', v:30, fb:'Medidas de controle não devem esperar a conclusão quando há risco continuado, mas interditar e divulgar sem verificação mínima expõe a vigilância a erro.'},
+       {t:'Orientar os casos a procurar o hospital e encerrar a atuação da vigilância.', v:0, fb:'A assistência é necessária, mas não substitui a investigação do surto.'}],
+      explica:'O roteiro começa por verificar o alerta e confirmar que há excesso de casos (surto) com diagnóstico provável, enquanto se organiza a equipe.' }
+   ]},
+ { id:'caso', nome:'Definição de caso',
+   intro:'A UBS confirmou que os doentes atendidos comeram no mesmo jantar. A equipe precisa de uma definição de caso para contar os doentes de forma padronizada.',
+   perguntas:[
+    { id:'q2', tipo:'single', texto:'Pessoa e lugar: quem pode ser considerado caso?',
+      opcoes:[
+       {t:'Qualquer morador do bairro Jardim das Acácias.', v:0, fb:'Inclui pessoas sem exposição ao evento e dilui o vínculo epidemiológico.'},
+       {t:'Participante da confraternização de 12/09.', v:100, fb:'Delimita a população exposta e permite calcular taxa de ataque.'},
+       {t:'Qualquer pessoa atendida na UBS na semana.', v:0, fb:'Mistura casos de outras causas e não delimita a exposição.'},
+       {t:'Somente quem procurou atendimento médico.', v:20, fb:'Deixa de fora quem adoeceu e não procurou serviço, subestimando o surto.'}],
+      explica:'A definição de caso combina pessoa, lugar, tempo e quadro clínico.' },
+    { id:'q3', tipo:'single', texto:'Tempo: qual o período de início dos sintomas?',
+      opcoes:[
+       {t:'Início dos sintomas até 72 horas após o jantar (12 a 15/09).', v:100, fb:'Cobre o período de incubação esperado para os agentes mais comuns de DTA.'},
+       {t:'Sintomas em qualquer momento nos últimos 30 dias.', v:0, fb:'Período longo demais: incluiria quadros sem relação com o evento.'},
+       {t:'Somente sintomas no próprio dia do evento.', v:0, fb:'A maioria dos agentes de DTA tem incubação de horas a dias; limitar ao dia do evento perde casos.'}],
+      explica:'O período deve cobrir a incubação plausível sem incluir quadros sem relação com o evento.' },
+    { id:'q4', tipo:'single', texto:'Quadro clínico: que critério usar?',
+      opcoes:[
+       {t:'Diarreia (3 ou mais evacuações líquidas ou amolecidas em 24 horas) ou vômitos, com ou sem febre.', v:100, fb:'Sensível o bastante para captar os casos e específica para o quadro gastrointestinal.'},
+       {t:'Qualquer mal-estar após o jantar.', v:40, fb:'Muito sensível: inclui pessoas sem relação com o surto e dificulta a análise.'},
+       {t:'Diarreia com sangue e febre acima de 39 °C.', v:20, fb:'Muito específica: captaria só os casos graves e esconderia a dimensão do surto.'},
+       {t:'Febre e manchas vermelhas na pele.', v:0, fb:'Não corresponde ao quadro observado.'}],
+      explica:'No início, a definição costuma ser mais sensível; depois, pode ser refinada.' }
+   ]},
+ { id:'busca', nome:'Busca ativa',
+   intro:'Com a definição em mãos, é preciso encontrar os casos e também quem esteve no evento e não adoeceu.',
+   perguntas:[
+    { id:'q5', tipo:'multi', texto:'Quais ações a equipe deve realizar?', dica:'Marque todas as que forem adequadas.',
+      opcoes:[
+       {t:'Obter a lista de participantes com a organizadora do evento.', v:1, fb:'Sem o total de participantes não há taxa de ataque.'},
+       {t:'Entrevistar por telefone todos os participantes, doentes ou não, com questionário padronizado (início dos sintomas e alimentos consumidos).', v:1, fb:'Comparar expostos e não expostos a cada alimento é o que permite apontar o veículo.'},
+       {t:'Registrar os casos em listagem (uma linha por pessoa), com data e hora de início dos sintomas.', v:1, fb:'A listagem alimenta a curva epidêmica e a análise por alimento.'},
+       {t:'Orientar quem está doente a procurar atendimento se houver sinais de gravidade.', v:0.5, fb:'É um cuidado necessário, mas não substitui a coleta de informações.'},
+       {t:'Entrevistar somente quem procurou a UBS.', v:-1, fb:'Enviesa: subestima casos leves e impede comparar expostos e não expostos.'},
+       {t:'Pedir que os casos divulguem o ocorrido nas redes sociais para achar outros doentes.', v:-1, fb:'Não é método de busca e expõe as pessoas sem controle das informações.'}],
+      explica:'A busca ativa precisa incluir doentes e não doentes, com o mesmo questionário.' }
+   ]},
+ { id:'descricao', nome:'Descrição em tempo, pessoa e lugar',
+   intro:'A busca resultou em 60 participantes e 34 casos (taxa de ataque geral de 57%). Observe a curva epidêmica, por horas após o jantar, e a frequência de sintomas.',
+   exhibit:function(){ return exibirDescricao(); },
+   perguntas:[
+    { id:'q6', tipo:'single', texto:'Que tipo de curva epidêmica é esta?',
+      opcoes:[
+       {t:'Fonte comum pontual (exposição única).', v:100, fb:'Pico único e concentrado, dentro de uma faixa compatível com um período de incubação.'},
+       {t:'Fonte comum contínua.', v:0, fb:'Nesse caso, os casos se distribuiriam por um período longo, com exposição repetida.'},
+       {t:'Transmissão pessoa a pessoa (propagada).', v:0, fb:'Mostraria ondas sucessivas separadas por um período de incubação.'}],
+      explica:'A curva de um surto de fonte pontual sobe e desce dentro de uma única faixa de incubação.' },
+    { id:'q7', tipo:'single', texto:'Qual é a mediana aproximada do período de incubação?',
+      opcoes:[
+       {t:'Cerca de 2 horas.', v:0, fb:'Só 1 caso começou nas primeiras 6 horas.'},
+       {t:'Cerca de 20 horas (de 6 a 48 horas).', v:100, fb:'Metade dos casos começou até cerca de 20 horas; a maioria ficou entre 12 e 30 horas.'},
+       {t:'Cerca de 4 dias.', v:0, fb:'Todos os casos começaram em até 48 horas.'},
+       {t:'Mais de 10 dias.', v:0, fb:'Incompatível com o intervalo observado.'}],
+      explica:'A mediana fica na faixa de 18 a 24 horas após o jantar.' },
+    { id:'q8', tipo:'single', texto:'Qual agente é mais compatível com incubação e sintomas?',
+      opcoes:[
+       {t:'Staphylococcus aureus (toxina pré-formada).', v:0, fb:'Costuma dar vômitos intensos, sem febre, com incubação de 1 a 6 horas.'},
+       {t:'Salmonella.', v:100, fb:'Incubação de horas a poucos dias, diarreia, dor abdominal e febre são o quadro típico.'},
+       {t:'Norovírus.', v:50, fb:'É possível, mas o vômito costuma predominar; aqui predominam diarreia e febre.'},
+       {t:'Bacillus cereus (forma emética).', v:0, fb:'Incubação curta, de 1 a 6 horas, com vômitos predominantes.'}],
+      explica:'A hipótese do agente é uma orientação para a coleta de amostras e para as medidas iniciais, não uma conclusão.' }
+   ]},
+ { id:'hipotese', nome:'Teste da hipótese',
+   intro:'Compare a taxa de ataque de quem comeu cada alimento com a de quem não comeu.',
+   exhibit:function(){ return exibirAlimentos(); },
+   perguntas:[
+    { id:'q9', tipo:'single', texto:'Qual alimento é o veículo mais provável?',
+      opcoes:ALIMENTOS.map(function(a,i){
+        var rr=(a[1]/a[2])/(a[3]/a[4]);
+        var ok=(i===0);
+        return {t:a[0]+'.', v:ok?100:0, fb:'Taxa de ataque de '+pct(a[1],a[2])+'% entre quem comeu e '+pct(a[3],a[4])+'% entre quem não comeu (razão de '+rr.toFixed(1).replace('.',',')+').'};
+      }),
+      explica:'O veículo é o alimento com maior taxa de ataque entre os expostos e maior diferença em relação aos não expostos. Dois doentes não comeram a salada: pode ter havido falha de memória, contaminação cruzada ou outra exposição, o que não invalida a associação.' },
+    { id:'q10', tipo:'single', texto:'Que critério sustenta apontar esse alimento?',
+      opcoes:[
+       {t:'Maior taxa de ataque entre os que comeram e grande diferença em relação aos que não comeram.', v:100, fb:'É a comparação entre expostos e não expostos que sustenta a associação.'},
+       {t:'O alimento mais consumido pelos participantes.', v:0, fb:'Ser muito consumido não indica que seja o veículo.'},
+       {t:'O alimento que a organizadora acha suspeito.', v:0, fb:'A impressão de terceiros orienta hipóteses, mas não as testa.'},
+       {t:'O primeiro alimento servido no jantar.', v:0, fb:'A ordem de serviço não indica o veículo.'}],
+      explica:'Hipóteses se testam comparando quem foi exposto com quem não foi.' }
+   ]},
+ { id:'amostras', nome:'Coleta de amostras',
+   intro:'A hipótese de trabalho é uma infecção por Salmonella transmitida pela salada de batata com maionese caseira. É hora de coletar material para confirmar.',
+   perguntas:[
+    { id:'q11', tipo:'multi', texto:'O que coletar e como?', dica:'Marque todas as que forem adequadas.',
+      opcoes:[
+       {t:'Fezes (ou swab retal) de casos com quadro agudo, de preferência antes de antibiótico, em meio de transporte adequado.', v:1, fb:'É a amostra principal para isolar o agente nos casos.'},
+       {t:'Sobras da salada de batata e da maionese, se existirem, acondicionadas e mantidas refrigeradas.', v:1, fb:'Permitem confirmar o agente no alimento suspeito.'},
+       {t:'Fezes dos manipuladores de alimentos do buffet.', v:1, fb:'Ajudam a esclarecer a origem da contaminação.'},
+       {t:'Swabs de superfícies e bancadas da cozinha.', v:0.5, fb:'Aceitável como apoio da vigilância sanitária; não é a prioridade.'},
+       {t:'Sangue de todos os participantes para sorologia.', v:-1, fb:'Não está indicado para o diagnóstico de infecção bacteriana aguda por alimento.'},
+       {t:'Descartar as sobras depois de fotografá-las.', v:-1, fb:'Perde-se a chance de identificar o agente no alimento.'},
+       {t:'Enviar tudo ao laboratório sem identificação e à temperatura ambiente.', v:-1, fb:'Sem identificação e sem conservação adequada, o material perde valor.'}],
+      explica:'As amostras seguem para o laboratório central com a requisição e o transporte adequados (no fluxo do GAL/LACEN).' }
+   ]},
+ { id:'controle', nome:'Medidas de controle',
+   intro:'A evidência epidemiológica já é forte. Que medidas tomar agora?',
+   perguntas:[
+    { id:'q12', tipo:'multi', texto:'Quais medidas são adequadas?', dica:'Marque todas as que forem adequadas.',
+      opcoes:[
+       {t:'Inspeção sanitária do buffet pela vigilância sanitária, com orientação sobre preparo e conservação.', v:1, fb:'Atua na causa: o preparo e a conservação dos alimentos.'},
+       {t:'Suspender cautelarmente a maionese caseira com ovo cru no buffet enquanto durar a investigação.', v:1, fb:'Evita novos casos enquanto a causa é esclarecida.'},
+       {t:'Afastar manipuladores com sintomas até avaliação.', v:1, fb:'Reduz o risco de contaminação de alimentos.'},
+       {t:'Orientar os casos sobre hidratação e sinais de alarme, e a procurar serviço se piorarem.', v:1, fb:'Reduz o risco de complicações.'},
+       {t:'Comunicar os participantes e a população sobre a situação e as medidas de prevenção.', v:0.5, fb:'Útil, com informação verificada e sem apontar culpados.'},
+       {t:'Fornecer antibiótico a todos os participantes como profilaxia.', v:-1, fb:'Não é indicado: a maioria dos casos é autolimitada e o uso indiscriminado traz riscos.'},
+       {t:'Fechar todos os buffets do município.', v:-1, fb:'Desproporcional e sem base na investigação.'},
+       {t:'Aguardar o resultado do laboratório antes de qualquer medida.', v:-1, fb:'As medidas se baseiam na evidência epidemiológica e não devem esperar o laboratório.'}],
+      explica:'As medidas de controle não devem esperar a confirmação laboratorial quando a evidência epidemiológica é consistente.' }
+   ]},
+ { id:'encerramento', nome:'Registro e conclusão',
+   intro:'Chegou a hora de registrar o surto e concluir a investigação.',
+   perguntas:[
+    { id:'q13', tipo:'multi', texto:'Quais registros e comunicações fazer?', dica:'Marque todas as que forem adequadas.',
+      opcoes:[
+       {t:'Registrar o surto na ficha de investigação de surto no SINAN.', v:1, fb:'O registro no sistema torna o surto visível para as outras esferas.'},
+       {t:'Comunicar o surto ao NRS e à vigilância estadual, conforme o fluxo.', v:1, fb:'O nível regional e o estadual apoiam a investigação e consolidam os dados.'},
+       {t:'Elaborar relatório final com conclusão, medidas tomadas e recomendações.', v:1, fb:'O relatório documenta a investigação e sustenta as recomendações.'},
+       {t:'Manter apenas uma planilha local, sem registrar no sistema.', v:-1, fb:'O surto fica invisível para a vigilância regional e estadual.'},
+       {t:'Adiar qualquer registro até a chegada do laboratório.', v:-1, fb:'O registro não depende da confirmação laboratorial.'}],
+      explica:'O surto deve ser registrado e comunicado no fluxo, sem esperar o laboratório.' },
+    { id:'q14', tipo:'single', texto:'Qual conclusão você registra no relatório, enquanto o laboratório não responde?',
+      opcoes:[
+       {t:'Surto de DTA por Salmonella confirmado por laboratório.', v:0, fb:'A confirmação laboratorial ainda não chegou.'},
+       {t:'Surto de DTA com provável agente Salmonella e veículo provável salada de batata com maionese caseira, com base em evidência clínica e epidemiológica; confirmação laboratorial pendente.', v:100, fb:'Registra a conclusão possível hoje e deixa clara a pendência.'},
+       {t:'Intoxicação alimentar sem causa definida.', v:20, fb:'Descarta o que a investigação já mostrou.'},
+       {t:'Surto viral por norovírus.', v:0, fb:'Não é a hipótese mais compatível com os dados.'}],
+      explica:'A conclusão deve refletir o grau de evidência e registrar o que ainda depende de laboratório.' }
+   ]}
+];
+
+/* =====================  PEÇAS VISUAIS  ===================== */
+function svgEl(name, attrs){ var e=document.createElementNS('http://www.w3.org/2000/svg',name); Object.keys(attrs||{}).forEach(function(k){e.setAttribute(k,attrs[k]);}); return e; }
+function exibirDescricao(){
+  var W=560,H=210,left=34,bottom=34,top=18, n=HORAS.length, bw=(W-left-10)/n, max=10;
+  var s=svgEl('svg',{viewBox:'0 0 '+W+' '+H,class:'chart',role:'img','aria-label':'Curva epidêmica: casos por faixa de horas após o jantar. Pico entre 12 e 24 horas.'});
+  for(var g=0; g<=10; g+=5){
+    var y=H-bottom-(H-bottom-top)*g/max;
+    s.appendChild(svgEl('line',{x1:left,x2:W-8,y1:y,y2:y,stroke:'var(--line)','stroke-width':1}));
+    var t=svgEl('text',{x:left-6,y:y+4,'text-anchor':'end','font-size':11,fill:'var(--muted)'}); t.textContent=g; s.appendChild(t);
+  }
+  HORAS.forEach(function(d,i){
+    var bh=(H-bottom-top)*d[1]/max, x=left+i*bw+4, y=H-bottom-bh;
+    s.appendChild(svgEl('rect',{x:x,y:y,width:bw-8,height:bh,rx:3,fill:'var(--accent)'}));
+    var v=svgEl('text',{x:x+(bw-8)/2,y:y-4,'text-anchor':'middle','font-size':12,'font-weight':700,fill:'var(--ink)'}); v.textContent=d[1]; s.appendChild(v);
+    var l=svgEl('text',{x:x+(bw-8)/2,y:H-bottom+16,'text-anchor':'middle','font-size':11,fill:'var(--muted)'}); l.textContent=d[0]; s.appendChild(l);
+  });
+  var tt=svgEl('text',{x:W/2,y:H-2,'text-anchor':'middle','font-size':11,fill:'var(--muted)'}); tt.textContent='Horas após o jantar até o início dos sintomas'; s.appendChild(tt);
+  var linhas=SINTOMAS.map(function(x){ return h('tr',null,h('td',null,x[0]),h('td',{class:'num'},x[1]+' de '+N_CASOS),h('td',{class:'num'},pct(x[1],N_CASOS)+'%')); });
+  return card('exhibit',
+    h('h3',null,'Curva epidêmica (34 casos)'), s,
+    h('h3',{style:'margin-top:14px'},'Sintomas entre os casos'),
+    h('div',{class:'tablewrap'},h('table',null,h('thead',null,h('tr',null,h('th',null,'Sintoma'),h('th',{class:'num'},'Casos'),h('th',{class:'num'},'%'))),h('tbody',null,linhas))));
+}
+function exibirAlimentos(){
+  var linhas=ALIMENTOS.map(function(a){
+    return h('tr',null,h('td',null,a[0]),
+      h('td',{class:'num'},a[1]+'/'+a[2]),h('td',{class:'num'},pct(a[1],a[2])+'%'),
+      h('td',{class:'num'},a[3]+'/'+a[4]),h('td',{class:'num'},pct(a[3],a[4])+'%'));
+  });
+  return card('exhibit',
+    h('h3',null,'Taxa de ataque por alimento (60 participantes, 34 doentes)'),
+    h('div',{class:'tablewrap'},h('table',null,
+      h('thead',null,h('tr',null,h('th',null,'Alimento'),h('th',{class:'num'},'Comeu: doentes/total'),h('th',{class:'num'},'Taxa de ataque'),h('th',{class:'num'},'Não comeu: doentes/total'),h('th',{class:'num'},'Taxa de ataque'))),
+      h('tbody',null,linhas))));
+}
+
+/* =====================  AUXILIARES  ===================== */
+function h(tag, props){
+  var e=document.createElement(tag), kids=Array.prototype.slice.call(arguments,2);
+  if(props) Object.keys(props).forEach(function(k){
+    var v=props[k];
+    if(k==='class') e.className=v; else if(k==='html') e.innerHTML=v;
+    else if(k.slice(0,2)==='on') e.addEventListener(k.slice(2),v);
+    else if(v===true) e.setAttribute(k,''); else if(v!==false && v!=null) e.setAttribute(k,v);
+  });
+  (function add(list){ list.forEach(function(c){ if(c==null||c===false) return; if(Array.isArray(c)) add(c); else e.append(c.nodeType?c:document.createTextNode(c)); }); })(kids);
+  return e;
+}
+function card(cls){ var kids=Array.prototype.slice.call(arguments,1); return h.apply(null,['div',{class:'card '+cls}].concat(kids)); }
+var root=document.getElementById('app');
+function show(n){ root.innerHTML=''; root.append(n); window.scrollTo({top:0}); }
+function shuffle(a){ var r=a.slice(), i, j, t; for(i=r.length-1;i>0;i--){ j=Math.floor(Math.random()*(i+1)); t=r[i]; r[i]=r[j]; r[j]=t; } return r; }
+function steps(i){ var ul=h('ul',{class:'steps','aria-label':'Progresso'}); for(var n=0;n<ETAPAS.length;n++) ul.append(h('li',{class:n<i?'done':(n===i?'now':'')})); return ul; }
+
+var KEY='detetive-surtos:v1';
+function best(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}').best||0; }catch(e){ return 0; } }
+function saveBest(v){ try{ if(v>best()) localStorage.setItem(KEY,JSON.stringify({best:v})); }catch(e){} }
+
+/* =====================  PONTUAÇÃO  ===================== */
+function scoreQuestion(q, chosen){
+  if(q.tipo==='single') return chosen.length? q.opcoes[chosen[0]].v : 0;
+  var max=0, got=0;
+  q.opcoes.forEach(function(o,i){ if(o.v>0) max+=o.v; if(chosen.indexOf(i)>=0) got+=o.v; });
+  return Math.max(0, Math.min(100, Math.round(got/max*100)));
+}
+function verdict(s){ return s>=80?['ok','Correto']:(s>=40?['mid','Parcial']:['bad','Precisa rever']); }
+
+/* =====================  TELAS  ===================== */
+var st;
+function novo(){ st={i:0, respostas:{}, notas:{}, ordem:{}}; }
+
+function telaInicio(){
+  var b=best();
+  show(h('div',null,
+    card('',
+      h('span',{class:'tag'},'Caso 1'),
+      h('h2',{style:'margin-top:10px'},'Confraternização de formatura'),
+      h('p',null,'Você é a pessoa responsável pela vigilância epidemiológica de Serra Alta, um município fictício. Um alerta chega numa segunda-feira de manhã. Em oito etapas, você vai decidir como investigar, o que coletar, como controlar o surto e como encerrá-lo.'),
+      h('p',{class:'muted small'},'Cada etapa traz uma ou mais perguntas. Ao confirmar, você vê o que foi adequado, o que faltou e o porquê. No fim, recebe o relatório da investigação.'),
+      b?h('p',{class:'muted small'},'Sua melhor pontuação neste navegador: '+b+'%.'):null,
+      h('div',{class:'actions'},h('button',{class:'btn primary',type:'button',onclick:function(){ novo(); telaEtapa(0); }},'Começar a investigação')))));
+}
+
+function telaEtapa(i){
+  st.i=i; var E=ETAPAS[i];
+  var respostas={}; // qid -> array de índices (na ordem original)
+  var nodes=[];
+  var btn=h('button',{class:'btn primary',type:'button',disabled:true,onclick:function(){ confirmar(i,respostas); }},'Confirmar respostas');
+  function atualizar(){ btn.disabled = !E.perguntas.every(function(q){ return (respostas[q.id]||[]).length>0; }); }
+
+  E.perguntas.forEach(function(q){
+    var ordem=shuffle(q.opcoes.map(function(_,k){return k;}));
+    st.ordem[q.id]=ordem;
+    var grupo=h('div',{class:'opts',role:q.tipo==='single'?'radiogroup':'group','aria-label':q.texto});
+    ordem.forEach(function(k){
+      var id='o_'+q.id+'_'+k;
+      var inp=h('input',{type:q.tipo==='single'?'radio':'checkbox',name:q.id,id:id,value:k,onchange:function(){
+        var arr=respostas[q.id]||[];
+        if(q.tipo==='single') arr=[k];
+        else arr=inp.checked ? arr.concat([k]) : arr.filter(function(x){return x!==k;});
+        respostas[q.id]=arr; atualizar();
+      }});
+      grupo.append(h('label',{class:'opt',for:id},inp,h('span',null,q.opcoes[k].t)));
+    });
+    nodes.push(h('div',{class:'q'},h('p',{class:'qt'},q.texto),q.dica?h('p',{class:'hint'},q.dica):null,grupo));
+  });
+
+  show(h('div',null, steps(i),
+    h('p',{class:'stepname'},'Etapa '+(i+1)+' de '+ETAPAS.length+': '+E.nome),
+    E.exhibit ? E.exhibit() : null,
+    E.intro ? card('exhibit',h('p',{style:'margin:0'},E.intro)) : null,
+    card('',nodes),
+    h('div',{class:'actions'},btn)));
+}
+
+function confirmar(i,respostas){
+  var E=ETAPAS[i], soma=0, res=[];
+  E.perguntas.forEach(function(q){
+    var ch=respostas[q.id]||[], s=scoreQuestion(q,ch);
+    st.respostas[q.id]=ch; soma+=s; res.push({q:q,ch:ch,s:s});
+  });
+  st.notas[E.id]=Math.round(soma/E.perguntas.length);
+  telaFeedback(i,res);
+}
+
+function telaFeedback(i,res){
+  var E=ETAPAS[i], nota=st.notas[E.id], ultimo=(i===ETAPAS.length-1);
+  var blocos=res.map(function(r){
+    var v=verdict(r.s), q=r.q, ordem=st.ordem[q.id];
+    var itens;
+    if(q.tipo==='single'){
+      var melhor=q.opcoes.reduce(function(a,o,k){ return o.v>q.opcoes[a].v?k:a; },0), escolhida=r.ch[0], lis=[];
+      lis.push(h('li',{class:(escolhida===melhor?'rec':'nao pick')},h('span',{class:'st'},'Você marcou'),q.opcoes[escolhida].t,h('div',{class:'small muted'},q.opcoes[escolhida].fb)));
+      if(escolhida!==melhor) lis.push(h('li',{class:'rec'},h('span',{class:'st'},'Melhor resposta'),q.opcoes[melhor].t,h('div',{class:'small muted'},q.opcoes[melhor].fb)));
+      itens=h('ul',null,lis);
+    } else {
+      itens=h('ul',null,ordem.map(function(k){
+        var o=q.opcoes[k], marcou=r.ch.indexOf(k)>=0;
+        var tipo=o.v>=1?'Recomendado':(o.v>0?'Opcional':'Não recomendado');
+        var cls=(o.v>0?'rec':'nao')+(marcou?' pick':'');
+        return h('li',{class:cls},h('span',{class:'st'},(marcou?'Você marcou · ':'Você não marcou · ')+tipo),o.t,h('div',{class:'small muted'},o.fb));
+      }));
+    }
+    return h('div',{class:'fb '+v[0]},
+      h('p',{class:'qt'},h('span',{class:'badge '+v[0]},v[1]+' ('+r.s+'%)'),q.texto), itens,
+      h('p',{class:'why'},h('b',null,'Por quê: '),q.explica));
+  });
+  var proxima = (E.id==='busca') ? card('exhibit',h('p',{style:'margin:0'},h('b',null,'Resultado da busca: '),'60 participantes e 34 casos, com listagem e horários de início dos sintomas.')) : null;
+  show(h('div',null, steps(i+1),
+    card('',
+      h('span',{class:'tag'},'Etapa '+(i+1)+': '+E.nome),
+      h('div',{class:'score',style:'margin-top:10px'},h('div',{class:'pct'},nota+'%'),
+        h('div',{style:'flex:1;min-width:160px'},h('div',{class:'bar'},h('i',{style:'width:'+nota+'%'})),
+        h('p',{class:'muted small',style:'margin:6px 0 0'},'Pontuação da etapa')))),
+    blocos, proxima,
+    h('div',{class:'actions'},h('button',{class:'btn primary',type:'button',onclick:function(){ ultimo?telaRelatorio():telaEtapa(i+1); }},ultimo?'Ver o relatório da investigação':'Próxima etapa'))));
+}
+
+function telaRelatorio(){
+  var ids=ETAPAS.map(function(e){return e.id;});
+  var media=Math.round(ids.reduce(function(s,id){return s+(st.notas[id]||0);},0)/ids.length);
+  saveBest(media);
+  var verd=media>=85?['good','DETETIVE SÊNIOR']:(media>=65?['mid','INVESTIGADOR(A) EM CAMPO']:['bad','EM TREINAMENTO']);
+  var rever=ETAPAS.filter(function(e){return st.notas[e.id]<80;});
+  var linhas=ETAPAS.map(function(e,k){
+    var n=st.notas[e.id]||0;
+    return h('div',{class:'row'},h('span',null,(k+1)+'. '+e.nome),h('div',{class:'bar'},h('i',{style:'width:'+n+'%'})),h('b',null,n+'%'));
+  });
+  show(h('div',null, steps(ETAPAS.length),
+    card('',
+      h('h2',null,'Relatório da investigação'),
+      h('span',{class:'stamp '+verd[0]},verd[1]),
+      h('p',{style:'margin:0'},'Pontuação média: ',h('b',null,media+'%'),'.'),
+      best()>media?h('p',{class:'muted small'},'Melhor pontuação neste navegador: '+best()+'%.'):null),
+    card('',h('h3',null,'Desempenho por etapa'),h('div',{class:'rows'},linhas)),
+    card('',
+      h('h3',null,'O que aconteceu neste surto'),
+      h('p',{style:'margin:0'},'Confraternização com 60 participantes e 34 casos (taxa de ataque de 57%). Curva de fonte pontual, incubação mediana de cerca de 20 horas e quadro de diarreia, dor abdominal e febre. A salada de batata com maionese caseira teve taxa de ataque de 76% entre quem comeu e 11% entre quem não comeu. Conclusão: surto de DTA com provável agente Salmonella, com confirmação laboratorial pendente.')),
+    card('',
+      h('h3',null,'Roteiro de investigação de surto'),
+      h('ol',{class:'clean'},
+        ['Verificar o alerta e confirmar o surto','Definir caso','Fazer a busca ativa e a listagem','Descrever em tempo, pessoa e lugar','Formular e testar hipóteses','Coletar amostras','Implantar medidas de controle','Registrar, comunicar e concluir'].map(function(t){ return h('li',null,t); }))),
+    rever.length?card('',h('h3',null,'Vale rever'),h('ul',{class:'clean'},rever.map(function(e){ return h('li',null,e.nome+' ('+st.notas[e.id]+'%)'); }))):null,
+    h('div',{class:'actions'},
+      h('button',{class:'btn primary',type:'button',onclick:function(){ novo(); telaEtapa(0); }},'Investigar de novo'),
+      h('button',{class:'btn',type:'button',onclick:telaInicio},'Voltar ao início'))));
+}
+
+window.Detetive={ETAPAS:ETAPAS, ALIMENTOS:ALIMENTOS, HORAS:HORAS};
+telaInicio();
+})();
+</script>
+</body>
+</html>
