@@ -76,23 +76,30 @@ a.card:hover{border-color:var(--tone);transform:translateY(-3px)}
 .tone-green{--tone:var(--t-green)} .tone-orange{--tone:var(--t-orange)} .tone-blue{--tone:var(--t-blue)} .tone-violet{--tone:var(--t-violet)} .tone-rose{--tone:var(--t-rose)} .tone-soon{--tone:var(--t-soon)}
 
 
-/* ---------- filtros por tipo ---------- */
-.filtros{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 18px}
-.fchip{font:inherit;font-weight:700;color:var(--ink);background:var(--surface);border:2px solid var(--edge);border-radius:999px;padding:6px 16px;min-height:42px;cursor:pointer;white-space:nowrap}
-.fchip .n{margin-left:8px;opacity:.65}
-.fchip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+/* ---------- blocos (seções) ---------- */
 .cat{font-size:.82rem;font-weight:700;color:var(--tone)}
+.bloco{margin-top:40px}
+.bloco>h2{margin-top:0}
+
+/* bloco das cruzadinhas: painel próprio, cartões compactos na horizontal */
+.bloco.cruz{background:color-mix(in srgb,var(--t-green) 7%,var(--bg));border:2px solid var(--line);border-radius:20px;padding:20px 20px 22px}
+.bloco.cruz .sub{margin-bottom:16px}
+.cards.duo{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.duo .card{flex-direction:row;align-items:stretch}
+.duo .art{flex:0 0 120px;height:auto;min-height:112px;border-bottom:0;border-right:2px solid var(--line);padding:8px}
+.duo .art svg{max-width:none}
+.duo .body{padding:12px 14px;gap:4px}
+.duo .card h3{font-size:1.05rem}
 
 /* ---------- layouts responsivos: um único arquivo, três jeitos de ocupar a tela ---------- */
 
-/* celular: filtros em faixa rolável e cartões compactos na horizontal */
+/* celular: cartões compactos na horizontal */
 @media (max-width:639px){
-  .filtros{flex-wrap:nowrap;overflow-x:auto;margin:18px -16px 14px;padding:2px 16px 8px;scroll-snap-type:x proximity;scroll-padding:0 16px;-webkit-overflow-scrolling:touch}
-  .fchip{flex:none;scroll-snap-align:start}
   .cards{grid-template-columns:minmax(0,1fr);gap:12px}
   .card{flex-direction:row;align-items:stretch}
   .art{flex:0 0 112px;height:auto;min-height:112px;border-bottom:0;border-right:2px solid var(--line);padding:8px}
   .card.soon .art{border-bottom:0;border-right-style:dashed}
+  .bloco.cruz{padding:14px 12px 16px;border-radius:16px}
   .art svg{max-width:none}
   .body{padding:12px 14px;gap:4px}
   .card h3{font-size:1.02rem}
@@ -109,6 +116,7 @@ a.card:hover{border-color:var(--tone);transform:translateY(-3px)}
 }
 
 footer{margin-top:44px;color:var(--muted);font-size:.9rem;max-width:70ch}
+footer .autoria{margin:12px 0 0;font-weight:700;color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.card{transition:none}a.card:hover{transform:none}}
 </style>
 </head>
@@ -128,6 +136,7 @@ footer{margin-top:44px;color:var(--muted);font-size:.9rem;max-width:70ch}
 
   <footer>
     Os jogos usam casos fictícios e simplificam fichas e normas. Na rotina de trabalho, siga sempre os manuais, o dicionário de dados e as normas vigentes na sua UF.
+    <p class="autoria">Desenvolvido por Aline Azevedo.</p>
   </footer>
 </div>
 
@@ -137,19 +146,24 @@ footer{margin-top:44px;color:var(--muted);font-size:.9rem;max-width:70ch}
 
 /* ---------- catálogo: para incluir um jogo, basta acrescentar um item aqui ---------- */
 var CATEGORIAS = [
-  { id:'cruzadinhas', titulo:'Cruzadinhas', rotulo:'Cruzadinha', sub:'Palavras cruzadas de nível profissional, em desafios progressivos.' },
-  { id:'fichas', titulo:'Fichas e sistemas', rotulo:'Ficha e sistema', sub:'Preencha, envie e veja o que cada erro provoca na análise.' },
-  { id:'campo', titulo:'Investigação de campo', rotulo:'Investigação de campo', sub:'Conduza a investigação decidindo cada etapa.' },
-  { id:'analise', titulo:'Análise de situação', rotulo:'Análise de situação', sub:'Leia mapas e indicadores e decida onde agir.' },
-  { id:'breve', titulo:'Em breve', rotulo:'Em breve', sub:'Próximos jogos do projeto.' }
+  { id:'cruzadinhas', rotulo:'Cruzadinha' },
+  { id:'fichas', rotulo:'Ficha e sistema' },
+  { id:'campo', rotulo:'Investigação de campo' },
+  { id:'analise', rotulo:'Análise de situação' },
+  { id:'breve', rotulo:'Em breve' }
+];
+/* blocos da página, na ordem em que aparecem; cada um reúne uma ou mais categorias */
+var BLOCOS = [
+  { id:'simulacoes', titulo:'Simulações', sub:'Fichas, investigações e análises para treinar o dia a dia da vigilância.', cats:['fichas','campo','analise','breve'] },
+  { id:'cruzadinhas', titulo:'Cruzadinhas', sub:'Palavras cruzadas em desafios progressivos.', cats:['cruzadinhas'], compacto:true }
 ];
 var JOGOS = [
   { cat:'cruzadinhas', href:'cruzadinha-saude-publica.html', titulo:'Cruzadinha da saúde pública',
     desc:'Vigilância epidemiológica na prática, Bahia e mundo, gestão do SUS e história da saúde pública.',
-    chips:['3 desafios','Nível profissional'], arte:'cruz', tom:'green', key:'cruzadinha-saude-publica:v5', tipo:'cruz', total:3 },
+    chips:['3 desafios'], arte:'cruz', tom:'green', key:'cruzadinha-saude-publica:v5', tipo:'cruz', total:3 },
   { cat:'cruzadinhas', href:'cruzadinha-saude-do-trabalhador.html', titulo:'Cruzadinha da saúde do trabalhador',
     desc:'Política e rede do SUS, notificação e informação, adoecimento e ação em saúde do trabalhador.',
-    chips:['3 desafios','Nível profissional'], arte:'cruz', tom:'orange', key:'cruzadinha-saude-trabalhador:v2', tipo:'cruz', total:3 },
+    chips:['3 desafios'], arte:'cruz', tom:'orange', key:'cruzadinha-saude-trabalhador:v2', tipo:'cruz', total:3 },
   { cat:'fichas', href:'ficha-sinan-dengue.html', titulo:'Ficha do SINAN em jogo: dengue',
     desc:'Preencha fichas de casos fictícios a partir do relato e compare a sua base com a base correta.',
     chips:['5 casos','Protótipo'], arte:'ficha', tom:'blue', key:'ficha-sinan-dengue:v1', tipo:'ficha' },
@@ -232,15 +246,14 @@ function progresso(j){
 function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
 var catMap={}; CATEGORIAS.forEach(function(c){ catMap[c.id]=c; });
 var main=document.getElementById('lista');
-var atual='todos';
 
-function cartao(j){
+function cartao(j, compacto){
   var soon=!j.href;
   var card=el(soon?'div':'a','card tone-'+j.tom+(soon?' soon':''));
   if(!soon) card.href=j.href;
   card.appendChild(el('div','art',ARTE[j.arte]()));
   var b=el('div','body');
-  b.appendChild(el('div','cat',j.rotulo || (catMap[j.cat]||{}).rotulo || ''));
+  if(!compacto) b.appendChild(el('div','cat',j.rotulo || (catMap[j.cat]||{}).rotulo || ''));
   b.appendChild(el('h3',null,j.titulo));
   b.appendChild(el('p',null,j.desc));
   var chips=el('div','chips'); j.chips.forEach(function(c){ chips.appendChild(el('span','chip',c)); }); b.appendChild(chips);
@@ -250,26 +263,17 @@ function cartao(j){
   return card;
 }
 
-var barra=el('div','filtros'); barra.setAttribute('role','group'); barra.setAttribute('aria-label','Filtrar jogos por tipo');
-var grade=el('div','cards'); grade.id='grade';
-function desenhar(){
-  grade.innerHTML='';
-  JOGOS.filter(function(j){ return atual==='todos' || j.cat===atual; }).forEach(function(j){ grade.appendChild(cartao(j)); });
-}
-var opcoes=[{id:'todos',t:'Todos',n:JOGOS.length}].concat(CATEGORIAS.map(function(c){
-  return {id:c.id,t:c.titulo,n:JOGOS.filter(function(j){return j.cat===c.id;}).length};
-})).filter(function(o){ return o.n>0; });
-opcoes.forEach(function(o){
-  var b=el('button','fchip',o.t+'<span class="n">'+o.n+'</span>'); b.type='button';
-  b.setAttribute('aria-pressed', o.id===atual?'true':'false');
-  b.addEventListener('click',function(){
-    atual=o.id;
-    Array.prototype.forEach.call(barra.children,function(x){ x.setAttribute('aria-pressed','false'); });
-    b.setAttribute('aria-pressed','true'); desenhar();
-  });
-  barra.appendChild(b);
+BLOCOS.forEach(function(bl){
+  var jogos=JOGOS.filter(function(j){ return bl.cats.indexOf(j.cat)!==-1; });
+  if(!jogos.length) return;
+  var sec=el('section','bloco'+(bl.id==='cruzadinhas'?' cruz':'')); sec.setAttribute('aria-labelledby','h-'+bl.id);
+  var h=el('h2',null,bl.titulo); h.id='h-'+bl.id; sec.appendChild(h);
+  sec.appendChild(el('p','sub',bl.sub));
+  var grade=el('div','cards'+(bl.compacto?' duo':''));
+  jogos.forEach(function(j){ grade.appendChild(cartao(j, bl.compacto)); });
+  sec.appendChild(grade);
+  main.appendChild(sec);
 });
-main.appendChild(barra); main.appendChild(grade); desenhar();
 })();
 </script>
 </body>
