@@ -75,6 +75,39 @@ a.card:hover{border-color:var(--tone);transform:translateY(-3px)}
 /* cores por jogo */
 .tone-green{--tone:var(--t-green)} .tone-orange{--tone:var(--t-orange)} .tone-blue{--tone:var(--t-blue)} .tone-violet{--tone:var(--t-violet)} .tone-soon{--tone:var(--t-soon)}
 
+
+/* ---------- filtros por tipo ---------- */
+.filtros{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 18px}
+.fchip{font:inherit;font-weight:700;color:var(--ink);background:var(--surface);border:2px solid var(--edge);border-radius:999px;padding:6px 16px;min-height:42px;cursor:pointer;white-space:nowrap}
+.fchip .n{margin-left:8px;opacity:.65}
+.fchip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cat{font-size:.82rem;font-weight:700;color:var(--tone)}
+
+/* ---------- layouts responsivos: um único arquivo, três jeitos de ocupar a tela ---------- */
+
+/* celular: filtros em faixa rolável e cartões compactos na horizontal */
+@media (max-width:639px){
+  .filtros{flex-wrap:nowrap;overflow-x:auto;margin:18px -16px 14px;padding:2px 16px 8px;scroll-snap-type:x proximity;scroll-padding:0 16px;-webkit-overflow-scrolling:touch}
+  .fchip{flex:none;scroll-snap-align:start}
+  .cards{grid-template-columns:minmax(0,1fr);gap:12px}
+  .card{flex-direction:row;align-items:stretch}
+  .art{flex:0 0 112px;height:auto;min-height:112px;border-bottom:0;border-right:2px solid var(--line);padding:8px}
+  .card.soon .art{border-bottom:0;border-right-style:dashed}
+  .art svg{max-width:none}
+  .body{padding:12px 14px;gap:4px}
+  .card h3{font-size:1.02rem}
+  .card p{font-size:.9rem}
+}
+
+/* computador: cabeçalho em duas colunas e cartões lado a lado */
+@media (min-width:1000px){
+  .app{max-width:1280px;padding-top:34px}
+  header{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px 48px}
+  .lede{margin:0;max-width:58ch}
+  .cards{grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}
+  .art{height:118px}
+}
+
 footer{margin-top:44px;color:var(--muted);font-size:.9rem;max-width:70ch}
 @media (prefers-reduced-motion:reduce){.card{transition:none}a.card:hover{transform:none}}
 </style>
@@ -104,10 +137,10 @@ footer{margin-top:44px;color:var(--muted);font-size:.9rem;max-width:70ch}
 
 /* ---------- catálogo: para incluir um jogo, basta acrescentar um item aqui ---------- */
 var CATEGORIAS = [
-  { id:'cruzadinhas', titulo:'Cruzadinhas', sub:'Palavras cruzadas de nível profissional, em desafios progressivos.' },
-  { id:'fichas', titulo:'Fichas e sistemas', sub:'Preencha, envie e veja o que cada erro provoca na análise.' },
-  { id:'campo', titulo:'Investigação de campo', sub:'Conduza a investigação decidindo cada etapa.' },
-  { id:'breve', titulo:'Em breve', sub:'Próximos jogos do projeto.' }
+  { id:'cruzadinhas', titulo:'Cruzadinhas', rotulo:'Cruzadinha', sub:'Palavras cruzadas de nível profissional, em desafios progressivos.' },
+  { id:'fichas', titulo:'Fichas e sistemas', rotulo:'Ficha e sistema', sub:'Preencha, envie e veja o que cada erro provoca na análise.' },
+  { id:'campo', titulo:'Investigação de campo', rotulo:'Investigação de campo', sub:'Conduza a investigação decidindo cada etapa.' },
+  { id:'breve', titulo:'Em breve', rotulo:'Em breve', sub:'Próximos jogos do projeto.' }
 ];
 var JOGOS = [
   { cat:'cruzadinhas', href:'cruzadinha-saude-publica.html', titulo:'Cruzadinha da saúde pública',
@@ -124,22 +157,30 @@ var JOGOS = [
     chips:['8 etapas','Protótipo'], arte:'surto', tom:'violet', key:'detetive-surtos:v1', tipo:'ficha' },
   { cat:'breve', titulo:'Ficha do SINAN em jogo: acidente de trabalho grave',
     desc:'Ocupação, CNAE, CAT e o que a ficha incompleta faz com a vigilância em saúde do trabalhador.',
-    chips:['Em breve'], arte:'ficha', tom:'soon' }
+    chips:['Em breve'], rotulo:'Ficha e sistema', arte:'ficha', tom:'soon' }
 ];
 
 /* ---------- ilustrações (SVG que herda as cores do tema) ---------- */
 function svg(inner){ return '<svg viewBox="0 0 220 110" role="img" aria-hidden="true" focusable="false">'+inner+'</svg>'; }
 function arteCruz(){
-  // grade de palavras cruzadas estilizada
-  var pad=[[1,1,1,1,1,0],[0,1,0,0,1,0],[0,1,1,1,1,1],[0,1,0,0,1,0],[1,1,1,1,0,0]];
-  var letras={'0-0':'S','0-1':'U','0-2':'S','2-2':'A','2-3':'Ú','2-4':'D','2-5':'E'};
-  var out='', s=32, gap=3, ox=(220-6*(s+gap)+gap)/2, oy=(110-5*(s+gap)+gap)/2, r,c;
-  for(r=0;r<5;r++) for(c=0;c<6;c++){
-    if(!pad[r][c]) continue;
-    var x=ox+c*(s+gap), y=oy+r*(s+gap), hl=(r===2&&c===3);
-    out+='<rect x="'+x+'" y="'+y+'" width="'+s+'" height="'+s+'" rx="4" fill="'+(hl?'var(--sel)':'var(--cell)')+'" stroke="var(--tone)" stroke-width="2.5"/>';
+  // grade de palavras cruzadas estilizada (9 colunas x 5 linhas), com "SAÚDE" na linha do meio
+  var celulas={};
+  function marca(r,c){ celulas[r+'-'+c]=1; }
+  var i;
+  for(i=2;i<=6;i++) marca(2,i);          // SAÚDE
+  for(i=0;i<=4;i++) marca(i,2);          // vertical que cruza o S
+  for(i=1;i<=4;i++) marca(i,4);          // vertical que cruza o Ú
+  for(i=0;i<=3;i++) marca(i,6);          // vertical que cruza o E
+  for(i=4;i<=8;i++) marca(4,i);          // horizontal embaixo
+  for(i=0;i<=1;i++) marca(0,i);          // horizontal em cima
+  var letras={'2-2':'S','2-3':'A','2-4':'Ú','2-5':'D','2-6':'E'};
+  var out='', s=18, gap=3, cols=9, rows=5, ox=(220-(cols*(s+gap)-gap))/2, oy=(110-(rows*(s+gap)-gap))/2, r, c;
+  for(r=0;r<rows;r++) for(c=0;c<cols;c++){
+    if(!celulas[r+'-'+c]) continue;
+    var x=ox+c*(s+gap), y=oy+r*(s+gap), hl=(r===2&&c===4);
+    out+='<rect x="'+x+'" y="'+y+'" width="'+s+'" height="'+s+'" rx="3" fill="'+(hl?'var(--sel)':'var(--cell)')+'" stroke="var(--tone)" stroke-width="2"/>';
     var L=letras[r+'-'+c];
-    if(L) out+='<text x="'+(x+s/2)+'" y="'+(y+s/2+6)+'" text-anchor="middle" font-family="Bricolage Grotesque,Trebuchet MS,sans-serif" font-weight="800" font-size="18" fill="'+(hl?'var(--sel-ink)':'var(--ink)')+'">'+L+'</text>';
+    if(L) out+='<text x="'+(x+s/2)+'" y="'+(y+s/2+5)+'" text-anchor="middle" font-family="Bricolage Grotesque,Trebuchet MS,sans-serif" font-weight="800" font-size="13" fill="'+(hl?'var(--sel-ink)':'var(--ink)')+'">'+L+'</text>';
   }
   return svg(out);
 }
@@ -177,32 +218,46 @@ function progresso(j){
 
 /* ---------- montagem ---------- */
 function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+var catMap={}; CATEGORIAS.forEach(function(c){ catMap[c.id]=c; });
 var main=document.getElementById('lista');
-CATEGORIAS.forEach(function(cat){
-  var lista=JOGOS.filter(function(j){return j.cat===cat.id;});
-  if(!lista.length) return;
-  var sec=el('section');
-  sec.setAttribute('aria-labelledby','h-'+cat.id);
-  var h=el('h2',null,cat.titulo); h.id='h-'+cat.id; sec.appendChild(h);
-  sec.appendChild(el('p','sub',cat.sub));
-  var grid=el('div','cards');
-  lista.forEach(function(j){
-    var soon=!j.href;
-    var card=el(soon?'div':'a','card tone-'+j.tom+(soon?' soon':''));
-    if(!soon) card.href=j.href;
-    card.appendChild(el('div','art',ARTE[j.arte]()));
-    var b=el('div','body');
-    b.appendChild(el('h3',null,j.titulo));
-    b.appendChild(el('p',null,j.desc));
-    var chips=el('div','chips'); j.chips.forEach(function(c){ chips.appendChild(el('span','chip',c)); }); b.appendChild(chips);
-    var p=progresso(j); if(p) b.appendChild(el('div','prog',p));
-    b.appendChild(el('div','cta', soon?'Em breve':'Jogar →'));
-    card.appendChild(b);
-    grid.appendChild(card);
+var atual='todos';
+
+function cartao(j){
+  var soon=!j.href;
+  var card=el(soon?'div':'a','card tone-'+j.tom+(soon?' soon':''));
+  if(!soon) card.href=j.href;
+  card.appendChild(el('div','art',ARTE[j.arte]()));
+  var b=el('div','body');
+  b.appendChild(el('div','cat',j.rotulo || (catMap[j.cat]||{}).rotulo || ''));
+  b.appendChild(el('h3',null,j.titulo));
+  b.appendChild(el('p',null,j.desc));
+  var chips=el('div','chips'); j.chips.forEach(function(c){ chips.appendChild(el('span','chip',c)); }); b.appendChild(chips);
+  var p=progresso(j); if(p) b.appendChild(el('div','prog',p));
+  b.appendChild(el('div','cta', soon?'Em breve':'Jogar →'));
+  card.appendChild(b);
+  return card;
+}
+
+var barra=el('div','filtros'); barra.setAttribute('role','group'); barra.setAttribute('aria-label','Filtrar jogos por tipo');
+var grade=el('div','cards'); grade.id='grade';
+function desenhar(){
+  grade.innerHTML='';
+  JOGOS.filter(function(j){ return atual==='todos' || j.cat===atual; }).forEach(function(j){ grade.appendChild(cartao(j)); });
+}
+var opcoes=[{id:'todos',t:'Todos',n:JOGOS.length}].concat(CATEGORIAS.map(function(c){
+  return {id:c.id,t:c.titulo,n:JOGOS.filter(function(j){return j.cat===c.id;}).length};
+})).filter(function(o){ return o.n>0; });
+opcoes.forEach(function(o){
+  var b=el('button','fchip',o.t+'<span class="n">'+o.n+'</span>'); b.type='button';
+  b.setAttribute('aria-pressed', o.id===atual?'true':'false');
+  b.addEventListener('click',function(){
+    atual=o.id;
+    Array.prototype.forEach.call(barra.children,function(x){ x.setAttribute('aria-pressed','false'); });
+    b.setAttribute('aria-pressed','true'); desenhar();
   });
-  sec.appendChild(grid);
-  main.appendChild(sec);
+  barra.appendChild(b);
 });
+main.appendChild(barra); main.appendChild(grade); desenhar();
 })();
 </script>
 </body>
