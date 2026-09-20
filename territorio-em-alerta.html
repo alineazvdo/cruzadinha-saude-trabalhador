@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Território em Alerta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#EEF5F7; --surface:#FFFFFF; --ink:#12324A; --muted:#4F6B7D; --line:#B9CBD3; --edge:#12324A; --emph:#12324A;
+  --field:#FFFFFF; --sel:#FFD23F; --sel-ink:#12324A;
+  --accent:#B0356B; --accent-ink:#FFFFFF; --ok:#0B6B58; --ok-bg:#D6F0E6;
+  --err:#B3311A; --err-bg:#FBE0DA; --warn:#7A4E00; --warn-bg:#FFF0B3; --focus:#0B5FA5;
+  --s1:#FCEFD8; --s1t:#12324A; --s2:#F8D08F; --s2t:#12324A; --s3:#F19C55; --s3t:#12324A; --s4:#CF4A22; --s4t:#FFFFFF; --s5:#9E2F14; --s5t:#FFFFFF;
+  --g1:#BFE8D2; --g1t:#12324A; --g2:#FFE08A; --g2t:#12324A; --g3:#C7381F; --g3t:#FFFFFF;
+  --v1:#C7381F; --v1t:#FFFFFF; --v2:#F2A65A; --v2t:#12324A; --v3:#D6E6F4; --v3t:#12324A; --v4:#8DBBE3; --v4t:#12324A;
+  --t1:#CFE3F5; --t1t:#12324A; --t2:#E9EEF1; --t2t:#12324A; --t3:#F2A65A; --t3t:#12324A; --t4:#C7381F; --t4t:#FFFFFF;
+  --display:'Bricolage Grotesque','Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --body:'Atkinson Hyperlegible','Segoe UI',Verdana,system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
+    --field:#152F41; --sel:#FFD23F; --sel-ink:#0B2233;
+    --accent:#FF8FBB; --accent-ink:#3A0A20; --ok:#3FCFAA; --ok-bg:#12403A;
+    --err:#FF9A86; --err-bg:#4A2622; --warn:#FFD23F; --warn-bg:#3A3411; --focus:#7CC0FF;
+    --s1:#23394B; --s1t:#EAF3F7; --s2:#6A4F2B; --s2t:#EAF3F7; --s3:#C87A3A; --s3t:#0B2233; --s4:#E8894F; --s4t:#0B2233; --s5:#FFB080; --s5t:#0B2233;
+    --g1:#1E5C4B; --g1t:#EAF3F7; --g2:#D9B43A; --g2t:#0B2233; --g3:#FF7A5C; --g3t:#0B2233;
+    --v1:#FF7A5C; --v1t:#0B2233; --v2:#E8B04F; --v2t:#0B2233; --v3:#2E5C80; --v3t:#EAF3F7; --v4:#23705F; --v4t:#EAF3F7;
+    --t1:#2E5C80; --t1t:#EAF3F7; --t2:#2B3F4F; --t2t:#EAF3F7; --t3:#E8B04F; --t3t:#0B2233; --t4:#FF7A5C; --t4t:#0B2233;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
+  --field:#152F41; --sel:#FFD23F; --sel-ink:#0B2233;
+  --accent:#FF8FBB; --accent-ink:#3A0A20; --ok:#3FCFAA; --ok-bg:#12403A;
+  --err:#FF9A86; --err-bg:#4A2622; --warn:#FFD23F; --warn-bg:#3A3411; --focus:#7CC0FF;
+  --s1:#23394B; --s1t:#EAF3F7; --s2:#6A4F2B; --s2t:#EAF3F7; --s3:#C87A3A; --s3t:#0B2233; --s4:#E8894F; --s4t:#0B2233; --s5:#FFB080; --s5t:#0B2233;
+  --g1:#1E5C4B; --g1t:#EAF3F7; --g2:#D9B43A; --g2t:#0B2233; --g3:#FF7A5C; --g3t:#0B2233;
+  --v1:#FF7A5C; --v1t:#0B2233; --v2:#E8B04F; --v2t:#0B2233; --v3:#2E5C80; --v3t:#EAF3F7; --v4:#23705F; --v4t:#EAF3F7;
+  --t1:#2E5C80; --t1t:#EAF3F7; --t2:#2B3F4F; --t2t:#EAF3F7; --t3:#E8B04F; --t3t:#0B2233; --t4:#FF7A5C; --t4t:#0B2233;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.app{max-width:1240px;margin:0 auto;padding:18px 16px 56px}
+.back{margin:0 0 6px;font-size:.95rem}
+.back a{font-weight:700;text-underline-offset:3px;color:var(--ink)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(1.7rem,5.5vw,2.5rem);line-height:1.08;margin:0 0 6px;letter-spacing:-0.02em}
+h2{font-family:var(--display);font-weight:800;font-size:1.25rem;margin:0 0 8px;line-height:1.2}
+h3{font-family:var(--display);font-weight:700;font-size:1.02rem;margin:0 0 6px}
+.lede{margin:0 0 16px;color:var(--muted);max-width:64ch}
+.muted{color:var(--muted)} .small{font-size:.9rem}
+
+.card{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px 16px}
+.card + .card{margin-top:14px}
+.tag{display:inline-block;font-family:var(--display);font-weight:700;font-size:.85rem;background:var(--surface);border:2px solid var(--edge);border-radius:999px;padding:2px 12px}
+.btn{background:var(--surface);border:2px solid var(--edge);border-radius:10px;padding:10px 18px;min-height:46px;font-weight:700}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+
+.steps{display:flex;gap:4px;margin:0 0 8px;padding:0;list-style:none}
+.steps li{flex:1;height:8px;border-radius:99px;background:var(--line)}
+.steps li.done{background:var(--accent)} .steps li.now{background:var(--emph)}
+.stepname{margin:0 0 12px;color:var(--muted);font-size:.92rem}
+
+/* palco: mapa + perguntas */
+.stage{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;grid-template-areas:"q" "map" "a" "d"}
+.pq{grid-area:q} .pmap{grid-area:map} .pa{grid-area:a} .pd{grid-area:d}
+.stage .card + .card{margin-top:0}
+@media (min-width:980px){
+  .stage{grid-template-columns:minmax(0,1fr) 400px;grid-template-areas:"map q" "map a" "map d";align-items:start}
+}
+.mission{border-left:8px solid var(--accent);background:var(--bg);border-radius:10px;padding:10px 12px;margin:0 0 12px}
+.mission b{font-family:var(--display)}
+.qt{font-weight:700;margin:0 0 4px;font-size:1.05rem}
+.hint{margin:0 0 8px;color:var(--muted);font-size:.9rem}
+.picks{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0;min-height:34px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--accent);border-radius:999px;padding:1px 6px 1px 12px;font-size:.88rem;font-weight:700;background:var(--surface)}
+.chip button{border:0;background:transparent;font-weight:800;padding:0 6px;min-height:28px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:2px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--field);cursor:pointer;min-height:48px}
+.opt:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--field))}
+.opt input{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex:none}
+
+/* camadas e mapa */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.tabs button{border:2px solid var(--edge);border-radius:999px;background:var(--surface);padding:4px 14px;min-height:40px;font-weight:700;white-space:nowrap}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs .sep{flex:1}
+@media (max-width:639px){
+  .tabs{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px 8px;padding:2px 16px 8px;scroll-padding:0 16px}
+  .tabs button{flex:none}
+}
+.viewbtn{margin-left:auto}
+.layername{margin:2px 0 6px;font-family:var(--display);font-weight:700}
+.mapwrap{position:relative}
+svg.mapa{display:block;width:100%;height:auto;border-radius:10px;background:color-mix(in srgb,var(--line) 30%,var(--surface))}
+.mun{cursor:pointer;outline:none}
+.mun path{fill:var(--f);stroke:var(--edge);stroke-width:.45;stroke-linejoin:round}
+.mun:hover path{stroke-width:.9}
+.mun:focus-visible path{stroke:var(--focus);stroke-width:1.3}
+.mun text{fill:var(--tx);pointer-events:none;font-family:var(--display);text-anchor:middle}
+.mun .nm{font-size:2.1px;font-weight:700}
+.mun .vl{font-size:3.1px;font-weight:800}
+.mun .ck{font-size:3.2px;font-weight:800;display:none}
+.compact .mun .nm{display:none}
+.compact .mun .vl{font-size:3.7px}
+.mun.sel path{stroke:var(--emph);stroke-width:1.2}
+.mun.pick path{stroke:var(--accent);stroke-width:1.7}
+.mun.pick .ck,.mun.ok .ck,.mun.no .ck,.mun.miss .ck{display:block}
+.mun.ok path{stroke:var(--ok);stroke-width:1.9}
+.mun.no path{stroke:var(--err);stroke-width:1.9}
+.mun.miss path{stroke:var(--ok);stroke-width:1.7;stroke-dasharray:2.2 1.4}
+.s1{--f:var(--s1);--tx:var(--s1t)} .s2{--f:var(--s2);--tx:var(--s2t)} .s3{--f:var(--s3);--tx:var(--s3t)} .s4{--f:var(--s4);--tx:var(--s4t)} .s5{--f:var(--s5);--tx:var(--s5t)}
+.g1{--f:var(--g1);--tx:var(--g1t)} .g2{--f:var(--g2);--tx:var(--g2t)} .g3{--f:var(--g3);--tx:var(--g3t)}
+.v1{--f:var(--v1);--tx:var(--v1t)} .v2{--f:var(--v2);--tx:var(--v2t)} .v3{--f:var(--v3);--tx:var(--v3t)} .v4{--f:var(--v4);--tx:var(--v4t)}
+.t1{--f:var(--t1);--tx:var(--t1t)} .t2{--f:var(--t2);--tx:var(--t2t)} .t3{--f:var(--t3);--tx:var(--t3t)} .t4{--f:var(--t4);--tx:var(--t4t)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0 0;padding:0;list-style:none;font-size:.88rem}
+.legend li{display:flex;align-items:center;gap:6px}
+.sw{width:18px;height:18px;border-radius:4px;background:var(--f);border:2px solid var(--edge);flex:none}
+.legend .n{color:var(--muted)}
+.note{margin:8px 0 0;font-size:.85rem;color:var(--muted)}
+
+/* tabela */
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);cursor:pointer;white-space:nowrap}
+th.num,td.num{text-align:right;white-space:nowrap}
+td.hl,th.hl{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+tr.trow{cursor:pointer}
+tr.trow.sel td{outline:0;background:color-mix(in srgb,var(--sel) 35%,transparent)}
+tr.trow.pick td:first-child{box-shadow:inset 6px 0 0 var(--accent)}
+
+/* detalhes */
+.det dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:8px 0}
+.det dt{color:var(--muted)} .det dd{margin:0;font-weight:700}
+.det .viz{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.det .viz button{border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:2px 10px;min-height:32px;font-size:.85rem;font-weight:700}
+.klass{font-weight:400;color:var(--muted);font-size:.85rem}
+
+/* feedback */
+.badge{display:inline-block;font-family:var(--display);font-weight:700;font-size:.78rem;border-radius:999px;padding:1px 10px;margin-right:6px}
+.badge.ok{background:var(--ok-bg);color:var(--ok)} .badge.mid{background:var(--warn-bg);color:var(--warn)} .badge.bad{background:var(--err-bg);color:var(--err)}
+.fb{border:2px solid var(--line);border-left-width:8px;border-radius:12px;padding:12px 14px;background:var(--surface)}
+.fb.ok{border-left-color:var(--ok)} .fb.mid{border-left-color:var(--warn)} .fb.bad{border-left-color:var(--err)}
+.fb ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.fb li{font-size:.95rem;padding:6px 10px;border-radius:8px;background:var(--bg)}
+.fb li .st{font-family:var(--display);font-weight:700;font-size:.78rem;margin-right:6px}
+.fb li.rec{outline:2px solid var(--ok)} .fb li.nao.pick{outline:2px solid var(--err)}
+.why{margin:8px 0 0;padding:8px 10px;border-radius:8px;background:var(--bg);font-size:.95rem}
+.score{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.pct{font-family:var(--display);font-weight:800;font-size:2.2rem;line-height:1}
+.bar{height:12px;border-radius:99px;background:var(--line);overflow:hidden;flex:1;min-width:120px}
+.bar > i{display:block;height:100%;background:var(--accent);border-radius:99px}
+
+/* relatório */
+.stamp{display:inline-block;font-family:var(--display);font-weight:800;font-size:clamp(1.2rem,4.6vw,1.8rem);letter-spacing:.03em;border:5px solid currentColor;outline:2px solid currentColor;outline-offset:4px;border-radius:10px;padding:4px 16px;transform:rotate(-3deg);margin:8px 0 14px}
+.stamp.good{color:var(--ok)} .stamp.mid{color:var(--warn)} .stamp.bad{color:var(--err)}
+.rows{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.row{display:grid;grid-template-columns:minmax(120px,230px) 1fr auto;gap:10px;align-items:center;font-size:.95rem}
+ol.clean,ul.clean{margin:8px 0 0;padding-left:22px} ol.clean li,ul.clean li{margin:5px 0}
+.narrow{max-width:860px}
+footer{margin-top:28px;color:var(--muted);font-size:.9rem;max-width:72ch}
+@media (prefers-reduced-motion:no-preference){.stamp{animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}}
+@keyframes pop{from{transform:rotate(-3deg) scale(2);opacity:0}to{transform:rotate(-3deg) scale(1);opacity:1}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <p class="back"><a href="index.html">‹ Saúde em jogo</a></p>
+    <h1>Território em Alerta</h1>
+    <p class="lede">Interprete mapas de uma região de saúde e decida onde agir. Cada missão pede que você leia o território: taxas, semáforos, tendências, vizinhança e cobertura.</p>
+  </header>
+  <main id="app"></main>
+  <footer>
+    A região, os municípios e os dados são fictícios. A classificação do LIRAa (satisfatório, alerta e risco) e a meta de 95% de cobertura da tríplice viral seguem as referências do Ministério da Saúde. As demais faixas de cor e o critério de prioridade são do jogo: na rotina, cada regional define os seus.
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var GEO = {"Serra Alta": {"d": "M23.0 40.3 L28.0 40.3 L32.5 42.2 L36.5 45.6 L41.4 46.1 L42.6 44.3 L43.4 42.4 L43.7 37.4 L42.5 32.7 L39.9 28.3 L40.1 23.3 L37.5 22.1 L35.0 20.7 L30.6 22.6 L25.9 23.7 L25.1 27.8 L25.2 32.1 L24.5 36.3 Z", "cx": 33.0, "cy": 34.0, "area": 368.5, "viz": ["Mata Redonda", "Riacho Fundo", "São Benício", "Taboleiro", "Umburana Velha", "Vale do Sol"]}, "Vale do Sol": {"d": "M43.4 42.4 L48.1 41.9 L51.8 39.3 L55.9 37.5 L59.8 35.2 L58.9 30.9 L56.4 27.0 L55.3 22.8 L55.5 18.2 L52.1 20.8 L47.9 21.1 L43.7 21.5 L40.1 23.3 L39.9 28.3 L42.5 32.7 L43.7 37.4 Z", "cx": 49.7, "cy": 29.7, "area": 311.8, "viz": ["Alto Verde", "Mata Redonda", "Serra Alta", "Taboleiro"]}, "Alto Verde": {"d": "M55.5 18.2 L55.3 22.8 L56.4 27.0 L58.9 30.9 L59.8 35.2 L63.4 36.7 L67.4 37.3 L70.4 40.0 L74.1 37.3 L75.9 33.0 L79.0 29.9 L77.4 25.2 L76.7 20.3 L74.3 16.0 L69.7 16.7 L64.9 16.0 L60.2 17.0 L55.6 18.0 L55.6 18.1 Z", "cx": 67.8, "cy": 27.1, "area": 386.0, "viz": ["Cacimba Nova", "Pé de Serra", "Santa Aurora", "Taboleiro", "Vale do Sol"]}, "Cacimba Nova": {"d": "M74.3 16.0 L76.7 20.3 L77.4 25.2 L79.0 29.9 L83.7 29.2 L88.1 31.9 L92.9 30.5 L97.5 31.5 L97.8 26.8 L98.0 22.0 L95.8 18.8 L94.8 15.1 L94.5 11.1 L92.0 8.0 L87.6 8.2 L83.5 7.0 L79.5 5.2 L77.4 8.6 L77.2 12.9 Z", "cx": 86.4, "cy": 20.2, "area": 461.8, "viz": ["Alto Verde", "Pé de Serra", "Santa Aurora"]}, "Mata Redonda": {"d": "M35.0 20.7 L37.5 22.1 L40.1 23.3 L43.7 21.5 L47.9 21.1 L52.1 20.8 L55.5 18.2 L55.6 18.1 L55.6 18.0 L53.8 14.4 L53.0 10.6 L53.2 6.5 L52.5 2.7 L48.8 3.0 L45.0 2.5 L41.7 3.5 L38.3 1.7 L35.0 2.7 L35.6 7.2 L35.8 11.7 L36.1 16.2 Z", "cx": 44.3, "cy": 11.9, "area": 356.1, "viz": ["Pé de Serra", "Serra Alta", "Umburana Velha", "Vale do Sol"]}, "Riacho Fundo": {"d": "M23.0 40.3 L24.5 36.3 L25.2 32.1 L25.1 27.8 L25.9 23.7 L21.3 22.1 L17.5 19.1 L14.2 21.9 L10.3 23.3 L6.1 23.7 L2.1 25.0 L2.0 26.5 L2.0 28.0 L3.1 31.3 L2.0 34.8 L2.4 38.1 L6.8 37.8 L10.4 40.6 L14.3 42.1 L18.5 42.5 L20.7 41.3 Z", "cx": 14.5, "cy": 31.0, "area": 418.4, "viz": ["Jurema Nova", "Serra Alta", "São Benício", "Três Barras", "Umburana Velha"]}, "Santa Aurora": {"d": "M79.0 29.9 L75.9 33.0 L74.1 37.3 L70.4 40.0 L71.2 43.3 L71.4 46.6 L74.6 49.0 L77.3 52.1 L81.1 53.6 L83.8 56.9 L87.9 57.9 L88.9 56.9 L90.0 56.0 L92.9 52.5 L94.0 48.2 L95.5 44.1 L97.0 40.0 L97.7 35.8 L97.5 31.5 L92.9 30.5 L88.1 31.9 L83.7 29.2 Z", "cx": 83.8, "cy": 41.6, "area": 511.0, "viz": ["Alto Verde", "Cacimba Nova", "Taboleiro", "Várzea Grande do Sul"]}, "São Benício": {"d": "M41.4 46.1 L36.5 45.6 L32.5 42.2 L28.0 40.3 L23.0 40.3 L20.7 41.3 L18.5 42.5 L17.1 47.0 L17.4 51.5 L19.0 56.0 L17.8 60.6 L18.5 65.1 L22.2 66.3 L26.3 65.4 L30.0 67.0 L34.0 67.0 L37.9 68.1 L41.8 69.2 L45.9 68.4 L44.1 64.2 L44.5 59.4 L42.1 55.3 L42.0 50.6 Z", "cx": 30.8, "cy": 55.1, "area": 597.7, "viz": ["Riacho Fundo", "Serra Alta", "Taboleiro", "Três Barras"]}, "Taboleiro": {"d": "M41.4 46.1 L42.0 50.6 L42.1 55.3 L44.5 59.4 L44.1 64.2 L45.9 68.4 L47.5 68.9 L49.2 68.8 L52.2 65.4 L54.9 61.7 L59.6 60.2 L61.0 55.2 L64.2 52.1 L68.7 50.3 L71.4 46.6 L71.2 43.3 L70.4 40.0 L67.4 37.3 L63.4 36.7 L59.8 35.2 L55.9 37.5 L51.8 39.3 L48.1 41.9 L43.4 42.4 L42.6 44.3 Z", "cx": 53.1, "cy": 49.8, "area": 597.4, "viz": ["Alto Verde", "Santa Aurora", "Serra Alta", "São Benício", "Vale do Sol", "Várzea Grande do Sul"]}, "Três Barras": {"d": "M18.5 42.5 L14.3 42.1 L10.4 40.6 L6.8 37.8 L2.4 38.1 L1.2 42.8 L4.1 47.3 L3.0 52.0 L5.9 54.5 L7.3 58.1 L10.1 60.7 L12.0 64.0 L15.2 64.6 L18.5 65.1 L17.8 60.6 L19.0 56.0 L17.4 51.5 L17.1 47.0 Z", "cx": 10.7, "cy": 48.9, "area": 319.5, "viz": ["Riacho Fundo", "São Benício"]}, "Umburana Velha": {"d": "M17.5 19.1 L21.3 22.1 L25.9 23.7 L30.6 22.6 L35.0 20.7 L36.1 16.2 L35.8 11.7 L35.6 7.2 L35.0 2.7 L30.7 3.1 L26.3 2.2 L22.0 3.0 L19.8 3.8 L17.5 3.9 L18.8 7.7 L16.2 11.5 L17.1 15.3 Z", "cx": 26.2, "cy": 13.2, "area": 328.7, "viz": ["Jurema Nova", "Mata Redonda", "Riacho Fundo", "Serra Alta"]}, "Várzea Grande do Sul": {"d": "M71.4 46.6 L68.7 50.3 L64.2 52.1 L61.0 55.2 L59.6 60.2 L54.9 61.7 L52.2 65.4 L49.2 68.8 L50.6 69.1 L52.0 69.0 L56.4 69.0 L60.7 68.9 L65.0 68.1 L69.4 68.3 L73.6 66.4 L78.0 67.0 L82.3 65.1 L85.3 61.7 L87.9 57.9 L83.8 56.9 L81.1 53.6 L77.3 52.1 L74.6 49.0 Z", "cx": 72.8, "cy": 58.4, "area": 435.6, "viz": ["Santa Aurora", "Taboleiro"]}, "Jurema Nova": {"d": "M17.5 19.1 L17.1 15.3 L16.2 11.5 L18.8 7.7 L17.5 3.9 L12.7 5.0 L8.0 6.9 L3.0 7.0 L2.8 11.5 L3.3 16.0 L1.1 20.5 L2.1 25.0 L6.1 23.7 L10.3 23.3 L14.2 21.9 Z", "cx": 10.1, "cy": 13.0, "area": 245.4, "viz": ["Riacho Fundo", "Umburana Velha"]}, "Pé de Serra": {"d": "M55.6 18.0 L60.2 17.0 L64.9 16.0 L69.7 16.7 L74.3 16.0 L77.2 12.9 L77.4 8.6 L79.5 5.2 L74.7 4.3 L70.0 3.0 L65.7 1.8 L61.3 1.4 L56.9 2.7 L52.5 2.7 L53.2 6.5 L53.0 10.6 L53.8 14.4 Z", "cx": 61.6, "cy": 10.1, "area": 316.6, "viz": ["Alto Verde", "Cacimba Nova", "Mata Redonda"]}};
+
+/* nome, população, casos (4 sem), casos (4 sem anteriores), IIP (%), cobertura tríplice viral D1 (%) */
+var DADOS = [
+ ['Serra Alta',168000,420,350,2.1,96],
+ ['Vale do Sol',42000,300,120,5.8,88],
+ ['Alto Verde',9800,95,40,4.6,91],
+ ['Cacimba Nova',1900,3,1,2.6,100],
+ ['Mata Redonda',27000,60,95,3.2,97],
+ ['Riacho Fundo',15500,44,30,1.5,79],
+ ['Santa Aurora',31000,150,138,3.9,94],
+ ['São Benício',8600,10,12,0.8,98],
+ ['Taboleiro',19900,210,100,4.2,92],
+ ['Três Barras',12400,15,14,1.2,71],
+ ['Umburana Velha',5400,6,8,2.4,99],
+ ['Várzea Grande do Sul',23800,95,70,4.9,90],
+ ['Jurema Nova',3100,2,3,0.4,96],
+ ['Pé de Serra',6900,28,9,3.6,85]
+];
+var M={}, NOMES=[], POP_TOT=0, AREA_TOT=0, CV_SOMA=0;
+DADOS.forEach(function(r){
+  var g=GEO[r[0]];
+  var m={nome:r[0],pop:r[1],c4:r[2],c4p:r[3],iip:r[4],cv:r[5],d:g.d,cx:g.cx,cy:g.cy,area:g.area,viz:g.viz};
+  m.inc=m.c4/m.pop*1e5; m.varp=(m.c4-m.c4p)/m.c4p*100;
+  M[m.nome]=m; NOMES.push(m.nome); POP_TOT+=m.pop; AREA_TOT+=m.area; CV_SOMA+=m.cv*m.pop;
+});
+var CV_MED=CV_SOMA/POP_TOT;
+
+/* ---------- formatação ---------- */
+function n0(v){ return Math.round(v).toLocaleString('pt-BR'); }
+function n1(v){ return v.toFixed(1).replace('.',','); }
+function pv(v){ return (v>=0?'+':'−')+Math.abs(Math.round(v))+'%'; }
+function lista(a){ return a.length<=1?(a[0]||''):a.slice(0,-1).join(', ')+' e '+a[a.length-1]; }
+
+/* ---------- camadas ---------- */
+var CAMADAS=[
+ {id:'casos',rot:'Casos',nome:'Casos nas últimas 4 semanas',rampa:'s',mins:[0,10,50,100,200],
+  rots:['0 a 9','10 a 49','50 a 99','100 a 199','200 ou mais'],val:function(m){return m.c4;},txt:function(m){return n0(m.c4);},
+  nota:'Número absoluto de casos: depende do tamanho da população.'},
+ {id:'incid',rot:'Incidência',nome:'Incidência por 100 mil habitantes (4 semanas)',rampa:'s',mins:[0,100,300,600,1000],
+  rots:['Menos de 100','100 a 299','300 a 599','600 a 999','1.000 ou mais'],val:function(m){return m.inc;},txt:function(m){return n0(m.inc);},
+  nota:'Casos ajustados pela população: permite comparar municípios de tamanhos diferentes.'},
+ {id:'iip',rot:'LIRAa (IIP)',nome:'LIRAa: índice de infestação predial (%)',rampa:'g',mins:[0,1,4],
+  rots:['Satisfatório (menos de 1%)','Alerta (1% a 3,9%)','Risco (4% ou mais)'],val:function(m){return m.iip;},txt:function(m){return n1(m.iip)+'%';},
+  nota:'Classificação do LIRAa: satisfatório abaixo de 1%, alerta de 1% a 3,9% e risco a partir de 4%.'},
+ {id:'cv',rot:'Cobertura vacinal',nome:'Cobertura da tríplice viral, 1ª dose (%)',rampa:'v',mins:[0,80,90,95],
+  rots:['Menos de 80%','80% a 89,9%','90% a 94,9%','95% ou mais (meta)'],val:function(m){return m.cv;},txt:function(m){return Math.round(m.cv)+'%';},
+  nota:'A meta é 95%. As faixas intermediárias são do jogo.'},
+ {id:'tend',rot:'Variação',nome:'Variação dos casos (4 semanas contra as 4 anteriores)',rampa:'t',mins:[-Infinity,0,25,100],
+  rots:['Queda','Estável (0 a 24,9%)','Aumento moderado (25% a 99,9%)','Aumento forte (100% ou mais)'],val:function(m){return m.varp;},txt:function(m){return pv(m.varp);},
+  nota:'Percentuais calculados sobre poucos casos são instáveis: confira sempre o número absoluto.'}
+];
+var CAM={}; CAMADAS.forEach(function(c){CAM[c.id]=c;});
+function classeIdx(c,v){ var k=0; c.mins.forEach(function(mn,i){ if(v>=mn) k=i; }); return k; }
+
+/* ---------- prioridade (critério do jogo) ---------- */
+function prioridade(m){
+  var inc=m.inc>=1000?3:(m.inc>=600?2:(m.inc>=300?1:0));
+  var ip=m.iip>=4?2:(m.iip>=3?1:0);
+  var td=(m.varp>=100&&m.c4>=50)?2:((m.varp>=25&&m.c4>=30)?1:0);
+  var cv=m.cv<80?2:(m.cv<90?1:0);
+  var vo=m.c4>=200?1:0;
+  return {inc:inc,ip:ip,td:td,cv:cv,vo:vo,total:inc+ip+td+cv+vo};
+}
+var RANK=NOMES.slice().sort(function(a,b){ return prioridade(M[b]).total-prioridade(M[a]).total || M[b].inc-M[a].inc; });
+var TOP3=RANK.slice(0,3), PTS_TOP3=TOP3.reduce(function(s,n){return s+prioridade(M[n]).total;},0);
+
+/* ---------- missões e perguntas ---------- */
+var MISSOES=[
+ {t:'Números absolutos ou taxas?',x:'Você está na sala de situação de um Núcleo Regional de Saúde. A Região Serra Azul (fictícia) tem 14 municípios e cerca de '+n0(POP_TOT/1000)+' mil habitantes. Os dados são das últimas 4 semanas de dengue.'},
+ {t:'Semáforo do LIRAa',x:'Chegaram os resultados do LIRAa. Use a camada do índice de infestação predial (IIP) para ver onde o controle do vetor é mais urgente.'},
+ {t:'Tendência e vizinhança',x:'Um mapa não mostra só onde há casos: mostra para onde a situação caminha e quem faz fronteira com quem.'},
+ {t:'Cobertura vacinal: a média esconde',x:'Além da dengue, a equipe acompanha a cobertura da tríplice viral (primeira dose), cuja meta é 95%.'},
+ {t:'Decidir onde agir',x:'Agora é hora de decidir. Há poucas equipes e muitos municípios: cruze as camadas antes de escolher.'}
+];
+var FORTE=NOMES.filter(function(n){return M[n].varp>=100 && M[n].c4>=50;});
+var CAND_VIZ=NOMES.filter(function(n){
+  if(FORTE.indexOf(n)>=0) return false;
+  return M[n].viz.filter(function(v){return FORTE.indexOf(v)>=0;}).length>=2;
+});
+var ALVO_VIZ=CAND_VIZ.slice().sort(function(a,b){return M[b].iip-M[a].iip;})[0];
+var COMBO=NOMES.filter(function(n){return M[n].iip>=4 && M[n].varp>=100 && M[n].cv<90;});
+
+function det(n){ var m=M[n]; return n+' ('+n0(m.c4)+' casos, '+n0(m.inc)+' por 100 mil)'; }
+
+var QUESTOES=[
+ {m:0,tipo:'click1',camada:'casos',texto:'Na camada Casos, qual município registrou mais casos nas últimas 4 semanas?',dica:'Clique no município no mapa ou na tabela.',
+  correta:function(){return ['Serra Alta'];},
+  explica:function(){return 'Serra Alta registrou '+n0(M['Serra Alta'].c4)+' casos. Ela concentra a maior parte da população da região, por isso também tem o maior número absoluto. O número de casos mostra a carga sobre os serviços, mas não compara o risco entre municípios de tamanhos diferentes.';}},
+ {m:0,tipo:'click1',camada:'incid',texto:'Agora, na camada Incidência (casos por 100 mil habitantes), qual município tem o maior risco?',dica:'Troque de camada se for preciso.',
+  correta:function(){return ['Taboleiro'];},
+  explica:function(){var t=M['Taboleiro']; return 'Taboleiro tem a maior incidência: '+n0(t.inc)+' casos por 100 mil habitantes ('+t.c4+' casos em '+n0(t.pop)+' moradores). A incidência ajusta o número de casos pela população e permite comparar o risco.';}},
+ {m:0,tipo:'single',camada:'incid',texto:'Por que o mapa de casos e o mapa de incidência apontam municípios diferentes?',
+  opcoes:[
+   {t:'Um dos mapas tem erro de cálculo.',v:0,fb:'Os dois estão corretos: medem coisas diferentes.'},
+   {t:'Os casos dependem do tamanho da população; a incidência ajusta pela população e permite comparar o risco.',v:100,fb:'Um município grande tem mais casos mesmo com risco menor por habitante.'},
+   {t:'A incidência conta apenas os casos graves.',v:0,fb:'A incidência usa todos os casos notificados no período.'},
+   {t:'Serra Alta notifica mais do que os outros municípios.',v:20,fb:'Pode até notificar, mas a diferença aqui vem do tamanho da população.'}],
+  explica:function(){return 'Para comparar municípios de tamanhos diferentes, use taxas. Números absolutos servem para dimensionar a demanda por serviços.';}},
+ {m:0,tipo:'click1',camada:'casos',texto:'Qual município concentra a maior parte da população da região?',dica:'Clique em um município para ver a população no painel de detalhes.',
+  correta:function(){return ['Serra Alta'];},
+  explica:function(){var s=M['Serra Alta'], b=M['São Benício'];
+    return 'Serra Alta tem '+n0(s.pop)+' habitantes, cerca de '+Math.round(s.pop/POP_TOT*100)+'% da população da região, mas ocupa só '+n1(s.area/AREA_TOT*100)+'% da área do mapa. São Benício ocupa '+n1(b.area/AREA_TOT*100)+'% da área e tem '+n0(b.pop)+' moradores. A mancha colorida chama a atenção pelo tamanho no papel, não pelo número de pessoas: olhe sempre os números.';}},
+
+ {m:1,tipo:'clickN',camada:'iip',texto:'Marque todos os municípios em situação de risco no LIRAa (IIP de 4% ou mais).',dica:'Marque todos os que se enquadrarem.',
+  correta:function(){return NOMES.filter(function(n){return M[n].iip>=4;});},
+  explica:function(){var c=NOMES.filter(function(n){return M[n].iip>=4;}).sort(function(a,b){return M[b].iip-M[a].iip;});
+    return 'Estão em risco: '+lista(c.map(function(n){return n+' ('+n1(M[n].iip)+'%)';}))+'. Santa Aurora, com '+n1(M['Santa Aurora'].iip)+'%, ainda está em alerta. A classificação do LIRAa é: satisfatório abaixo de 1%, alerta de 1% a 3,9% e risco a partir de 4%.';}},
+ {m:1,tipo:'single',camada:'iip',texto:'Santa Aurora tem IIP de 3,9%. Como interpretar?',
+  opcoes:[
+   {t:'Situação satisfatória: não requer nenhuma ação.',v:0,fb:'Satisfatório é abaixo de 1%.'},
+   {t:'Alerta, muito perto do limite de risco: reforçar o monitoramento e as ações de prevenção e controle do vetor.',v:100,fb:'É a leitura correta: a diferença para 4% é mínima.'},
+   {t:'Risco: deve entrar em resposta de emergência.',v:20,fb:'Pela classificação, 3,9% ainda é alerta, embora esteja colado no limite.'},
+   {t:'Não é possível classificar sem saber o número de casos.',v:0,fb:'O IIP tem classificação própria, independente dos casos.'}],
+  explica:function(){var s=M['Santa Aurora']; return 'Pela classificação, 3,9% é alerta. Mas o município tem incidência de '+n0(s.inc)+' por 100 mil e vizinhos em risco: vale monitorar de perto e agir de forma preventiva. Limites de classe são convenções, e o território não respeita a linha entre 3,9% e 4%.';}},
+
+ {m:2,tipo:'clickN',camada:'tend',texto:'Marque os municípios com aumento forte (100% ou mais) e mais de 50 casos nas últimas 4 semanas.',dica:'Cruze a variação com o número de casos.',
+  correta:function(){return FORTE;},
+  explica:function(){return 'Aumento forte com volume relevante: '+lista(FORTE.map(function(n){return n+' ('+pv(M[n].varp)+', '+M[n].c4+' casos)';}))+'. Pé de Serra ('+pv(M['Pé de Serra'].varp)+') e Cacimba Nova ('+pv(M['Cacimba Nova'].varp)+') também aparecem na cor mais forte, mas com apenas '+M['Pé de Serra'].c4+' e '+M['Cacimba Nova'].c4+' casos: variações percentuais sobre números pequenos são instáveis.';}},
+ {m:2,tipo:'single',camada:'tend',texto:'Cacimba Nova aparece com aumento de '+'200%: foi de 1 para 3 casos. O que fazer com essa informação?',
+  opcoes:[
+   {t:'Tratar como prioridade máxima: é a maior variação da região.',v:0,fb:'Percentual sobre número pequeno exagera a impressão de gravidade.'},
+   {t:'Ignorar: com poucos casos, não é relevante.',v:30,fb:'Poucos casos não são irrelevantes: podem ser o começo de algo.'},
+   {t:'Interpretar com cautela, acompanhar e investigar se houver vínculo entre os casos.',v:100,fb:'Equilibra a instabilidade do número com a atenção a um possível início de transmissão.'},
+   {t:'Corrigir o dado: aumento de 200% é impossível.',v:0,fb:'O cálculo está correto: de 1 para 3 é +200%.'}],
+  explica:function(){return 'O aumento de 1 para 3 casos é de 200%, mas são dois casos a mais. A variação percentual em municípios pequenos oscila muito de uma semana para outra. Acompanhe a série e investigue vínculos entre os casos, sem tratá-la como a maior prioridade da região.';}},
+ {m:2,tipo:'click1',camada:'iip',texto:'Fora do grupo em forte aumento ('+'Vale do Sol, Alto Verde e Taboleiro), vários municípios fazem fronteira com dois deles. Entre esses, qual tem o IIP mais alto?',dica:'Observe as fronteiras no mapa e troque de camada para consultar o IIP.',
+  correta:function(){return [ALVO_VIZ];},
+  explica:function(){return 'Fazem fronteira com dois dos municípios em forte aumento: '+lista(CAND_VIZ)+'. Entre eles, '+ALVO_VIZ+' tem o IIP mais alto ('+n1(M[ALVO_VIZ].iip)+'%, contra '+lista(CAND_VIZ.filter(function(n){return n!==ALVO_VIZ;}).map(function(n){return n1(M[n].iip)+'% em '+n;}))+'). Somando vizinhança e infestação, é o município mais vulnerável à propagação. Doenças transmitidas por vetores não respeitam limites municipais.';}},
+
+ {m:3,tipo:'single',camada:'cv',texto:'A cobertura média da tríplice viral na região, ponderada pela população, é de '+'__CVMED__%. A região está protegida?',
+  opcoes:[
+   {t:'Sim: a média está acima de 90%.',v:0,fb:'A média está abaixo da meta de 95% e esconde diferenças grandes entre municípios.'},
+   {t:'Não necessariamente: a média está abaixo da meta e esconde municípios (e bairros) com cobertura bem menor, onde pode se acumular gente suscetível.',v:100,fb:'É por isso que se olha a cobertura município a município, e depois por área.'},
+   {t:'Sim, porque Serra Alta tem cobertura de 96%.',v:0,fb:'Serra Alta pesa muito na média por ser grande, mas isso não protege os outros municípios.'},
+   {t:'Não: só valeria se todos os municípios estivessem em 100%.',v:20,fb:'A meta é 95%, não 100%.'}],
+  explica:function(){return 'A média da região ('+n1(CV_MED)+'%) fica abaixo da meta de 95% e é puxada pelo município maior. Enquanto isso, Três Barras tem '+M['Três Barras'].cv+'% e Riacho Fundo, '+M['Riacho Fundo'].cv+'%. A média esconde bolsões de suscetíveis.';}},
+ {m:3,tipo:'clickN',camada:'cv',texto:'Marque todos os municípios com cobertura abaixo de 90%.',dica:'Atenção aos limites: 90% não é abaixo de 90%.',
+  correta:function(){return NOMES.filter(function(n){return M[n].cv<90;});},
+  explica:function(){var c=NOMES.filter(function(n){return M[n].cv<90;}).sort(function(a,b){return M[a].cv-M[b].cv;});
+    return 'Abaixo de 90%: '+lista(c.map(function(n){return n+' ('+M[n].cv+'%)';}))+'. Várzea Grande do Sul tem exatamente 90% e Alto Verde, 91%: ficam fora, mas perto do limite.';}},
+ {m:3,tipo:'click1',camada:'tend',texto:'Em qual município se somam IIP em risco, aumento forte de casos e cobertura abaixo de 90%?',dica:'Cruze três camadas.',
+  correta:function(){return COMBO;},
+  explica:function(){var m=M[COMBO[0]]; return COMBO[0]+' reúne os três sinais: IIP de '+n1(m.iip)+'%, aumento de '+pv(m.varp)+' nos casos e cobertura de '+m.cv+'%. Nele, controle do vetor, vigilância dos casos e vacinação precisam andar juntos.';}},
+
+ {m:4,tipo:'prior',camada:'incid',n:3,texto:'Você tem 3 equipes para supervisão intensiva nesta semana. Marque os 3 municípios prioritários.',dica:'Cruze incidência, LIRAa, variação, cobertura e volume de casos.',
+  correta:function(){return TOP3;},
+  explica:function(){return 'O critério do jogo soma pontos por incidência (0 a 3), IIP (0 a 2), tendência (0 a 2), cobertura (0 a 2) e volume de casos (0 ou 1). Os três primeiros são '+lista(TOP3)+'. Na rotina, cada regional define seus critérios, mas o raciocínio é o mesmo: nenhuma camada sozinha decide.';}},
+ {m:4,tipo:'single',camada:'cv',texto:'Riacho Fundo (79%) e Três Barras (71%) têm poucos casos de dengue, mas as menores coberturas da tríplice viral. Qual conduta faz mais sentido?',
+  opcoes:[
+   {t:'Nenhuma: sem casos, não é prioridade.',v:0,fb:'Cobertura baixa é risco acumulado, mesmo sem casos hoje.'},
+   {t:'Investigar se é falta de vacinação ou de registro das doses no sistema e fazer busca ativa de faltosos e intensificação da vacinação.',v:100,fb:'Cobre os dois cenários possíveis e começa pela conferência dos registros.'},
+   {t:'Fazer bloqueio vacinal imediato em todos os bairros.',v:30,fb:'Bloqueio é resposta a caso suspeito; aqui a estratégia é recuperar a cobertura.'},
+   {t:'Fazer nebulização (fumacê) nos dois municípios.',v:0,fb:'Não tem relação com a vacinação.'}],
+  explica:function(){return 'Cobertura baixa pode refletir falta de vacinação ou subregistro de doses (por exemplo, doses aplicadas que não chegaram ao SIPNI). Nos dois casos, o caminho começa por conferir os registros e buscar os faltosos.';}}
+];
+QUESTOES.forEach(function(q){ if(q.texto.indexOf('__CVMED__')>=0) q.texto=q.texto.replace('__CVMED__',n1(CV_MED)); });
+
+/* ---------- auxiliares de DOM ---------- */
+function h(tag, props){
+  var e=document.createElement(tag), kids=Array.prototype.slice.call(arguments,2);
+  if(props) Object.keys(props).forEach(function(k){
+    var v=props[k];
+    if(k==='class') e.className=v; else if(k==='html') e.innerHTML=v;
+    else if(k.slice(0,2)==='on') e.addEventListener(k.slice(2),v);
+    else if(v===true) e.setAttribute(k,''); else if(v!==false && v!=null) e.setAttribute(k,v);
+  });
+  (function add(list){ list.forEach(function(c){ if(c==null||c===false) return; if(Array.isArray(c)) add(c); else e.append(c.nodeType?c:document.createTextNode(c)); }); })(kids);
+  return e;
+}
+function sv(name, attrs){ var e=document.createElementNS('http://www.w3.org/2000/svg',name); Object.keys(attrs||{}).forEach(function(k){e.setAttribute(k,attrs[k]);}); return e; }
+var root=document.getElementById('app');
+function show(n){ root.innerHTML=''; root.append(n); window.scrollTo({top:0}); }
+function steps(i){ var ul=h('ul',{class:'steps','aria-label':'Progresso'}); for(var n=0;n<QUESTOES.length;n++) ul.append(h('li',{class:n<i?'done':(n===i?'now':'')})); return ul; }
+function quebra(nome){
+  var w=nome.split(' '); if(w.length===1||nome.length<=10) return [nome];
+  var best=null, i, a, b, mx;
+  for(i=1;i<w.length;i++){ a=w.slice(0,i).join(' '); b=w.slice(i).join(' '); mx=Math.max(a.length,b.length); if(!best||mx<best.mx) best={mx:mx,l:[a,b]}; }
+  return best.l;
+}
+
+var KEY='territorio-alerta:v1';
+function best(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}').best||0; }catch(e){ return 0; } }
+function saveBest(v){ try{ if(v>best()) localStorage.setItem(KEY,JSON.stringify({best:v})); }catch(e){} }
+
+/* ---------- estado ---------- */
+var st, ui;
+function novo(){ st={q:0,notas:[],picks:[],escolha:null,camada:'incid',sel:null,locked:false,view:'mapa',ord:{col:'nome',dir:1}}; }
+
+/* ---------- pontuação ---------- */
+function pontuar(q){
+  if(q.tipo==='single') return st.escolha==null?0:q.opcoes[st.escolha].v;
+  var C=q.correta(), P=st.picks;
+  if(q.tipo==='click1') return (P.length===1 && C.indexOf(P[0])>=0)?100:0;
+  if(q.tipo==='prior'){ var pts=P.reduce(function(s,n){return s+prioridade(M[n]).total;},0); return Math.min(100,Math.round(pts/PTS_TOP3*100)); }
+  var tp=P.filter(function(n){return C.indexOf(n)>=0;}).length, fp=P.length-tp;
+  return Math.max(0,Math.round((tp-fp)/C.length*100));
+}
+function veredito(s){ return s>=80?['ok','Correto']:(s>=40?['mid','Parcial']:['bad','Precisa rever']); }
+
+/* ---------- telas ---------- */
+function telaInicio(){
+  var b=best();
+  show(h('div',{class:'narrow'},
+    h('div',{class:'card'},
+      h('span',{class:'tag'},'Missão de campo'),
+      h('h2',{style:'margin-top:10px'},'Sala de situação da Região Serra Azul'),
+      h('p',null,'Você analisa mapas de uma região fictícia com 14 municípios. São cinco missões e 14 perguntas: ler taxas e números absolutos, usar o semáforo do LIRAa, acompanhar tendências e vizinhança, enxergar bolsões de baixa cobertura e decidir onde agir.'),
+      h('ul',{class:'clean'},
+        h('li',null,'Clique nos municípios no mapa (ou na tabela) para responder e para ver os indicadores de cada um.'),
+        h('li',null,'Troque de camada para cruzar informações: nenhuma camada sozinha conta a história toda.'),
+        h('li',null,'Ao confirmar, o mapa mostra o que estava certo e o que faltou.')),
+      b?h('p',{class:'muted small'},'Sua melhor pontuação neste navegador: '+b+'%.'):null,
+      h('div',{class:'actions'},h('button',{class:'btn primary',type:'button',onclick:function(){ novo(); telaPergunta(0); }},'Começar')))));
+}
+
+function construirMapa(){
+  var svg=sv('svg',{viewBox:'0 0 100 72',class:'mapa',role:'group','aria-label':'Mapa da Região Serra Azul, com 14 municípios'});
+  var ord=NOMES.slice().sort(function(a,b){return M[a].area<M[b].area?1:-1;});
+  ui.g={};
+  ord.forEach(function(n){
+    var m=M[n];
+    var g=sv('g',{class:'mun',tabindex:'0',role:'button','data-nome':n});
+    g.appendChild(sv('path',{d:m.d}));
+    var t=sv('text',{});
+    var ln=quebra(n), alt=2.4, lh=3.3, H=ln.length*alt+lh, y0=m.cy-H/2+1.9;
+    ln.forEach(function(s,i){ var ts=sv('tspan',{x:m.cx,y:(y0+i*alt).toFixed(2),class:'nm'}); ts.textContent=s; t.appendChild(ts); });
+    var tv=sv('tspan',{x:m.cx,y:(y0+ln.length*alt+1.1).toFixed(2),class:'vl'}); t.appendChild(tv);
+    g.appendChild(t);
+    g._vl=tv; g._vlY=(y0+ln.length*alt+1.1); g._vlYc=m.cy+1.2; g._t=t;
+    var ck=sv('text',{x:m.cx,y:(m.cy-H/2-0.6).toFixed(2),class:'ck'}); ck.textContent='✓'; g.appendChild(ck); g._ck=ck;
+    g.addEventListener('click',function(){ selecionar(n); });
+    g.addEventListener('keydown',function(ev){ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); selecionar(n); } });
+    svg.appendChild(g); ui.g[n]=g;
+  });
+  return svg;
+}
+
+function telaPergunta(i){
+  st.q=i; var Q=QUESTOES[i], MI=MISSOES[Q.m];
+  st.picks=[]; st.escolha=null; st.locked=false; st.camada=Q.camada; st.sel=null; st.view='mapa';
+  ui={};
+
+  /* painel da pergunta */
+  var primeira=(i===0 || QUESTOES[i-1].m!==Q.m);
+  ui.pq=h('section',{class:'card pq','aria-label':'Pergunta'});
+  ui.btn=h('button',{class:'btn primary',type:'button',disabled:true,onclick:confirmar},'Confirmar resposta');
+  ui.picksEl=h('div',{class:'picks','aria-live':'polite'});
+  var corpo=[];
+  if(primeira) corpo.push(h('div',{class:'mission'},h('b',null,'Missão '+(Q.m+1)+' de '+MISSOES.length+': '+MI.t),h('div',{class:'small',style:'margin-top:2px'},MI.x)));
+  corpo.push(h('p',{class:'qt'},Q.texto));
+  if(Q.dica) corpo.push(h('p',{class:'hint'},Q.dica));
+  if(Q.tipo==='single'){
+    var grupo=h('div',{class:'opts',role:'radiogroup','aria-label':Q.texto});
+    var ordem=Q.opcoes.map(function(_,k){return k;}); shuffle(ordem); ui.ordem=ordem;
+    ordem.forEach(function(k){
+      var id='o_'+i+'_'+k;
+      var inp=h('input',{type:'radio',name:'q'+i,id:id,value:k,onchange:function(){ st.escolha=k; ui.btn.disabled=false; }});
+      grupo.append(h('label',{class:'opt',for:id},inp,h('span',null,Q.opcoes[k].t)));
+    });
+    corpo.push(grupo);
+  }
+  ui.fbBox=h('div');
+  ui.pq.append(h('div',null,corpo));
+  ui.pa=h('div',{class:'pa'},Q.tipo==='single'?null:ui.picksEl,h('div',{class:'actions'},ui.btn),ui.fbBox);
+
+  /* painel do mapa */
+  ui.pmap=h('section',{class:'card pmap','aria-label':'Mapa e indicadores'});
+  ui.tabs=h('div',{class:'tabs',role:'group','aria-label':'Camadas do mapa'});
+  CAMADAS.forEach(function(c){
+    var b=h('button',{type:'button','aria-pressed':c.id===st.camada?'true':'false',onclick:function(){ st.camada=c.id; atualizarCamada(); }},c.rot);
+    b._id=c.id; ui.tabs.append(b);
+  });
+  ui.viewBtn=h('button',{type:'button',class:'viewbtn','aria-pressed':'false',onclick:function(){ st.view=st.view==='mapa'?'tabela':'mapa'; atualizarView(); }},'Ver como tabela');
+  ui.tabs.append(ui.viewBtn);
+  ui.nomeCam=h('p',{class:'layername'});
+  ui.mapWrap=h('div',{class:'mapwrap'});
+  ui.svg=construirMapa(); ui.mapWrap.append(ui.svg);
+  ui.tabWrap=h('div',{class:'tablewrap',hidden:true});
+  ui.legend=h('ul',{class:'legend'});
+  ui.nota=h('p',{class:'note'});
+  ui.pmap.append(ui.tabs,ui.nomeCam,ui.mapWrap,ui.tabWrap,ui.legend,ui.nota);
+
+  /* painel de detalhes */
+  ui.pd=h('section',{class:'card pd det','aria-label':'Detalhes do município','aria-live':'polite'});
+
+  show(h('div',null, steps(i),
+    h('p',{class:'stepname'},'Pergunta '+(i+1)+' de '+QUESTOES.length),
+    h('div',{class:'stage'},ui.pq,ui.pmap,ui.pa,ui.pd)));
+
+  if(window.ResizeObserver){ new ResizeObserver(ajustarRotulos).observe(ui.mapWrap); }
+  if(!window.__rz){ window.__rz=1; window.addEventListener('resize',function(){ ajustarRotulos(); }); }
+  atualizarCamada(); atualizarView(); renderDetalhe(); renderPicks(); ajustarRotulos();
+}
+function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+function ajustarRotulos(){
+  if(!ui||!ui.mapWrap) return;
+  var w=ui.mapWrap.clientWidth;
+  ui.mapWrap.classList.toggle('compact', w>0 && w<560);
+  var compact = w>0 && w<560;
+  NOMES.forEach(function(n){ var g=ui.g[n]; if(g) g._vl.setAttribute('y',(compact?g._vlYc:g._vlY).toFixed(2)); });
+}
+
+function atualizarCamada(){
+  var c=CAM[st.camada];
+  Array.prototype.forEach.call(ui.tabs.children,function(b){ if(b._id) b.setAttribute('aria-pressed',b._id===st.camada?'true':'false'); });
+  ui.nomeCam.textContent=c.nome;
+  var cont=c.rots.map(function(){return 0;});
+  NOMES.forEach(function(n){
+    var m=M[n], k=classeIdx(c,c.val(m)), g=ui.g[n];
+    cont[k]++;
+    g.setAttribute('class',(g.getAttribute('class')||'mun').replace(/\b[stgv]\d\b/g,'').replace(/\s+/g,' ').trim()+' '+c.rampa+(k+1));
+    g._vl.textContent=c.txt(m);
+    g.setAttribute('aria-label',n+', '+c.rot+': '+c.txt(m)+' ('+c.rots[k]+')');
+  });
+  ui.legend.innerHTML='';
+  c.rots.forEach(function(r,k){ ui.legend.append(h('li',{class:c.rampa+(k+1)},h('span',{class:'sw'}),h('span',null,r+' '),h('span',{class:'n'},'('+cont[k]+')'))); });
+  ui.nota.textContent=c.nota;
+  renderTabela(); marcar();
+}
+function atualizarView(){
+  var t=st.view==='tabela';
+  ui.svg.parentNode.hidden=t; ui.legend.hidden=false;
+  ui.tabWrap.hidden=!t;
+  ui.viewBtn.setAttribute('aria-pressed',t?'true':'false');
+  ui.viewBtn.textContent=t?'Ver como mapa':'Ver como tabela';
+}
+
+/* ---------- tabela ---------- */
+var COLS=[
+ {k:'nome',t:'Município',get:function(m){return m.nome;},fmt:function(m){return m.nome;}},
+ {k:'pop',t:'População',num:1,get:function(m){return m.pop;},fmt:function(m){return n0(m.pop);}},
+ {k:'casos',t:'Casos',num:1,get:function(m){return m.c4;},fmt:function(m){return n0(m.c4);}},
+ {k:'incid',t:'Incid.',num:1,get:function(m){return m.inc;},fmt:function(m){return n0(m.inc);}},
+ {k:'iip',t:'IIP',num:1,get:function(m){return m.iip;},fmt:function(m){return n1(m.iip)+'%';}},
+ {k:'cv',t:'Cobert.',num:1,get:function(m){return m.cv;},fmt:function(m){return m.cv+'%';}},
+ {k:'tend',t:'Variação',num:1,get:function(m){return m.varp;},fmt:function(m){return pv(m.varp);}}
+];
+function renderTabela(){
+  ui.tabWrap.innerHTML='';
+  var o=st.ord, col=COLS.filter(function(c){return c.k===o.col;})[0];
+  var linhas=NOMES.slice().sort(function(a,b){ var x=col.get(M[a]), y=col.get(M[b]); return (x<y?-1:(x>y?1:0))*o.dir; });
+  var head=h('tr',null,COLS.map(function(c){
+    var th=h('th',{class:(c.num?'num ':'')+(c.k===st.camada?'hl':''),scope:'col','aria-sort':c.k===o.col?(o.dir>0?'ascending':'descending'):'none',tabindex:'0',
+      onclick:function(){ st.ord=(o.col===c.k)?{col:c.k,dir:-o.dir}:{col:c.k,dir:c.k==='nome'?1:-1}; renderTabela(); },
+      onkeydown:function(ev){ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); th.click(); } }},c.t+(c.k===o.col?(o.dir>0?' ▲':' ▼'):''));
+    return th;
+  }));
+  var corpo=linhas.map(function(n){
+    var m=M[n];
+    var tr=h('tr',{class:'trow','data-nome':n,tabindex:'0',role:'button','aria-label':n,onclick:function(){ selecionar(n); },
+      onkeydown:function(ev){ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); selecionar(n); } }},
+      COLS.map(function(c){ return h('td',{class:(c.num?'num ':'')+(c.k===st.camada?'hl':'')},c.fmt(m)); }));
+    return tr;
+  });
+  ui.tabWrap.append(h('table',null,h('thead',null,head),h('tbody',null,corpo)));
+  marcar();
+}
+
+/* ---------- seleção e marcações ---------- */
+function corretas(){ var Q=QUESTOES[st.q]; return Q.tipo==='single'?[]:Q.correta(); }
+function marcar(){
+  var Q=QUESTOES[st.q], C=st.locked?corretas():[];
+  NOMES.forEach(function(n){
+    var g=ui.g[n], pick=st.picks.indexOf(n)>=0, cls=['mun'];
+    var base=(g.getAttribute('class')||'').match(/\b[stgv]\d\b/); if(base) cls.push(base[0]);
+    if(n===st.sel) cls.push('sel');
+    if(st.locked){
+      if(pick && C.indexOf(n)>=0){ cls.push('ok'); g._ck.textContent='✓'; }
+      else if(pick){ cls.push('no'); g._ck.textContent='✕'; }
+      else if(C.indexOf(n)>=0){ cls.push('miss'); g._ck.textContent='●'; }
+    } else if(pick){ cls.push('pick'); g._ck.textContent='✓'; }
+    g.setAttribute('class',cls.join(' '));
+    if(Q.tipo!=='single' && !st.locked) g.setAttribute('aria-pressed',pick?'true':'false'); else g.removeAttribute('aria-pressed');
+    if(pick||st.locked) g.parentNode.appendChild(g);       // traz para a frente
+  });
+  if(n_sel()) g_sel().parentNode.appendChild(g_sel());
+  Array.prototype.forEach.call(ui.tabWrap.querySelectorAll('tr.trow'),function(tr){
+    var n=tr.getAttribute('data-nome');
+    tr.classList.toggle('sel',n===st.sel); tr.classList.toggle('pick',st.picks.indexOf(n)>=0);
+  });
+}
+function n_sel(){ return st.sel; } function g_sel(){ return ui.g[st.sel]; }
+
+function selecionar(n){
+  st.sel=n;
+  var Q=QUESTOES[st.q];
+  if(!st.locked && Q.tipo!=='single'){
+    var i=st.picks.indexOf(n);
+    if(Q.tipo==='click1') st.picks=[n];
+    else if(i>=0) st.picks.splice(i,1);
+    else if(Q.tipo==='prior' && st.picks.length>=Q.n) { ui.dicaExtra='Você já marcou '+Q.n+'. Remova um para trocar.'; }
+    else st.picks.push(n);
+    renderPicks();
+  }
+  marcar(); renderDetalhe();
+}
+function renderPicks(){
+  var Q=QUESTOES[st.q];
+  if(Q.tipo==='single'){ return; }
+  ui.picksEl.innerHTML='';
+  if(!st.picks.length) ui.picksEl.append(h('span',{class:'muted small'},Q.tipo==='click1'?'Nenhum município marcado.':'Nenhum município marcado ainda.'));
+  st.picks.forEach(function(n){
+    ui.picksEl.append(h('span',{class:'chip'},n,st.locked?null:h('button',{type:'button','aria-label':'Remover '+n,onclick:function(){ st.picks.splice(st.picks.indexOf(n),1); renderPicks(); marcar(); }},'✕')));
+  });
+  if(Q.tipo==='prior') ui.picksEl.append(h('span',{class:'muted small'},st.picks.length+' de '+Q.n));
+  ui.btn.disabled = st.locked || (Q.tipo==='prior' ? st.picks.length!==Q.n : st.picks.length===0);
+}
+
+function renderDetalhe(){
+  ui.pd.innerHTML='';
+  if(!st.sel){ ui.pd.append(h('h3',null,'Detalhes do município'),h('p',{class:'muted small',style:'margin:0'},'Clique em um município no mapa ou na tabela para ver os indicadores, a população e os vizinhos.')); return; }
+  var m=M[st.sel];
+  function linha(rot,val,camId){ var c=CAM[camId]; return [h('dt',null,rot),h('dd',null,val,c?h('div',{class:'klass'},c.rots[classeIdx(c,c.val(m))]):null)]; }
+  ui.pd.append(h('h3',null,m.nome),
+    h('dl',null,
+      h('dt',null,'População'),h('dd',null,n0(m.pop)+' hab. ',h('span',{class:'klass'},'('+Math.round(m.pop/POP_TOT*100)+'% da região; '+n1(m.area/AREA_TOT*100)+'% da área)')),
+      linha('Casos (4 semanas)',n0(m.c4),'casos'),
+      linha('Incidência por 100 mil',n0(m.inc),'incid'),
+      linha('LIRAa (IIP)',n1(m.iip)+'%','iip'),
+      linha('Cobertura tríplice viral',m.cv+'%','cv'),
+      linha('Variação dos casos',pv(m.varp)+' ('+m.c4p+' → '+m.c4+' casos)','tend')),
+    h('p',{class:'small muted',style:'margin:8px 0 0'},'Faz fronteira com:'),
+    h('div',{class:'viz'},m.viz.map(function(v){ return h('button',{type:'button',onclick:function(){ st.sel=v; marcar(); renderDetalhe(); }},v); })));
+}
+
+/* ---------- confirmar e devolutiva ---------- */
+function confirmar(){
+  var Q=QUESTOES[st.q]; st.locked=true;
+  var s=pontuar(Q); st.notas[st.q]=s;
+  var v=veredito(s);
+  marcar(); renderPicks();
+  ui.btn.remove();
+  var conteudo=[];
+  conteudo.push(h('div',{class:'score'},h('div',{class:'pct'},s+'%'),h('div',{style:'flex:1;min-width:120px'},h('div',{class:'bar'},h('i',{style:'width:'+s+'%'})))));
+  if(Q.tipo==='single'){
+    var melhor=Q.opcoes.reduce(function(a,o,k){return o.v>Q.opcoes[a].v?k:a;},0), es=st.escolha, lis=[];
+    lis.push(h('li',{class:es===melhor?'rec':'nao pick'},h('span',{class:'st'},'Você marcou'),Q.opcoes[es].t,h('div',{class:'small muted'},Q.opcoes[es].fb)));
+    if(es!==melhor) lis.push(h('li',{class:'rec'},h('span',{class:'st'},'Melhor resposta'),Q.opcoes[melhor].t,h('div',{class:'small muted'},Q.opcoes[melhor].fb)));
+    conteudo.push(h('ul',null,lis));
+  } else {
+    var C=Q.correta();
+    conteudo.push(h('p',{style:'margin:0 0 4px'},h('b',null,'Você marcou: '),st.picks.length?lista(st.picks):'nenhum'));
+    conteudo.push(h('p',{style:'margin:0'},h('b',null,(Q.tipo==='prior'?'Mais prioritários: ':'Resposta: ')),lista(C)));
+    conteudo.push(h('p',{class:'small muted',style:'margin:6px 0 0'},'No mapa: ✓ acerto, ✕ marcado a mais, ● faltou marcar.'));
+    if(Q.tipo==='prior') conteudo.push(tabelaPrioridade());
+  }
+  conteudo.push(h('p',{class:'why'},h('b',null,'Por quê: '),Q.explica()));
+  var ultimo=(st.q===QUESTOES.length-1);
+  ui.fbBox.append(h('div',{class:'fb '+v[0]},h('p',{style:'margin:0 0 8px'},h('span',{class:'badge '+v[0]},v[1])),conteudo,
+    h('div',{class:'actions'},h('button',{class:'btn primary',type:'button',onclick:function(){ ultimo?telaRelatorio():telaPergunta(st.q+1); }},ultimo?'Ver o relatório':'Próxima pergunta'))));
+  ui.fbBox.scrollIntoView && ui.fbBox.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function tabelaPrioridade(){
+  var linhas=RANK.slice(0,8).map(function(n){ var p=prioridade(M[n]);
+    return h('tr',null,h('td',null,n),h('td',{class:'num'},p.inc),h('td',{class:'num'},p.ip),h('td',{class:'num'},p.td),h('td',{class:'num'},p.cv),h('td',{class:'num'},p.vo),h('td',{class:'num'},h('b',null,p.total)));
+  });
+  return h('div',{class:'tablewrap',style:'margin-top:10px'},h('table',null,
+    h('thead',null,h('tr',null,h('th',null,'Município'),h('th',{class:'num'},'Incid.'),h('th',{class:'num'},'IIP'),h('th',{class:'num'},'Tend.'),h('th',{class:'num'},'Cob.'),h('th',{class:'num'},'Vol.'),h('th',{class:'num'},'Total'))),
+    h('tbody',null,linhas)));
+}
+
+/* ---------- relatório ---------- */
+function telaRelatorio(){
+  var media=Math.round(st.notas.reduce(function(s,x){return s+x;},0)/QUESTOES.length);
+  saveBest(media);
+  var verd=media>=85?['good','LEITURA AFIADA']:(media>=65?['mid','LEITURA COM RESSALVAS']:['bad','REVISAR A LEITURA']);
+  var porMissao=MISSOES.map(function(mi,k){
+    var idx=[]; QUESTOES.forEach(function(q,j){ if(q.m===k) idx.push(j); });
+    var nota=Math.round(idx.reduce(function(s,j){return s+st.notas[j];},0)/idx.length);
+    return {t:mi.t,n:nota};
+  });
+  var linhas=porMissao.map(function(p,k){ return h('div',{class:'row'},h('span',null,(k+1)+'. '+p.t),h('div',{class:'bar'},h('i',{style:'width:'+p.n+'%'})),h('b',null,p.n+'%')); });
+  var rever=porMissao.filter(function(p){return p.n<80;});
+  var regras=[
+   ['Compare taxas, não só números absolutos.','Município grande tem mais casos mesmo com risco menor por habitante.'],
+   ['Desconfie de percentuais sobre números pequenos.','De 1 para 3 casos é +200%, mas são dois casos.'],
+   ['A mancha grande não é população grande.','Serra Alta tem quase metade da população numa área pequena do mapa.'],
+   ['Olhe as fronteiras.','Doenças transmitidas por vetores não respeitam limites municipais.'],
+   ['A média esconde bolsões.','A cobertura regional pode parecer razoável com municípios muito abaixo da meta.'],
+   ['Cruze camadas antes de decidir.','Incidência, LIRAa, tendência e cobertura contam partes diferentes da história.']
+  ];
+  show(h('div',{class:'narrow'}, steps(QUESTOES.length),
+    h('div',{class:'card'},
+      h('h2',null,'Relatório da sala de situação'),
+      h('span',{class:'stamp '+verd[0]},verd[1]),
+      h('p',{style:'margin:0'},'Pontuação média: ',h('b',null,media+'%'),'.'),
+      best()>media?h('p',{class:'muted small'},'Melhor pontuação neste navegador: '+best()+'%.'):null),
+    h('div',{class:'card'},h('h3',null,'Desempenho por missão'),h('div',{class:'rows'},linhas)),
+    h('div',{class:'card'},h('h3',null,'O que o território mostrou'),
+      h('p',{style:'margin:0'},'Os municípios mais prioritários, pelo critério do jogo, foram '+lista(TOP3)+'. Vale do Sol e Taboleiro reúnem incidência muito alta, IIP em risco e aumento forte, e fazem fronteira entre si; Santa Aurora e Serra Alta, vizinhas do grupo, merecem monitoramento. Três Barras e Riacho Fundo pedem uma agenda diferente: recuperar a cobertura vacinal.')),
+    h('div',{class:'card'},h('h3',null,'Seis regras para ler um mapa'),
+      h('ol',{class:'clean'},regras.map(function(r){ return h('li',null,h('b',null,r[0]+' '),r[1]); }))),
+    rever.length?h('div',{class:'card'},h('h3',null,'Vale rever'),h('ul',{class:'clean'},rever.map(function(p){ return h('li',null,p.t+' ('+p.n+'%)'); }))):null,
+    h('div',{class:'actions'},
+      h('button',{class:'btn primary',type:'button',onclick:function(){ novo(); telaPergunta(0); }},'Jogar de novo'),
+      h('button',{class:'btn',type:'button',onclick:telaInicio},'Voltar ao início'))));
+}
+
+window.Territorio={QUESTOES:QUESTOES,M:M,NOMES:NOMES,RANK:RANK,TOP3:TOP3,CV_MED:CV_MED,prioridade:prioridade,classeIdx:classeIdx,CAM:CAM};
+telaInicio();
+})();
+</script>
+</body>
+</html>

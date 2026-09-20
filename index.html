@@ -13,7 +13,7 @@
   color-scheme:light;
   --bg:#EEF5F7; --surface:#FFFFFF; --ink:#12324A; --muted:#4F6B7D; --line:#B9CBD3; --edge:#12324A; --emph:#12324A;
   --cell:#FFFFFF; --sel:#FFD23F; --sel-ink:#12324A; --focus:#0B5FA5;
-  --t-green:#0E7C66; --t-orange:#B4470A; --t-blue:#1F5FA8; --t-violet:#5B3FB4; --t-soon:#6B8391;
+  --t-green:#0E7C66; --t-orange:#B4470A; --t-blue:#1F5FA8; --t-violet:#5B3FB4; --t-rose:#B0356B; --t-soon:#6B8391;
   --display:'Bricolage Grotesque','Trebuchet MS','Segoe UI',system-ui,sans-serif;
   --body:'Atkinson Hyperlegible','Segoe UI',Verdana,system-ui,sans-serif;
   box-sizing:border-box;
@@ -25,14 +25,14 @@
     color-scheme:dark;
     --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
     --cell:#152F41; --sel:#FFD23F; --sel-ink:#0B2233; --focus:#7CC0FF;
-    --t-green:#3FCFAA; --t-orange:#FF9A5C; --t-blue:#7CB7FF; --t-violet:#B79CFF; --t-soon:#7C95A4;
+    --t-green:#3FCFAA; --t-orange:#FF9A5C; --t-blue:#7CB7FF; --t-violet:#B79CFF; --t-rose:#FF8FBB; --t-soon:#7C95A4;
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
   --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
   --cell:#152F41; --sel:#FFD23F; --sel-ink:#0B2233; --focus:#7CC0FF;
-  --t-green:#3FCFAA; --t-orange:#FF9A5C; --t-blue:#7CB7FF; --t-violet:#B79CFF; --t-soon:#7C95A4;
+  --t-green:#3FCFAA; --t-orange:#FF9A5C; --t-blue:#7CB7FF; --t-violet:#B79CFF; --t-rose:#FF8FBB; --t-soon:#7C95A4;
 }
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
 *,*::before,*::after{box-sizing:inherit}
@@ -73,7 +73,7 @@ a.card:hover{border-color:var(--tone);transform:translateY(-3px)}
 .card.soon .cta{color:var(--muted);font-weight:700}
 
 /* cores por jogo */
-.tone-green{--tone:var(--t-green)} .tone-orange{--tone:var(--t-orange)} .tone-blue{--tone:var(--t-blue)} .tone-violet{--tone:var(--t-violet)} .tone-soon{--tone:var(--t-soon)}
+.tone-green{--tone:var(--t-green)} .tone-orange{--tone:var(--t-orange)} .tone-blue{--tone:var(--t-blue)} .tone-violet{--tone:var(--t-violet)} .tone-rose{--tone:var(--t-rose)} .tone-soon{--tone:var(--t-soon)}
 
 
 /* ---------- filtros por tipo ---------- */
@@ -104,7 +104,7 @@ a.card:hover{border-color:var(--tone);transform:translateY(-3px)}
   .app{max-width:1280px;padding-top:34px}
   header{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px 48px}
   .lede{margin:0;max-width:58ch}
-  .cards{grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}
+  .cards{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
   .art{height:118px}
 }
 
@@ -140,6 +140,7 @@ var CATEGORIAS = [
   { id:'cruzadinhas', titulo:'Cruzadinhas', rotulo:'Cruzadinha', sub:'Palavras cruzadas de nível profissional, em desafios progressivos.' },
   { id:'fichas', titulo:'Fichas e sistemas', rotulo:'Ficha e sistema', sub:'Preencha, envie e veja o que cada erro provoca na análise.' },
   { id:'campo', titulo:'Investigação de campo', rotulo:'Investigação de campo', sub:'Conduza a investigação decidindo cada etapa.' },
+  { id:'analise', titulo:'Análise de situação', rotulo:'Análise de situação', sub:'Leia mapas e indicadores e decida onde agir.' },
   { id:'breve', titulo:'Em breve', rotulo:'Em breve', sub:'Próximos jogos do projeto.' }
 ];
 var JOGOS = [
@@ -155,6 +156,9 @@ var JOGOS = [
   { cat:'campo', href:'detetive-de-surtos.html', titulo:'Detetive de surtos',
     desc:'Do alerta ao encerramento: investigue um surto de DTA, analise a curva e a taxa de ataque e decida as medidas.',
     chips:['8 etapas','Protótipo'], arte:'surto', tom:'violet', key:'detetive-surtos:v1', tipo:'ficha' },
+  { cat:'analise', href:'territorio-em-alerta.html', titulo:'Território em Alerta',
+    desc:'Leia mapas de uma região de saúde: taxas, semáforo do LIRAa, tendência, vizinhança e cobertura vacinal.',
+    chips:['5 missões','Protótipo'], arte:'mapa', tom:'rose', key:'territorio-alerta:v1', tipo:'ficha' },
   { cat:'breve', titulo:'Ficha do SINAN em jogo: acidente de trabalho grave',
     desc:'Ocupação, CNAE, CAT e o que a ficha incompleta faz com a vigilância em saúde do trabalhador.',
     chips:['Em breve'], rotulo:'Ficha e sistema', arte:'ficha', tom:'soon' }
@@ -200,7 +204,15 @@ function arteSurto(){
   o+='<line x1="26" y1="97" x2="196" y2="97" stroke="var(--tone)" stroke-width="2.5"/>';
   return svg(o);
 }
-var ARTE={cruz:arteCruz, ficha:arteFicha, surto:arteSurto};
+function arteMapa(){
+  var pol=['M34 28 L80 18 L96 44 L68 62 L36 56 Z','M80 18 L128 24 L136 52 L96 44 Z','M128 24 L178 30 L184 62 L136 52 Z',
+           'M36 56 L68 62 L62 92 L32 84 Z','M68 62 L96 44 L136 52 L124 90 L62 92 Z','M136 52 L184 62 L170 94 L124 90 Z'];
+  var op=[.22,.5,.85,.35,1,.6], o='', i;
+  for(i=0;i<pol.length;i++) o+='<path d="'+pol[i]+'" fill="var(--tone)" fill-opacity="'+op[i]+'" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>';
+  o+='<circle cx="98" cy="68" r="5" fill="var(--sel)" stroke="var(--ink)" stroke-width="2"/>';
+  return svg(o);
+}
+var ARTE={cruz:arteCruz, ficha:arteFicha, surto:arteSurto, mapa:arteMapa};
 
 /* ---------- progresso salvo pelos próprios jogos (mesmo navegador) ---------- */
 function progresso(j){
