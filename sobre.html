@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sobre e referências | Saúde em jogo</title>
+<meta name="description" content="O que é o projeto Saúde em jogo, o que ele não é e em quais fontes os jogos se baseiam.">
+<meta name="theme-color" content="#F6F1E7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1A14" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Saúde em jogo">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Sobre e referências | Saúde em jogo">
+<meta property="og:description" content="O que é o projeto Saúde em jogo, o que ele não é e em quais fontes os jogos se baseiam.">
+<meta property="og:image" content="https://SEU-USUARIO.github.io/SEU-REPOSITORIO/social.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Logo Saúde em jogo: as letras S, A, Ú, D e E em quadrinhos de cruzadinha, com o Ú em amarelo">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#F6F1E7; --surface:#FFFFFF; --ink:#22392E; --muted:#647062; --line:#D5CBB4; --edge:#22392E; --emph:#22392E;
+  --cell:#FFFFFF; --sel:#FFD23F; --sel-ink:#22392E; --focus:#0B5FA5;
+  --t-green:#0E7C66; --t-orange:#B4470A; --t-blue:#1F5FA8; --t-violet:#5B3FB4; --t-rose:#B0356B; --t-soon:#75806F;
+  --display:'Bricolage Grotesque','Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --body:'Atkinson Hyperlegible','Segoe UI',Verdana,system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0F1A14; --surface:#182A20; --ink:#F1EBDD; --muted:#B3BCA9; --line:#33483B; --edge:#6F8B78; --emph:#FFD23F;
+    --cell:#1D3327; --sel:#FFD23F; --sel-ink:#16241B; --focus:#7CC0FF;
+    --t-green:#3FCFAA; --t-orange:#FF9A5C; --t-blue:#7CB7FF; --t-violet:#B79CFF; --t-rose:#FF8FBB; --t-soon:#8D9885;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0F1A14; --surface:#182A20; --ink:#F1EBDD; --muted:#B3BCA9; --line:#33483B; --edge:#6F8B78; --emph:#FFD23F;
+  --cell:#1D3327; --sel:#FFD23F; --sel-ink:#16241B; --focus:#7CC0FF;
+  --t-green:#3FCFAA; --t-orange:#FF9A5C; --t-blue:#7CB7FF; --t-violet:#B79CFF; --t-rose:#FF8FBB; --t-soon:#8D9885;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+
+.app{max-width:1080px;margin:0 auto;padding:22px 16px 56px}
+
+/* marca */
+.brand{display:flex;flex-wrap:wrap;align-items:center;gap:18px 22px;margin-bottom:6px}
+.tiles{display:flex;gap:5px}
+.tile{width:clamp(36px,9vw,52px);aspect-ratio:1;display:grid;place-items:center;background:var(--cell);border:2px solid var(--edge);border-radius:5px;font-family:var(--display);font-weight:800;font-size:clamp(1.15rem,4.6vw,1.7rem);line-height:1}
+.tile.hl{background:var(--sel);color:var(--sel-ink);border-color:var(--emph)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,7vw,3.3rem);line-height:1;letter-spacing:-0.02em;margin:0}
+.lede{margin:12px 0 0;color:var(--muted);max-width:60ch;font-size:1.05rem}
+
+h2{font-family:var(--display);font-weight:800;font-size:1.3rem;margin:36px 0 4px}
+.sub{margin:0 0 14px;color:var(--muted);font-size:.95rem}
+
+
+.wrap{max-width:760px}
+.ref{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:16px 20px 14px;margin:0 0 14px}
+.ref h3{font-family:var(--display);font-weight:800;font-size:1.1rem;margin:0 0 6px}
+.ref h3 a{text-decoration:none}
+.ref h3 a:hover{text-decoration:underline}
+.ref p{margin:0 0 8px;color:var(--muted);font-size:.95rem}
+.ref h4{margin:10px 0 4px;font-size:.85rem;font-weight:700;text-transform:none;color:var(--ink)}
+.ref ul{margin:0 0 4px;padding-left:1.15rem}
+.ref li{margin:3px 0;font-size:.95rem}
+.txt p{margin:0 0 12px;max-width:68ch}
+.txt ul{margin:0 0 12px;padding-left:1.2rem;max-width:68ch}
+.txt li{margin:4px 0}
+.back{margin:0 0 14px;font-size:.95rem}
+.back a{font-weight:700}
+footer{margin-top:44px;color:var(--muted);font-size:.9rem;max-width:70ch}
+footer .autoria{margin:12px 0 0;font-weight:700;color:var(--ink)}
+a.ext{text-underline-offset:3px}
+
+</style>
+</head>
+<body>
+<div class="app wrap">
+  <header>
+    <p class="back"><a href="index.html">‹ Saúde em jogo</a></p>
+    <div class="brand">
+      <div class="tiles" aria-hidden="true">
+        <span class="tile">S</span><span class="tile">A</span><span class="tile hl">Ú</span><span class="tile">D</span><span class="tile">E</span>
+      </div>
+    </div>
+    <h1 style="margin-top:14px">Sobre e referências</h1>
+    <p class="lede">O que é o Saúde em jogo, o que ele não é e em quais fontes cada jogo se baseia.</p>
+  </header>
+
+  <main class="txt">
+    <h2>O que é este projeto</h2>
+    <p>O Saúde em jogo reúne jogos para estudar e treinar o dia a dia da vigilância em saúde: preencher fichas do SINAN, investigar um surto, ler mapas de uma região de saúde e resolver cruzadinhas. Tudo roda direto no navegador, sem cadastro.</p>
+    <p>É um projeto pessoal de <b>Aline Azevedo</b>, enfermeira sanitarista. Não é material oficial da Secretaria da Saúde do Estado da Bahia, de núcleos regionais de saúde nem do Ministério da Saúde.</p>
+
+    <h2>O que ele não é</h2>
+    <ul>
+      <li>Não substitui as fichas, os instrutivos, os guias, os dicionários de dados e as normas vigentes. Na rotina de trabalho, siga sempre os documentos oficiais e as orientações da sua UF.</li>
+      <li>Os casos, as pessoas, as empresas, os municípios e os números são fictícios.</li>
+      <li>Os jogos simplificam as fichas e usam listas reduzidas, como as de CID-10 e de CNAE. Algumas regras, como faixas de cor e critérios de prioridade, são do próprio jogo e estão sinalizadas nele.</li>
+      <li>Os jogos estão em fase de protótipo e podem ter erros. Se você encontrar algum, avise.</li>
+    </ul>
+
+    <h2>Privacidade</h2>
+    <p>O site não pede cadastro nem coleta dados pessoais. A sua melhor pontuação e o seu progresso ficam salvos apenas no navegador do seu próprio aparelho, e você pode apagá-los limpando os dados do site. As fontes de texto são carregadas do Google Fonts, o que envolve uma requisição aos servidores do Google.</p>
+
+    <h2>Referências por jogo</h2>
+    <p class="sub">"Base" é o que o jogo usou para construir as regras e os casos. "Para aprofundar" são leituras recomendadas.</p>
+
+    <article class="ref">
+      <h3><a href="ficha-sinan-dengue.html">Ficha do SINAN em jogo: dengue</a></h3>
+      <h4>Base</h4>
+      <ul><li>Ficha de Investigação de Dengue e Febre de Chikungunya (SVS/Sinan).</li></ul>
+      <h4>Para aprofundar</h4>
+      <ul><li>Ministério da Saúde. Guia de Vigilância em Saúde (6ª edição revisada, 2024).</li><li>Dicionário de dados do Sinan.</li></ul>
+    </article>
+
+    <article class="ref">
+      <h3><a href="ficha-sinan-acidente-trabalho.html">Ficha do SINAN em jogo: acidente de trabalho grave</a></h3>
+      <h4>Base</h4>
+      <ul>
+        <li><a class="ext" href="https://portalsinan.saude.gov.br/images/DRT/DRT_Acidente_Trabalho_Grave.pdf" target="_blank" rel="noopener">Ficha de Investigação de Acidente de Trabalho (SVS/Sinan, versão de 2019)</a>, de onde vêm os números e as opções dos campos.</li>
+        <li>Ministério da Saúde. Guia de Vigilância em Saúde, capítulo sobre acidente de trabalho: notificação de todos os acidentes de trabalho, independentemente da gravidade (Nota Informativa nº 94/2019), e indicadores de preenchimento de ocupação e CNAE.</li>
+        <li><a class="ext" href="https://portalcievs.saude.pe.gov.br/docs/Instrutivo_Notifica%C3%A7%C3%A3o_de_Acidentes_de_Trabalho_Grave.pdf" target="_blank" rel="noopener">Instrutivo sobre Notificação de Acidentes de Trabalho Grave</a> (CIEVS, Secretaria de Saúde de Pernambuco), para as instruções de preenchimento.</li>
+        <li>Lei nº 8.213/1991, art. 22, sobre a comunicação do acidente de trabalho (CAT).</li>
+      </ul>
+      <h4>Observações</h4>
+      <ul><li>Os códigos CID-10 e CNAE das listas, os casos e as empresas são exemplos elaborados para o jogo. Consulte a CBO e a tabela do CNAE (IBGE/Concla) na rotina.</li></ul>
+    </article>
+
+    <article class="ref">
+      <h3><a href="detetive-de-surtos.html">Detetive de surtos</a></h3>
+      <h4>Base</h4>
+      <ul><li>Roteiro clássico de investigação de surtos, com caso fictício de doença transmitida por alimentos.</li></ul>
+      <h4>Para aprofundar</h4>
+      <ul><li>Ministério da Saúde. Manual integrado de vigilância, prevenção e controle de doenças transmitidas por alimentos, e normas da sua UF.</li></ul>
+    </article>
+
+    <article class="ref">
+      <h3><a href="territorio-em-alerta.html">Território em Alerta</a></h3>
+      <h4>Base</h4>
+      <ul>
+        <li>Classificação do LIRAa (satisfatório, alerta e risco) e meta de 95% de cobertura da tríplice viral, segundo o Ministério da Saúde.</li>
+        <li>Bloqueio vacinal seletivo em até 72 horas após caso suspeito de sarampo e intensificação vacinal depois desse prazo: Ministério da Saúde, Guia de Vigilância em Saúde (6ª edição revisada, 2024) e notas técnicas sobre sarampo e rubéola.</li>
+      </ul>
+      <h4>Observações</h4>
+      <ul><li>A região, os municípios e os dados são fictícios. As demais faixas de cor e o critério de prioridade são do jogo: na rotina, cada regional define os seus.</li></ul>
+    </article>
+
+    <article class="ref">
+      <h3><a href="cruzadinha-saude-do-trabalhador.html">Cruzadinha da saúde do trabalhador</a></h3>
+      <h4>Base</h4>
+      <ul>
+        <li>Portaria GM/MS nº 1.339/1999, que instituiu a Lista de Doenças Relacionadas ao Trabalho.</li>
+        <li>Portaria nº 777/2004, sobre a notificação de agravos à saúde do trabalhador na rede sentinela.</li>
+        <li>Portaria GM/MS nº 1.823/2012, que instituiu a Política Nacional de Saúde do Trabalhador e da Trabalhadora (PNSTT).</li>
+      </ul>
+    </article>
+
+    <article class="ref">
+      <h3><a href="cruzadinha-saude-publica.html">Cruzadinha da saúde pública</a></h3>
+      <h4>Base</h4>
+      <ul><li>Guias e manuais do Ministério da Saúde. Em caso de dúvida sobre algum termo, confira neles.</li></ul>
+    </article>
+
+    <h2>Encontrou um erro ou quer sugerir um tema?</h2>
+    <p>Abra uma <i>issue</i> no repositório do projeto no GitHub. Correções e sugestões são bem-vindas, principalmente sobre normas que mudaram.</p>
+    <p class="sub">Última revisão desta página: setembro de 2026.</p>
+  </main>
+
+  <footer>
+    <p class="autoria">Desenvolvido por Aline Azevedo.</p>
+  </footer>
+</div>
+</body>
+</html>

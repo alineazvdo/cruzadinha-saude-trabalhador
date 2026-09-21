@@ -5,6 +5,22 @@
 <meta name="color-scheme" content="light dark">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ficha do SINAN em jogo: acidente de trabalho grave</title>
+<meta name="description" content="Ocupação, CNAE, CAT e o que a ficha incompleta faz com a vigilância em saúde do trabalhador.">
+<meta name="theme-color" content="#F6F1E7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1A14" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Saúde em jogo">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Ficha do SINAN em jogo: acidente de trabalho grave">
+<meta property="og:description" content="Ocupação, CNAE, CAT e o que a ficha incompleta faz com a vigilância em saúde do trabalhador.">
+<meta property="og:image" content="https://SEU-USUARIO.github.io/SEU-REPOSITORIO/social.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Logo Saúde em jogo: as letras S, A, Ú, D e E em quadrinhos de cruzadinha, com o Ú em amarelo">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
@@ -142,7 +158,7 @@ footer{margin-top:28px;color:var(--muted);font-size:.9rem;max-width:70ch}
   <main id="app"></main>
   <footer>
     Todos os casos, pessoas e empresas são fictícios. O jogo simplifica a Ficha de Investigação de Acidente de Trabalho (SVS/Sinan, versão de 2019) e usa listas reduzidas de CID-10 e de CNAE. Na rotina, siga sempre a ficha, o instrutivo, o Guia de Vigilância em Saúde e as normas vigentes na sua UF.
-  </footer>
+  <p style="margin:10px 0 0"><a href="sobre.html">Sobre e referências</a></p></footer>
 </div>
 
 <script>
@@ -247,7 +263,7 @@ var IMPACT = {
   quantos:'O número de atingidos mede a dimensão do acidente coletivo. Em branco, ou inconsistente com o campo anterior, a ficha perde esse dado.',
   partes:'As partes do corpo atingidas mostram o perfil das lesões e orientam a proteção. Incompletas, subestimam a gravidade do acidente.',
   lesao:'O diagnóstico da lesão (CID-10) é campo obrigatório e é diferente da causa: a causa é como aconteceu, a lesão é o que aconteceu no corpo. Código genérico, como traumatismo não especificado, diz pouco sobre a gravidade do caso.',
-  regime:'O regime de tratamento (hospitalar, ambulatorial ou ambos) é um dos sinais de gravidade. Sem ele, o caso fica sem esse critério.',
+  regime:'O regime de tratamento separa quem precisou de internação (hospitalar) de quem foi atendido e liberado (ambulatorial), e "ambos" vale para quem teve os dois. A necessidade de internação é um dos critérios de gravidade do acidente. Neste jogo, atendimento em UPA ou pronto atendimento com alta no mesmo dia, sem internação, conta como ambulatorial.',
   evolucao:'A evolução alimenta a análise de gravidade e de letalidade. Evolução errada pode esconder um óbito ou uma incapacidade permanente.',
   dtObito:'Sem a data do óbito, o caso fatal não entra na série de mortalidade por acidente de trabalho, e a inconsistência trava a análise da ficha.',
   cat:'A CAT é campo obrigatório e liga a vigilância à Previdência. A empresa deve emitir a CAT até o primeiro dia útil seguinte ao acidente, e imediatamente em caso de morte. Se ela não emitir, o próprio trabalhador, seus dependentes, o sindicato, o médico que o assistiu ou uma autoridade pública podem emitir. Ficha com CAT "não" aponta trabalhador sem cobertura acidentária.'
@@ -279,11 +295,11 @@ var CASES = [
    relato:[
     '<b>Larissa, 17 anos</b>, <b>repositora de mercadorias</b> no <b>Supermercado Bom Preço</b>, contratada como aprendiz com <b>carteira assinada</b>. Ela se declara parda.',
     'Em <b>5 de junho</b>, ao abrir uma caixa de papelão com um <b>estilete</b>, cortou a palma da mão esquerda, no depósito da loja.',
-    'Foi atendida na UPA, levou pontos e <b>voltou para casa no mesmo dia</b>, com acompanhamento ambulatorial. Nenhum outro trabalhador se feriu. Ela se recuperou por completo.',
+    'Foi atendida na UPA, levou pontos e teve <b>alta no mesmo dia, sem internação</b>. Nenhum outro trabalhador se feriu. Ela se recuperou por completo.',
     'A empresa <b>emitiu a CAT</b>. Você notificou em <b>6 de junho</b>.'],
    ocup:/repositor|estoquista/, emp:/bom preco/,
    truth:{dtNotif:'2026-06-06',dtAcid:'2026-06-05',idade:17,sexo:'F',raca:'parda',ocupacao:'repositora de mercadorias',situacao:'carteira',local:'contratante',empresa:'Supermercado Bom Preço',cnae:'4711-3/02',terceirizada:'nao',cnaePrinc:'',causa:'W26',tipo:'tipico',outros:'nao',quantos:'',partes:['mao'],lesao:'S61',regime:'amb',evolucao:'cura',dtObito:'',cat:'sim'},
-   nota:'O corte, sozinho, não seria grave. Mas acidente de trabalho com menor de 18 anos é notificado independentemente da gravidade, e é a idade correta na ficha que permite identificar esses casos.' },
+   nota:'O corte, sozinho, não seria grave. Mas acidente de trabalho com menor de 18 anos é notificado independentemente da gravidade, e é a idade correta na ficha que permite identificar esses casos. Já o regime de tratamento é ambulatorial: ela foi atendida na UPA e liberada no mesmo dia, sem internação.' },
  { id:4, titulo:'O cabo dentro da mina',
    relato:[
     '<b>Edvaldo, 45 anos</b>, <b>eletricista de manutenção</b>, empregado com <b>carteira assinada</b> da <b>Elétrica Serra Norte</b>, empresa <b>terceirizada</b> que presta serviço para a <b>Mineração Ouro do Norte</b> (extração de ouro). Ele se declara branco.',
@@ -482,7 +498,7 @@ function screenCase(i){
       checkGroup(F('partes')),
       h('div',{class:'row2'},
         fieldWrap(F('lesao'),selectField(F('lesao'),'f_lesao'),'f_lesao','O diagnóstico específico da lesão, e não a causa.',true),
-        sel('regime'))),
+        fieldWrap(F('regime'),selectField(F('regime'),'f_regime'),'f_regime','Hospitalar: houve internação. Ambulatorial: atendido e liberado, sem internação, mesmo em UPA ou pronto atendimento.',true))),
     h('fieldset',null,h('legend',null,'Conclusão do caso'),
       h('div',{class:'row2'},
         sel('evolucao'),
