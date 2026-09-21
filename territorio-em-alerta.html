@@ -11,14 +11,14 @@
 <style>
 :root{
   color-scheme:light;
-  --bg:#EEF5F7; --surface:#FFFFFF; --ink:#12324A; --muted:#4F6B7D; --line:#B9CBD3; --edge:#12324A; --emph:#12324A;
-  --field:#FFFFFF; --sel:#FFD23F; --sel-ink:#12324A;
+  --bg:#F6F1E7; --surface:#FFFFFF; --ink:#22392E; --muted:#647062; --line:#D5CBB4; --edge:#22392E; --emph:#22392E;
+  --field:#FFFFFF; --sel:#FFD23F; --sel-ink:#22392E;
   --accent:#B0356B; --accent-ink:#FFFFFF; --ok:#0B6B58; --ok-bg:#D6F0E6;
   --err:#B3311A; --err-bg:#FBE0DA; --warn:#7A4E00; --warn-bg:#FFF0B3; --focus:#0B5FA5;
-  --s1:#FCEFD8; --s1t:#12324A; --s2:#F8D08F; --s2t:#12324A; --s3:#F19C55; --s3t:#12324A; --s4:#CF4A22; --s4t:#FFFFFF; --s5:#9E2F14; --s5t:#FFFFFF;
-  --g1:#BFE8D2; --g1t:#12324A; --g2:#FFE08A; --g2t:#12324A; --g3:#C7381F; --g3t:#FFFFFF;
-  --v1:#C7381F; --v1t:#FFFFFF; --v2:#F2A65A; --v2t:#12324A; --v3:#D6E6F4; --v3t:#12324A; --v4:#8DBBE3; --v4t:#12324A;
-  --t1:#CFE3F5; --t1t:#12324A; --t2:#E9EEF1; --t2t:#12324A; --t3:#F2A65A; --t3t:#12324A; --t4:#C7381F; --t4t:#FFFFFF;
+  --s1:#FCEFD8; --s1t:#22392E; --s2:#F8D08F; --s2t:#22392E; --s3:#F19C55; --s3t:#22392E; --s4:#CF4A22; --s4t:#FFFFFF; --s5:#9E2F14; --s5t:#FFFFFF;
+  --g1:#BFE8D2; --g1t:#22392E; --g2:#FFE08A; --g2t:#22392E; --g3:#C7381F; --g3t:#FFFFFF;
+  --v1:#C7381F; --v1t:#FFFFFF; --v2:#F2A65A; --v2t:#22392E; --v3:#D6E6F4; --v3t:#22392E; --v4:#8DBBE3; --v4t:#22392E;
+  --t1:#CFE3F5; --t1t:#22392E; --t2:#EFEADD; --t2t:#22392E; --t3:#F2A65A; --t3t:#22392E; --t4:#C7381F; --t4t:#FFFFFF;
   --display:'Bricolage Grotesque','Trebuchet MS','Segoe UI',system-ui,sans-serif;
   --body:'Atkinson Hyperlegible','Segoe UI',Verdana,system-ui,sans-serif;
   box-sizing:border-box;
@@ -28,26 +28,26 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
-    --field:#152F41; --sel:#FFD23F; --sel-ink:#0B2233;
+    --bg:#0F1A14; --surface:#182A20; --ink:#F1EBDD; --muted:#B3BCA9; --line:#33483B; --edge:#6F8B78; --emph:#FFD23F;
+    --field:#1D3327; --sel:#FFD23F; --sel-ink:#16241B;
     --accent:#FF8FBB; --accent-ink:#3A0A20; --ok:#3FCFAA; --ok-bg:#12403A;
     --err:#FF9A86; --err-bg:#4A2622; --warn:#FFD23F; --warn-bg:#3A3411; --focus:#7CC0FF;
-    --s1:#23394B; --s1t:#EAF3F7; --s2:#6A4F2B; --s2t:#EAF3F7; --s3:#C87A3A; --s3t:#0B2233; --s4:#E8894F; --s4t:#0B2233; --s5:#FFB080; --s5t:#0B2233;
-    --g1:#1E5C4B; --g1t:#EAF3F7; --g2:#D9B43A; --g2t:#0B2233; --g3:#FF7A5C; --g3t:#0B2233;
-    --v1:#FF7A5C; --v1t:#0B2233; --v2:#E8B04F; --v2t:#0B2233; --v3:#2E5C80; --v3t:#EAF3F7; --v4:#23705F; --v4t:#EAF3F7;
-    --t1:#2E5C80; --t1t:#EAF3F7; --t2:#2B3F4F; --t2t:#EAF3F7; --t3:#E8B04F; --t3t:#0B2233; --t4:#FF7A5C; --t4t:#0B2233;
+    --s1:#27392D; --s1t:#F1EBDD; --s2:#6A4F2B; --s2t:#F1EBDD; --s3:#C87A3A; --s3t:#16241B; --s4:#E8894F; --s4t:#16241B; --s5:#FFB080; --s5t:#16241B;
+    --g1:#1E5C4B; --g1t:#F1EBDD; --g2:#D9B43A; --g2t:#16241B; --g3:#FF7A5C; --g3t:#16241B;
+    --v1:#FF7A5C; --v1t:#16241B; --v2:#E8B04F; --v2t:#16241B; --v3:#2E5C80; --v3t:#F1EBDD; --v4:#23705F; --v4t:#F1EBDD;
+    --t1:#2E5C80; --t1t:#F1EBDD; --t2:#33443A; --t2t:#F1EBDD; --t3:#E8B04F; --t3t:#16241B; --t4:#FF7A5C; --t4t:#16241B;
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --bg:#0A1822; --surface:#11283A; --ink:#EAF3F7; --muted:#9FB8C6; --line:#2E4B5E; --edge:#5E8499; --emph:#FFD23F;
-  --field:#152F41; --sel:#FFD23F; --sel-ink:#0B2233;
+  --bg:#0F1A14; --surface:#182A20; --ink:#F1EBDD; --muted:#B3BCA9; --line:#33483B; --edge:#6F8B78; --emph:#FFD23F;
+  --field:#1D3327; --sel:#FFD23F; --sel-ink:#16241B;
   --accent:#FF8FBB; --accent-ink:#3A0A20; --ok:#3FCFAA; --ok-bg:#12403A;
   --err:#FF9A86; --err-bg:#4A2622; --warn:#FFD23F; --warn-bg:#3A3411; --focus:#7CC0FF;
-  --s1:#23394B; --s1t:#EAF3F7; --s2:#6A4F2B; --s2t:#EAF3F7; --s3:#C87A3A; --s3t:#0B2233; --s4:#E8894F; --s4t:#0B2233; --s5:#FFB080; --s5t:#0B2233;
-  --g1:#1E5C4B; --g1t:#EAF3F7; --g2:#D9B43A; --g2t:#0B2233; --g3:#FF7A5C; --g3t:#0B2233;
-  --v1:#FF7A5C; --v1t:#0B2233; --v2:#E8B04F; --v2t:#0B2233; --v3:#2E5C80; --v3t:#EAF3F7; --v4:#23705F; --v4t:#EAF3F7;
-  --t1:#2E5C80; --t1t:#EAF3F7; --t2:#2B3F4F; --t2t:#EAF3F7; --t3:#E8B04F; --t3t:#0B2233; --t4:#FF7A5C; --t4t:#0B2233;
+  --s1:#27392D; --s1t:#F1EBDD; --s2:#6A4F2B; --s2t:#F1EBDD; --s3:#C87A3A; --s3t:#16241B; --s4:#E8894F; --s4t:#16241B; --s5:#FFB080; --s5t:#16241B;
+  --g1:#1E5C4B; --g1t:#F1EBDD; --g2:#D9B43A; --g2t:#16241B; --g3:#FF7A5C; --g3t:#16241B;
+  --v1:#FF7A5C; --v1t:#16241B; --v2:#E8B04F; --v2t:#16241B; --v3:#2E5C80; --v3t:#F1EBDD; --v4:#23705F; --v4t:#F1EBDD;
+  --t1:#2E5C80; --t1t:#F1EBDD; --t2:#33443A; --t2t:#F1EBDD; --t3:#E8B04F; --t3t:#16241B; --t4:#FF7A5C; --t4t:#16241B;
 }
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
 *,*::before,*::after{box-sizing:inherit}
@@ -258,9 +258,8 @@ function prioridade(m){
   var inc=m.inc>=1000?3:(m.inc>=600?2:(m.inc>=300?1:0));
   var ip=m.iip>=4?2:(m.iip>=3?1:0);
   var td=(m.varp>=100&&m.c4>=50)?2:((m.varp>=25&&m.c4>=30)?1:0);
-  var cv=m.cv<80?2:(m.cv<90?1:0);
   var vo=m.c4>=200?1:0;
-  return {inc:inc,ip:ip,td:td,cv:cv,vo:vo,total:inc+ip+td+cv+vo};
+  return {inc:inc,ip:ip,td:td,vo:vo,total:inc+ip+td+vo};
 }
 var RANK=NOMES.slice().sort(function(a,b){ return prioridade(M[b]).total-prioridade(M[a]).total || M[b].inc-M[a].inc; });
 var TOP3=RANK.slice(0,3), PTS_TOP3=TOP3.reduce(function(s,n){return s+prioridade(M[n]).total;},0);
@@ -270,8 +269,8 @@ var MISSOES=[
  {t:'Números absolutos ou taxas?',x:'Você está na sala de situação de um Núcleo Regional de Saúde. A Região Serra Azul (fictícia) tem 14 municípios e cerca de '+n0(POP_TOT/1000)+' mil habitantes. Os dados são das últimas 4 semanas de dengue.'},
  {t:'Semáforo do LIRAa',x:'Chegaram os resultados do LIRAa. Use a camada do índice de infestação predial (IIP) para ver onde o controle do vetor é mais urgente.'},
  {t:'Tendência e vizinhança',x:'Um mapa não mostra só onde há casos: mostra para onde a situação caminha e quem faz fronteira com quem.'},
- {t:'Cobertura vacinal: a média esconde',x:'Além da dengue, a equipe acompanha a cobertura da tríplice viral (primeira dose), cuja meta é 95%.'},
- {t:'Decidir onde agir',x:'Agora é hora de decidir. Há poucas equipes e muitos municípios: cruze as camadas antes de escolher.'}
+ {t:'Cobertura vacinal: a média esconde',x:'Além da dengue, a equipe acompanha a cobertura da tríplice viral (primeira dose), cuja meta é 95%. Essa vacina protege contra sarampo, caxumba e rubéola. É outro problema de saúde, com outra forma de transmissão e outra resposta, e não tem relação com a dengue.'},
+ {t:'Decidir onde agir',x:'Agora é hora de decidir. Há poucas equipes e muitos municípios: cruze as camadas da dengue antes de escolher a supervisão, e lembre que a imunização tem agenda própria.'}
 ];
 var FORTE=NOMES.filter(function(n){return M[n].varp>=100 && M[n].c4>=50;});
 var CAND_VIZ=NOMES.filter(function(n){
@@ -334,25 +333,25 @@ var QUESTOES=[
    {t:'Não necessariamente: a média está abaixo da meta e esconde municípios (e bairros) com cobertura bem menor, onde pode se acumular gente suscetível.',v:100,fb:'É por isso que se olha a cobertura município a município, e depois por área.'},
    {t:'Sim, porque Serra Alta tem cobertura de 96%.',v:0,fb:'Serra Alta pesa muito na média por ser grande, mas isso não protege os outros municípios.'},
    {t:'Não: só valeria se todos os municípios estivessem em 100%.',v:20,fb:'A meta é 95%, não 100%.'}],
-  explica:function(){return 'A média da região ('+n1(CV_MED)+'%) fica abaixo da meta de 95% e é puxada pelo município maior. Enquanto isso, Três Barras tem '+M['Três Barras'].cv+'% e Riacho Fundo, '+M['Riacho Fundo'].cv+'%. A média esconde bolsões de suscetíveis.';}},
+  explica:function(){return 'A média da região ('+n1(CV_MED)+'%) fica abaixo da meta de 95% e é puxada pelo município maior. Enquanto isso, Três Barras tem '+M['Três Barras'].cv+'% e Riacho Fundo, '+M['Riacho Fundo'].cv+'%. A média esconde bolsões de suscetíveis. Por isso a meta do Ministério da Saúde é de 95% de cobertura de forma homogênea, em todos os municípios: aqui, só '+NOMES.filter(function(n){return M[n].cv>=95;}).length+' dos '+NOMES.length+' chegam a 95%.';}},
  {m:3,tipo:'clickN',camada:'cv',texto:'Marque todos os municípios com cobertura abaixo de 90%.',dica:'Atenção aos limites: 90% não é abaixo de 90%.',
   correta:function(){return NOMES.filter(function(n){return M[n].cv<90;});},
   explica:function(){var c=NOMES.filter(function(n){return M[n].cv<90;}).sort(function(a,b){return M[a].cv-M[b].cv;});
     return 'Abaixo de 90%: '+lista(c.map(function(n){return n+' ('+M[n].cv+'%)';}))+'. Várzea Grande do Sul tem exatamente 90% e Alto Verde, 91%: ficam fora, mas perto do limite.';}},
  {m:3,tipo:'click1',camada:'tend',texto:'Em qual município se somam IIP em risco, aumento forte de casos e cobertura abaixo de 90%?',dica:'Cruze três camadas.',
   correta:function(){return COMBO;},
-  explica:function(){var m=M[COMBO[0]]; return COMBO[0]+' reúne os três sinais: IIP de '+n1(m.iip)+'%, aumento de '+pv(m.varp)+' nos casos e cobertura de '+m.cv+'%. Nele, controle do vetor, vigilância dos casos e vacinação precisam andar juntos.';}},
+  explica:function(){var m=M[COMBO[0]]; return COMBO[0]+' reúne os três sinais: IIP de '+n1(m.iip)+'%, aumento de '+pv(m.varp)+' nos casos e cobertura de '+m.cv+'%. Dengue e tríplice viral são problemas independentes, com vírus, transmissão e resposta diferentes, mas eles se somam no mesmo território: a equipe que vai a campo leva as duas agendas, cada uma com as suas ações.';}},
 
- {m:4,tipo:'prior',camada:'incid',n:3,texto:'Você tem 3 equipes para supervisão intensiva nesta semana. Marque os 3 municípios prioritários.',dica:'Cruze incidência, LIRAa, variação, cobertura e volume de casos.',
+ {m:4,tipo:'prior',camada:'incid',n:3,texto:'Você tem 3 equipes para supervisão intensiva da dengue nesta semana. Marque os 3 municípios prioritários.',dica:'Cruze incidência, LIRAa, variação e volume de casos.',
   correta:function(){return TOP3;},
-  explica:function(){return 'O critério do jogo soma pontos por incidência (0 a 3), IIP (0 a 2), tendência (0 a 2), cobertura (0 a 2) e volume de casos (0 ou 1). Os três primeiros são '+lista(TOP3)+'. Na rotina, cada regional define seus critérios, mas o raciocínio é o mesmo: nenhuma camada sozinha decide.';}},
- {m:4,tipo:'single',camada:'cv',texto:'Riacho Fundo (79%) e Três Barras (71%) têm poucos casos de dengue, mas as menores coberturas da tríplice viral. Qual conduta faz mais sentido?',
+  explica:function(){return 'O critério do jogo soma pontos por incidência (0 a 3), IIP (0 a 2), tendência (0 a 2) e volume de casos (0 ou 1). Os três primeiros são '+lista(TOP3)+'. A cobertura da tríplice viral não entra nessa conta, porque não tem relação com a dengue: ela pede uma agenda própria, que aparece na próxima pergunta. Na rotina, cada regional define seus critérios, mas o raciocínio é o mesmo: nenhuma camada sozinha decide.';}},
+ {m:4,tipo:'single',camada:'cv',texto:'Riacho Fundo (79%) e Três Barras (71%) têm poucos casos de dengue, mas as menores coberturas da tríplice viral, vacina que protege contra sarampo, caxumba e rubéola e não tem relação com a dengue. Qual conduta faz mais sentido?',
   opcoes:[
-   {t:'Nenhuma: sem casos, não é prioridade.',v:0,fb:'Cobertura baixa é risco acumulado, mesmo sem casos hoje.'},
+   {t:'Nenhuma: como quase não há casos de dengue, não é prioridade.',v:0,fb:'Poucos casos de dengue não dizem nada sobre o risco de sarampo. Cobertura baixa é risco acumulado de doenças imunopreveníveis, mesmo sem casos hoje.'},
    {t:'Investigar se é falta de vacinação ou de registro das doses no sistema e fazer busca ativa de faltosos e intensificação da vacinação.',v:100,fb:'Cobre os dois cenários possíveis e começa pela conferência dos registros.'},
-   {t:'Fazer bloqueio vacinal imediato em todos os bairros.',v:30,fb:'Bloqueio é resposta a caso suspeito; aqui a estratégia é recuperar a cobertura.'},
-   {t:'Fazer nebulização (fumacê) nos dois municípios.',v:0,fb:'Não tem relação com a vacinação.'}],
-  explica:function(){return 'Cobertura baixa pode refletir falta de vacinação ou subregistro de doses (por exemplo, doses aplicadas que não chegaram ao SIPNI). Nos dois casos, o caminho começa por conferir os registros e buscar os faltosos.';}}
+   {t:'Fazer bloqueio vacinal imediato em todos os bairros.',v:30,fb:'O bloqueio é seletivo e responde a caso suspeito, em até 72 horas, vacinando os contatos. Sem caso, a estratégia é a busca ativa e a intensificação da vacinação.'},
+   {t:'Fazer nebulização (fumacê) nos dois municípios.',v:0,fb:'A nebulização é uma medida de controle do mosquito e não tem relação com a vacinação.'}],
+  explica:function(){return 'Cobertura baixa pode refletir falta de vacinação ou subregistro de doses (por exemplo, doses aplicadas que não chegaram ao SI-PNI). Nos dois casos, o caminho começa por conferir os registros e buscar os faltosos. O risco aqui é de sarampo, caxumba e rubéola, e não de dengue: com muitas pessoas suscetíveis, um caso importado pode se espalhar. Por isso a meta do Ministério da Saúde é de 95% em todos os municípios, e não só na média.';}}
 ];
 QUESTOES.forEach(function(q){ if(q.texto.indexOf('__CVMED__')>=0) q.texto=q.texto.replace('__CVMED__',n1(CV_MED)); });
 
@@ -405,7 +404,7 @@ function telaInicio(){
     h('div',{class:'card'},
       h('span',{class:'tag'},'Missão de campo'),
       h('h2',{style:'margin-top:10px'},'Sala de situação da Região Serra Azul'),
-      h('p',null,'Você analisa mapas de uma região fictícia com 14 municípios. São cinco missões e 14 perguntas: ler taxas e números absolutos, usar o semáforo do LIRAa, acompanhar tendências e vizinhança, enxergar bolsões de baixa cobertura e decidir onde agir.'),
+      h('p',null,'Você analisa mapas de uma região fictícia com 14 municípios. São cinco missões e 14 perguntas: ler taxas e números absolutos, usar o semáforo do LIRAa, acompanhar tendências e vizinhança, enxergar bolsões de baixa cobertura vacinal (uma agenda à parte da dengue) e decidir onde agir.'),
       h('ul',{class:'clean'},
         h('li',null,'Clique nos municípios no mapa (ou na tabela) para responder e para ver os indicadores de cada um.'),
         h('li',null,'Troque de camada para cruzar informações: nenhuma camada sozinha conta a história toda.'),
@@ -654,10 +653,10 @@ function confirmar(){
 }
 function tabelaPrioridade(){
   var linhas=RANK.slice(0,8).map(function(n){ var p=prioridade(M[n]);
-    return h('tr',null,h('td',null,n),h('td',{class:'num'},p.inc),h('td',{class:'num'},p.ip),h('td',{class:'num'},p.td),h('td',{class:'num'},p.cv),h('td',{class:'num'},p.vo),h('td',{class:'num'},h('b',null,p.total)));
+    return h('tr',null,h('td',null,n),h('td',{class:'num'},p.inc),h('td',{class:'num'},p.ip),h('td',{class:'num'},p.td),h('td',{class:'num'},p.vo),h('td',{class:'num'},h('b',null,p.total)));
   });
   return h('div',{class:'tablewrap',style:'margin-top:10px'},h('table',null,
-    h('thead',null,h('tr',null,h('th',null,'Município'),h('th',{class:'num'},'Incid.'),h('th',{class:'num'},'IIP'),h('th',{class:'num'},'Tend.'),h('th',{class:'num'},'Cob.'),h('th',{class:'num'},'Vol.'),h('th',{class:'num'},'Total'))),
+    h('thead',null,h('tr',null,h('th',null,'Município'),h('th',{class:'num'},'Incid.'),h('th',{class:'num'},'IIP'),h('th',{class:'num'},'Tend.'),h('th',{class:'num'},'Vol.'),h('th',{class:'num'},'Total'))),
     h('tbody',null,linhas)));
 }
 
@@ -679,7 +678,7 @@ function telaRelatorio(){
    ['A mancha grande não é população grande.','Serra Alta tem quase metade da população numa área pequena do mapa.'],
    ['Olhe as fronteiras.','Doenças transmitidas por vetores não respeitam limites municipais.'],
    ['A média esconde bolsões.','A cobertura regional pode parecer razoável com municípios muito abaixo da meta.'],
-   ['Cruze camadas antes de decidir.','Incidência, LIRAa, tendência e cobertura contam partes diferentes da história.']
+   ['Cruze camadas antes de decidir.','Incidência, LIRAa e tendência contam partes diferentes da história da dengue. A cobertura vacinal conta outra história, com agenda própria.']
   ];
   show(h('div',{class:'narrow'}, steps(QUESTOES.length),
     h('div',{class:'card'},
@@ -689,7 +688,7 @@ function telaRelatorio(){
       best()>media?h('p',{class:'muted small'},'Melhor pontuação neste navegador: '+best()+'%.'):null),
     h('div',{class:'card'},h('h3',null,'Desempenho por missão'),h('div',{class:'rows'},linhas)),
     h('div',{class:'card'},h('h3',null,'O que o território mostrou'),
-      h('p',{style:'margin:0'},'Os municípios mais prioritários, pelo critério do jogo, foram '+lista(TOP3)+'. Vale do Sol e Taboleiro reúnem incidência muito alta, IIP em risco e aumento forte, e fazem fronteira entre si; Santa Aurora e Serra Alta, vizinhas do grupo, merecem monitoramento. Três Barras e Riacho Fundo pedem uma agenda diferente: recuperar a cobertura vacinal.')),
+      h('p',{style:'margin:0'},'Os municípios mais prioritários, pelo critério do jogo, foram '+lista(TOP3)+'. Vale do Sol e Taboleiro reúnem incidência muito alta, IIP em risco e aumento forte, e fazem fronteira entre si; Santa Aurora e Serra Alta, vizinhas do grupo, merecem monitoramento. Três Barras e Riacho Fundo pedem uma agenda diferente: recuperar a cobertura da tríplice viral (sarampo, caxumba e rubéola), que não tem relação com a dengue.')),
     h('div',{class:'card'},h('h3',null,'Seis regras para ler um mapa'),
       h('ol',{class:'clean'},regras.map(function(r){ return h('li',null,h('b',null,r[0]+' '),r[1]); }))),
     rever.length?h('div',{class:'card'},h('h3',null,'Vale rever'),h('ul',{class:'clean'},rever.map(function(p){ return h('li',null,p.t+' ('+p.n+'%)'); }))):null,
